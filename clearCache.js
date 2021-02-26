@@ -1,3 +1,3 @@
 const alfy = require("alfy");
 
-alfy.cache.clear();
+await alfy.cache.clear();

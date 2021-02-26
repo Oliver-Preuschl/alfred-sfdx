@@ -22,6 +22,18 @@
 				<key>vitoclose</key>
 				<false/>
 			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>D3D68EB4-224C-4F71-9B4E-0E164A0BA2FA</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>F3FA9154-3784-49BB-8528-71557A15BD60</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
 		</array>
 		<key>3AEE38FC-616A-4153-ACD7-65A37030B05F</key>
 		<array>
@@ -282,6 +294,20 @@
 						<key>uid</key>
 						<string>9E0F9AB7-6B2A-4D07-A80C-E147EED04827</string>
 					</dict>
+					<dict>
+						<key>inputstring</key>
+						<string></string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>0</integer>
+						<key>matchstring</key>
+						<string>clearCache</string>
+						<key>outputlabel</key>
+						<string>ClearCache</string>
+						<key>uid</key>
+						<string>F3FA9154-3784-49BB-8528-71557A15BD60</string>
+					</dict>
 				</array>
 				<key>elselabel</key>
 				<string>else</string>
@@ -308,8 +334,6 @@
 				<integer>2</integer>
 				<key>escaping</key>
 				<integer>102</integer>
-				<key>keyword</key>
-				<string>clearcache</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -317,11 +341,11 @@
 				<key>queuedelaymode</key>
 				<integer>0</integer>
 				<key>queuemode</key>
-				<integer>1</integer>
+				<integer>2</integer>
 				<key>runningsubtext</key>
 				<string></string>
 				<key>script</key>
-				<string>./node_modules/.bin/run-node resetCache.js</string>
+				<string>./node_modules/.bin/run-node clearCache.js "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -371,9 +395,9 @@
 		<key>D3D68EB4-224C-4F71-9B4E-0E164A0BA2FA</key>
 		<dict>
 			<key>xpos</key>
-			<integer>105</integer>
+			<integer>530</integer>
 			<key>ypos</key>
-			<integer>215</integer>
+			<integer>165</integer>
 		</dict>
 		<key>EFDB9924-0B68-4DF4-BA83-E3AE64831F5E</key>
 		<dict>
