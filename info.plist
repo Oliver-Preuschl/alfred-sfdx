@@ -24,7 +24,7 @@
 			</dict>
 			<dict>
 				<key>destinationuid</key>
-				<string>D3D68EB4-224C-4F71-9B4E-0E164A0BA2FA</string>
+				<string>EB47255F-26F6-4366-9811-1D663A29E1DF</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -48,11 +48,37 @@
 				<false/>
 			</dict>
 		</array>
+		<key>5A62520E-AC11-4D73-958C-50E0A429F127</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>A0B0AA7A-4BE9-4666-86C4-FFE54BAFD0BD</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>72F3B05C-CB19-4911-9929-55604EAC3B55</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
 				<string>F2637605-829D-4FF8-9ABE-36777000F685</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>EB47255F-26F6-4366-9811-1D663A29E1DF</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>5A62520E-AC11-4D73-958C-50E0A429F127</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -107,11 +133,11 @@
 				<key>queuedelaymode</key>
 				<integer>0</integer>
 				<key>queuemode</key>
-				<integer>1</integer>
+				<integer>2</integer>
 				<key>runningsubtext</key>
-				<string>Searching Package Versions...</string>
+				<string></string>
 				<key>script</key>
-				<string>./node_modules/.bin/run-node packageVersion.js "$1"</string>
+				<string>./node_modules/.bin/run-node packageVersionReport.js "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -128,7 +154,7 @@
 			<key>type</key>
 			<string>alfred.workflow.input.scriptfilter</string>
 			<key>uid</key>
-			<string>72F3B05C-CB19-4911-9929-55604EAC3B55</string>
+			<string>F2637605-829D-4FF8-9ABE-36777000F685</string>
 			<key>version</key>
 			<integer>3</integer>
 		</dict>
@@ -154,11 +180,11 @@
 				<key>queuedelaymode</key>
 				<integer>0</integer>
 				<key>queuemode</key>
-				<integer>2</integer>
+				<integer>1</integer>
 				<key>runningsubtext</key>
-				<string></string>
+				<string>Searching Package Versions...</string>
 				<key>script</key>
-				<string>./node_modules/.bin/run-node packageVersionReport.js "$1"</string>
+				<string>./node_modules/.bin/run-node packageVersion.js "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -175,7 +201,7 @@
 			<key>type</key>
 			<string>alfred.workflow.input.scriptfilter</string>
 			<key>uid</key>
-			<string>F2637605-829D-4FF8-9ABE-36777000F685</string>
+			<string>72F3B05C-CB19-4911-9929-55604EAC3B55</string>
 			<key>version</key>
 			<integer>3</integer>
 		</dict>
@@ -322,49 +348,61 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>alfredfiltersresults</key>
+				<key>lastpathcomponent</key>
 				<false/>
-				<key>alfredfiltersresultsmatchmode</key>
-				<integer>0</integer>
-				<key>argumenttreatemptyqueryasnil</key>
-				<true/>
-				<key>argumenttrimmode</key>
-				<integer>0</integer>
-				<key>argumenttype</key>
-				<integer>2</integer>
+				<key>onlyshowifquerypopulated</key>
+				<false/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string></string>
+				<key>title</key>
+				<string>Cache was cleared</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>5A62520E-AC11-4D73-958C-50E0A429F127</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
 				<key>escaping</key>
 				<integer>102</integer>
-				<key>queuedelaycustom</key>
-				<integer>3</integer>
-				<key>queuedelayimmediatelyinitially</key>
-				<true/>
-				<key>queuedelaymode</key>
-				<integer>0</integer>
-				<key>queuemode</key>
-				<integer>2</integer>
-				<key>runningsubtext</key>
-				<string></string>
 				<key>script</key>
 				<string>./node_modules/.bin/run-node clearCache.js "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
 				<string></string>
-				<key>subtext</key>
-				<string></string>
-				<key>title</key>
-				<string></string>
 				<key>type</key>
 				<integer>0</integer>
-				<key>withspace</key>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>EB47255F-26F6-4366-9811-1D663A29E1DF</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argument</key>
+				<string>sfdx</string>
+				<key>leftcursor</key>
 				<false/>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.input.scriptfilter</string>
+			<string>alfred.workflow.utility.showalfred</string>
 			<key>uid</key>
-			<string>D3D68EB4-224C-4F71-9B4E-0E164A0BA2FA</string>
+			<string>A0B0AA7A-4BE9-4666-86C4-FFE54BAFD0BD</string>
 			<key>version</key>
-			<integer>3</integer>
+			<integer>1</integer>
 		</dict>
 	</array>
 	<key>readme</key>
@@ -385,6 +423,13 @@
 			<key>ypos</key>
 			<integer>15</integer>
 		</dict>
+		<key>5A62520E-AC11-4D73-958C-50E0A429F127</key>
+		<dict>
+			<key>xpos</key>
+			<integer>775</integer>
+			<key>ypos</key>
+			<integer>165</integer>
+		</dict>
 		<key>72F3B05C-CB19-4911-9929-55604EAC3B55</key>
 		<dict>
 			<key>xpos</key>
@@ -392,10 +437,17 @@
 			<key>ypos</key>
 			<integer>15</integer>
 		</dict>
-		<key>D3D68EB4-224C-4F71-9B4E-0E164A0BA2FA</key>
+		<key>A0B0AA7A-4BE9-4666-86C4-FFE54BAFD0BD</key>
 		<dict>
 			<key>xpos</key>
-			<integer>530</integer>
+			<integer>990</integer>
+			<key>ypos</key>
+			<integer>195</integer>
+		</dict>
+		<key>EB47255F-26F6-4366-9811-1D663A29E1DF</key>
+		<dict>
+			<key>xpos</key>
+			<integer>525</integer>
 			<key>ypos</key>
 			<integer>165</integer>
 		</dict>

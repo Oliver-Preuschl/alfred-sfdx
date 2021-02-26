@@ -12,7 +12,7 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   packageVersions = alfy.cache.get(cacheKey);
 }
-alfy.output(packageVersions);
+alfy.output(packageVersions.sort((a, b) => (a.id > b.id ? -1 : 1)));
 
 async function queryPackageVersions(packageId) {
   const { stdout, stderr } = await exec(
@@ -46,15 +46,17 @@ async function queryPackageVersions(packageId) {
           packageVersionValues[3],
         subtitle: packageVersionValues[4],
         arg: packageVersionValues[4],
+        id: packageVersionValues[4],
+        version: packageVersionValues[3],
         mods: {
           alt: {
             subtitle: `Released: ${packageVersionValues[7]}`,
           },
           cmd: {
-            subtitle: `Key: ${packageVersionValues[6]}`,
+            subtitle: `Ancestor: ${packageVersionValues[9]}`,
           },
           ctrl: {
-            subtitle: `Ancestor: ${packageVersionValues[9]}`,
+            subtitle: `Key: ${packageVersionValues[6]}`,
           },
         },
         quicklookurl: "https://www.salesforce.com",
