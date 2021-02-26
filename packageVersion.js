@@ -1,0 +1,64 @@
+const alfy = require("alfy");
+const util = require("util");
+const exec = util.promisify(require("child_process").exec);
+
+const cacheKey = `sfdx:package:${alfy.input}:version`;
+let packageVersions;
+if (alfy.cache.has(cacheKey)) {
+  packageVersions = await queryPackageVersions(alfy.input);
+  alfy.cache.set(cacheKey, packageVersions, {
+    maxAge: 300000,
+  });
+} else {
+  packageVersions = alfy.cache.get(cacheKey);
+}
+alfy.output(packageVersions);
+
+async function queryPackageVersions(packageId) {
+  const { stdout, stderr } = await exec(
+    `cd  alfred-sfdx; sfdx force:package:version:list --packages=${packageId}`
+  );
+
+  let packageVersionLines = stdout.split("\n");
+  const separatorLine = packageVersionLines[2];
+  const separatorLineGroups = separatorLine.match(
+    /(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)/
+  );
+  packageVersionLines = packageVersionLines.slice(3);
+
+  return packageVersionLines
+    .map((line) => {
+      const packageVersionValues = [];
+      let position = 0;
+      for (let i = 1; i <= 12; i++) {
+        const value = line.slice(
+          position,
+          position + separatorLineGroups[i].length
+        );
+        packageVersionValues.push(value.trim());
+        position += separatorLineGroups[i].length + 2;
+      }
+      return {
+        title:
+          (packageVersionValues[1] ? `${packageVersionValues[1]}.` : "") +
+          packageVersionValues[0] +
+          " - " +
+          packageVersionValues[3],
+        subtitle: packageVersionValues[4],
+        arg: packageVersionValues[4],
+        mods: {
+          alt: {
+            subtitle: `Released: ${packageVersionValues[7]}`,
+          },
+          cmd: {
+            subtitle: `Key: ${packageVersionValues[6]}`,
+          },
+          ctrl: {
+            subtitle: `Ancestor: ${packageVersionValues[9]}`,
+          },
+        },
+        quicklookurl: "https://www.salesforce.com",
+      };
+    })
+    .filter((item) => !!item.arg);
+}

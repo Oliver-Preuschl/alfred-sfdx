@@ -1,0 +1,15 @@
+{
+  "name": "alfred-sfdx",
+  "version": "0.0.1",
+  "description": "SFDX UI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Oliver.Preuschl",
+  "license": "MIT",
+  "dependencies": {
+    "alfy": "^0.10.0",
+    "prettier": "^2.2.1"
+  }
+}
