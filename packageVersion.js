@@ -19,21 +19,21 @@ async function queryPackageVersions(packageId) {
     `cd  alfred-sfdx; sfdx force:package:version:list --packages=${packageId}`
   );
 
-  let packageVersionLines = stdout.split("\n");
-  const separatorLine = packageVersionLines[2];
+  let sfdxOutputLines = stdout.split("\n");
+  const separatorLine = sfdxOutputLines[2];
   const separatorLineGroups = separatorLine.match(
     /(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)/
   );
-  packageVersionLines = packageVersionLines.slice(3);
+  sfdxOutputLines = sfdxOutputLines.slice(3);
 
-  return packageVersionLines
+  return sfdxOutputLines
     .map((line) => {
       const packageVersionValues = [];
       let position = 0;
       for (let i = 1; i <= 12; i++) {
         const value = line.slice(
           position,
-          position + separatorLineGroups[i].length
+          position + separatorLineGroups[i].length + 2
         );
         packageVersionValues.push(value.trim());
         position += separatorLineGroups[i].length + 2;
@@ -59,7 +59,6 @@ async function queryPackageVersions(packageId) {
             subtitle: `Key: ${packageVersionValues[6]}`,
           },
         },
-        quicklookurl: "https://www.salesforce.com",
       };
     })
     .filter((item) => !!item.arg);

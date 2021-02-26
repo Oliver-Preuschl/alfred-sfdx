@@ -2,20 +2,16 @@ const alfy = require("alfy");
 
 alfy.output([
   {
-    title: "Auth",
-    arg: "auth ",
+    title: "Org - Scratch",
+    arg: "orgScratch ",
   },
   {
-    title: "Org",
-    arg: "org ",
+    title: "Org - Conected",
+    arg: "orgConnected ",
   },
   {
     title: "Package",
     arg: "package ",
-  },
-  {
-    title: "User",
-    arg: "user ",
   },
   {
     title: "Clear Cache",

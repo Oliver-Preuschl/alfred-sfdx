@@ -16,7 +16,7 @@ alfy.output(packageVersionReport);
 
 async function queryPackageVersionReport(packageVersionId) {
   const { stdout, stderr } = await exec(
-    `cd  alfred-sfdx; sfdx force:package:version:report --package=${alfy.input}`
+    `cd  alfred-sfdx; sfdx force:package:version:report --package=${packageVersionId}`
   );
 
   let sfdxOutputLines = stdout.split("\n");
@@ -33,7 +33,7 @@ async function queryPackageVersionReport(packageVersionId) {
       for (let i = 1; i <= 2; i++) {
         const value = line.slice(
           position,
-          position + separatorLineGroups[i].length
+          position + separatorLineGroups[i].length + 2
         );
         packageVersionValues.push(value.trim());
         position += separatorLineGroups[i].length + 2;

@@ -20,20 +20,20 @@ async function queryPackages(searchTerm) {
     "cd  alfred-sfdx; sfdx force:package:list"
   );
 
-  let packageLines = stdout.split("\n");
-  const separatorLine = packageLines[2];
+  let sfdxOutputLines = stdout.split("\n");
+  const separatorLine = sfdxOutputLines[2];
   const separatorLineGroups = separatorLine.match(
     /(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)/
   );
-  packageLines = packageLines.slice(3);
+  sfdxOutputLines = sfdxOutputLines.slice(3);
 
-  return packageLines.map((line) => {
+  return sfdxOutputLines.map((line) => {
     const packageValues = [];
     let position = 0;
     for (let i = 1; i <= 6; i++) {
       const value = line.slice(
         position,
-        position + separatorLineGroups[i].length
+        position + separatorLineGroups[i].length + 2
       );
       packageValues.push(value.trim());
       position += separatorLineGroups[i].length + 2;
@@ -41,20 +41,19 @@ async function queryPackages(searchTerm) {
     return {
       title:
         (packageValues[0] ? `${packageValues[0]}.` : "") + packageValues[1],
-      subtitle: packageValues[2],
+      subtitle: `Id: ${packageValues[2]}`,
       arg: packageValues[2],
       mods: {
         alt: {
-          subtitle: packageValues[4],
+          subtitle: `Description: ${packageValues[4]}`,
         },
         cmd: {
-          subtitle: packageValues[5],
+          subtitle: `Type: ${packageValues[5]}`,
         },
         ctrl: {
-          subtitle: packageValues[3],
+          subtitle: `Alias: ${packageValues[3]}`,
         },
       },
-      quicklookurl: "https://www.salesforce.com",
     };
   });
 }
