@@ -4,7 +4,7 @@ const exec = util.promisify(require("child_process").exec);
 
 const cacheKey = `sfdx:package:${alfy.input}:version`;
 let packageVersions;
-if (alfy.cache.has(cacheKey)) {
+if (!alfy.cache.has(cacheKey)) {
   packageVersions = await queryPackageVersions(alfy.input);
   alfy.cache.set(cacheKey, packageVersions, {
     maxAge: 300000,

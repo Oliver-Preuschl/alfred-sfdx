@@ -13,7 +13,7 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   packages = alfy.cache.get(cacheKey);
 }
-alfy.output(alfy.matches(searchTerm, packages));
+alfy.output(alfy.matches(searchTerm, packages, "title"));
 
 async function queryPackages(searchTerm) {
   const { stdout, stderr } = await exec(
