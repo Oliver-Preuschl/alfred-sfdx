@@ -16,7 +16,9 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   packageVersionReport = alfy.cache.get(cacheKey);
 }
-alfy.output(alfy.matches(searchTerm, packageVersionReport, "subtitle"));
+alfy.output(
+  addActions(alfy.matches(searchTerm, packageVersionReport, "subtitle"))
+);
 
 async function queryPackageVersionReport(packageVersionId) {
   const { stdout, stderr } = await exec(
@@ -32,22 +34,59 @@ async function queryPackageVersionReport(packageVersionId) {
 
   return sfdxOutputLines
     .map((line) => {
-      const packageVersionValues = [];
+      const properties = [];
       let position = 0;
       for (let i = 1; i <= 2; i++) {
         const value = line.slice(
           position,
           position + separatorLineGroups[i].length + 2
         );
-        packageVersionValues.push(value.trim());
+        properties.push(value.trim());
         position += separatorLineGroups[i].length + 2;
       }
       return {
-        title: packageVersionValues[1],
-        subtitle: packageVersionValues[0],
-        icon:{path: alfy.icon.info},
-        arg: packageVersionValues[1],
+        title: properties[1],
+        subtitle: properties[0],
+        icon: { path: alfy.icon.info },
+        arg: properties[1],
       };
     })
     .filter((item) => !!item.arg);
+}
+
+function addActions(items) {
+  const actions = [
+    {
+      title: "Back",
+      subtitle: "Go to Start",
+      icon: { path: alfy.icon.get("BackwardArrowIcon") },
+      arg: `sfdx`,
+    },
+  ];
+  return [...actions, ...items];
+}
+
+async function getSfdxLines(command, columnCount, separatorLineIndex) {
+  const { stdout, stderr } = await exec(command);
+
+  let sfdxOutputLines = stdout.split("\n");
+
+  const separatorLine = sfdxOutputLines[separatorLineIndex];
+  const pattern = "s*" + "(─*)s*".repeat(columnCount - 1) + "(─*)";
+  const separatorLineGroups = separatorLine.match(new RegExp(pattern));
+
+  sfdxOutputLines = sfdxOutputLines.slice(separatorLineIndex + 1);
+  return sfdxOutputLines.map((line) => {
+    const properties = [];
+    let position = 0;
+    for (let i = 1; i <= columnCount; i++) {
+      const value = line.slice(
+        position,
+        position + separatorLineGroups[i].length + 2
+      );
+      properties.push(value.trim());
+      position += separatorLineGroups[i].length + 2;
+    }
+    return properties;
+  });
 }

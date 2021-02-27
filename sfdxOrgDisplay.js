@@ -6,6 +6,10 @@ const inputGroups = alfy.input.match(/(\S*)\s*(\S*)\s*(\S*)/);
 let orgId = inputGroups[2];
 let searchTerm = inputGroups[3];
 
+let username;
+let isDevHubAvailable = false;
+let isConnectedStatusAvailable = false;
+
 const cacheKey = `sfdx:org:${orgId}:display`;
 let orgDetails;
 if (!alfy.cache.has(cacheKey)) {
@@ -16,7 +20,7 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   orgDetails = alfy.cache.get(cacheKey);
 }
-alfy.output(alfy.matches(searchTerm, orgDetails, "subtitle"));
+alfy.output(addActions(alfy.matches(searchTerm, orgDetails, "subtitle")));
 
 async function queryOrgDisplay(orgId) {
   const { stdout, stderr } = await exec(
@@ -30,36 +34,36 @@ async function queryOrgDisplay(orgId) {
 
   sfdxOutputLines = sfdxOutputLines.slice(5);
 
-  let username;
-  let isDevHubAvailable = false;
-  let isConnectedStatusAvailable = false;
-  const details = sfdxOutputLines
+  return sfdxOutputLines
     .map((line) => {
-      const packageVersionValues = [];
+      const properties = [];
       let position = 0;
       for (let i = 1; i <= 2; i++) {
         const value = line.slice(
           position,
           position + separatorLineGroups[i].length + 2
         );
-        packageVersionValues.push(value.trim());
+        properties.push(value.trim());
         position += separatorLineGroups[i].length + 2;
       }
-      if (packageVersionValues[0] === "Username") {
-        username = packageVersionValues[1];
-      } else if (packageVersionValues[0] === "Dev Hub Id") {
+      if (properties[0] === "Username") {
+        username = properties[1];
+      } else if (properties[0] === "Dev Hub Id") {
         isDevHubAvailable = true;
-      } else if (packageVersionValues[0] === "Connected Status") {
+      } else if (properties[0] === "Connected Status") {
         isConnectedStatusAvailable = true;
       }
       return {
-        title: packageVersionValues[1],
-        subtitle: packageVersionValues[0],
+        title: properties[1],
+        subtitle: properties[0],
         icon: { path: alfy.icon.info },
-        arg: packageVersionValues[1],
+        arg: properties[1],
       };
     })
     .filter((item) => !!item.arg);
+}
+
+function addActions(items) {
   const actions = [
     {
       title: "Back",
@@ -70,7 +74,7 @@ async function queryOrgDisplay(orgId) {
     {
       title: "Open",
       subtitle: "Open Org in Browser",
-      icon: { path: alfy.icon.get("RightContainerArrowIcon") },
+      icon: { path: alfy.icon.get("SidebarNetwork") },
       arg: `sfdx:org:open ${username}`,
     },
   ];
@@ -82,5 +86,5 @@ async function queryOrgDisplay(orgId) {
       arg: `sfdx:config:set:defaultdevhubusername ${username}`,
     });
   }
-  return [...actions, ...details];
+  return [...actions, ...items];
 }

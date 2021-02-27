@@ -2,8 +2,9 @@ const alfy = require("alfy");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 
-const inputGroups = alfy.input.match(/(\S*)\s*(\S*)/);
+const inputGroups = alfy.input.match(/(\S*)\s*(\S*)\s*(\S*)/);
 let packageId = inputGroups[2];
+let searchTerm = inputGroups[3];
 
 const cacheKey = `sfdx:package:${packageId}:version`;
 let packageVersions;
@@ -15,7 +16,13 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   packageVersions = alfy.cache.get(cacheKey);
 }
-alfy.output(packageVersions.sort((a, b) => (a.id > b.id ? -1 : 1)));
+alfy.output(
+  addActions(
+    alfy
+      .matches(searchTerm, packageVersions, "title")
+      .sort((a, b) => (a.id > b.id ? -1 : 1))
+  )
+);
 
 async function queryPackageVersions(packageId) {
   const { stdout, stderr } = await exec(
@@ -31,39 +38,51 @@ async function queryPackageVersions(packageId) {
 
   return sfdxOutputLines
     .map((line) => {
-      const packageVersionValues = [];
+      const properties = [];
       let position = 0;
       for (let i = 1; i <= 12; i++) {
         const value = line.slice(
           position,
           position + separatorLineGroups[i].length + 2
         );
-        packageVersionValues.push(value.trim());
+        properties.push(value.trim());
         position += separatorLineGroups[i].length + 2;
       }
       return {
         title:
-          (packageVersionValues[1] ? `${packageVersionValues[1]}.` : "") +
-          packageVersionValues[0] +
+          (properties[1] ? `${properties[1]}.` : "") +
+          properties[0] +
           " - " +
-          packageVersionValues[3],
-        subtitle: packageVersionValues[4],
+          properties[3],
+        subtitle: properties[4],
         icon: { path: alfy.icon.get("SidebarGenericFile") },
-        arg: `sfdx:package:version:report ${packageVersionValues[4]} `,
-        id: packageVersionValues[4],
-        version: packageVersionValues[3],
+        arg: `sfdx:package:version:report ${properties[4]} `,
+        id: properties[4],
+        version: properties[3],
         mods: {
           alt: {
-            subtitle: `Released: ${packageVersionValues[7]}`,
+            subtitle: `Released: ${properties[7]}`,
           },
           cmd: {
-            subtitle: `Ancestor: ${packageVersionValues[9]}`,
+            subtitle: `Ancestor: ${properties[9]}`,
           },
           ctrl: {
-            subtitle: `Key: ${packageVersionValues[6]}`,
+            subtitle: `Key: ${properties[6]}`,
           },
         },
       };
     })
-    .filter((item) => !!item.title);
+    .filter((item) => !!item.id);
+}
+
+function addActions(items) {
+  const actions = [
+    {
+      title: "Back",
+      subtitle: "Go to Start",
+      icon: { path: alfy.icon.get("BackwardArrowIcon") },
+      arg: `sfdx`,
+    },
+  ];
+  return [...actions, ...items];
 }

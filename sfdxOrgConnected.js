@@ -13,7 +13,7 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   packages = alfy.cache.get(cacheKey);
 }
-alfy.output(alfy.matches(searchTerm, packages, "title"));
+alfy.output(addActions(alfy.matches(searchTerm, packages, "title")));
 
 async function queryOrgs(searchTerm) {
   const { stdout, stderr } = await exec("cd  alfred-sfdx; sfdx force:org:list");
@@ -58,10 +58,22 @@ async function queryOrgs(searchTerm) {
           ctrl: {
             subtitle: `OrgId: ${properties[3]} (Action: Open in Browser)`,
             arg: `sfdx:org:open ${properties[2]}`,
-            icon: { path: alfy.icon.get("RightContainerArrowIcon") },
+            icon: { path: alfy.icon.get("SidebarNetwork") },
           },
         },
       };
     })
     .filter((item) => !!item.title);
+}
+
+function addActions(items) {
+  const actions = [
+    {
+      title: "Back",
+      subtitle: "Go to Start",
+      icon: { path: alfy.icon.get("BackwardArrowIcon") },
+      arg: `sfdx`,
+    },
+  ];
+  return [...actions, ...items];
 }

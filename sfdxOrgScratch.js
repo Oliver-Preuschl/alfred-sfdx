@@ -13,10 +13,12 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   packages = alfy.cache.get(cacheKey);
 }
-alfy.output(alfy.matches(searchTerm, packages, "title"));
+alfy.output(addActions(alfy.matches(searchTerm, packages, "title")));
 
 async function queryOrgs(searchTerm) {
-  const { stdout, stderr } = await exec("cd  alfred-sfdx; sfdx force:org:list --verbose");
+  const { stdout, stderr } = await exec(
+    "cd  alfred-sfdx; sfdx force:org:list --verbose"
+  );
 
   let sfdxOutputLines = stdout.split("\n");
   const scratchOrgFirstLineIndex = sfdxOutputLines.findIndex((line) =>
@@ -44,7 +46,7 @@ async function queryOrgs(searchTerm) {
         title: properties[0],
         subtitle: `${properties[3]} (Expiration Date: ${properties[7]})`,
         arg: `sfdx:org:display ${properties[1]} `,
-        icon: { path: alfy.icon.get('SidebariCloud') },
+        icon: { path: alfy.icon.get("SidebariCloud") },
         mods: {
           alt: {
             subtitle: `UserName: ${properties[1]}`,
@@ -55,10 +57,22 @@ async function queryOrgs(searchTerm) {
           ctrl: {
             subtitle: `OrgId: ${properties[2]} (Action: Open in Browser)`,
             arg: `sfdx:org:open ${properties[1]}`,
-            icon: { path: alfy.icon.get("RightContainerArrowIcon") },
+            icon: { path: alfy.icon.get("SidebarNetwork") },
           },
         },
       };
     })
     .filter((item) => !!item.title);
+}
+
+function addActions(items) {
+  const actions = [
+    {
+      title: "Back",
+      subtitle: "Go to Start",
+      icon: { path: alfy.icon.get("BackwardArrowIcon") },
+      arg: `sfdx`,
+    },
+  ];
+  return [...actions, ...items];
 }
