@@ -16,7 +16,7 @@ if (!alfy.cache.has(cacheKey)) {
 alfy.output(alfy.matches(searchTerm, packages, "title"));
 
 async function queryOrgs(searchTerm) {
-  const { stdout, stderr } = await exec("cd  alfred-sfdx; sfdx force:org:list");
+  const { stdout, stderr } = await exec("cd  alfred-sfdx; sfdx force:org:list --verbose");
 
   let sfdxOutputLines = stdout.split("\n");
   const scratchOrgFirstLineIndex = sfdxOutputLines.findIndex((line) =>
@@ -24,7 +24,7 @@ async function queryOrgs(searchTerm) {
   );
   const separatorLine = sfdxOutputLines[scratchOrgFirstLineIndex + 1];
   const separatorLineGroups = separatorLine.match(
-    /\s*(─*)\s*(─*)\s*(─*)\s*(─*)/
+    /\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)/
   );
   sfdxOutputLines = sfdxOutputLines.slice(scratchOrgFirstLineIndex + 2);
 
@@ -32,7 +32,7 @@ async function queryOrgs(searchTerm) {
     .map((line) => {
       const properties = [];
       let position = 0;
-      for (let i = 1; i <= 4; i++) {
+      for (let i = 1; i <= 8; i++) {
         const value = line.slice(
           position,
           position + separatorLineGroups[i].length + 2
@@ -42,22 +42,18 @@ async function queryOrgs(searchTerm) {
       }
       return {
         title: properties[0],
-        subtitle: `Expiration Date: ${properties[3]}`,
+        subtitle: `${properties[3]} (Expiration Date: ${properties[7]})`,
         arg: `sfdx:org:display ${properties[1]} `,
         icon: { path: alfy.icon.get('SidebariCloud') },
         mods: {
           alt: {
             subtitle: `UserName: ${properties[1]}`,
-            arg: `sfdx:org:open ${properties[1]}`,
-            icon: { path: alfy.icon.get("RightContainerArrowIcon") },
           },
           cmd: {
-            subtitle: `OrgId: ${properties[2]}`,
-            arg: `sfdx:org:open ${properties[1]}`,
-            icon: { path: alfy.icon.get("RightContainerArrowIcon") },
+            subtitle: `Dev Hub: ${properties[4]}`,
           },
           ctrl: {
-            subtitle: `OrgId: ${properties[2]}`,
+            subtitle: `OrgId: ${properties[2]} (Action: Open in Browser)`,
             arg: `sfdx:org:open ${properties[1]}`,
             icon: { path: alfy.icon.get("RightContainerArrowIcon") },
           },

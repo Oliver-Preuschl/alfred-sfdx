@@ -31,6 +31,8 @@ async function queryOrgDisplay(orgId) {
   sfdxOutputLines = sfdxOutputLines.slice(5);
 
   let username;
+  let isDevHubAvailable = false;
+  let isConnectedStatusAvailable = false;
   const details = sfdxOutputLines
     .map((line) => {
       const packageVersionValues = [];
@@ -45,6 +47,10 @@ async function queryOrgDisplay(orgId) {
       }
       if (packageVersionValues[0] === "Username") {
         username = packageVersionValues[1];
+      } else if (packageVersionValues[0] === "Dev Hub Id") {
+        isDevHubAvailable = true;
+      } else if (packageVersionValues[0] === "Connected Status") {
+        isConnectedStatusAvailable = true;
       }
       return {
         title: packageVersionValues[1],
@@ -56,11 +62,25 @@ async function queryOrgDisplay(orgId) {
     .filter((item) => !!item.arg);
   const actions = [
     {
+      title: "Back",
+      subtitle: "Go to Start",
+      icon: { path: alfy.icon.get("BackwardArrowIcon") },
+      arg: `sfdx`,
+    },
+    {
       title: "Open",
       subtitle: "Open Org in Browser",
       icon: { path: alfy.icon.get("RightContainerArrowIcon") },
       arg: `sfdx:org:open ${username}`,
     },
   ];
+  if (!isDevHubAvailable && !isConnectedStatusAvailable) {
+    actions.push({
+      title: "Set as Default",
+      subtitle: "Set as Default Dev Hub",
+      icon: { path: alfy.icon.get("SidebarUtilitiesFolder") },
+      arg: `sfdx:config:set:defaultdevhubusername ${username}`,
+    });
+  }
   return [...actions, ...details];
 }

@@ -42,23 +42,21 @@ async function queryOrgs(searchTerm) {
         position += separatorLineGroups[i].length + 2;
       }
       return {
-        title: ` ${properties[0]} ${properties[1]}`,
+        title: `${properties[0]} ${properties[1]}`,
         subtitle: `Connection Status: ${properties[4]}`,
         arg: `sfdx:org:display ${properties[2]} `,
         icon: { path: alfy.icon.get("SidebariCloud") },
         mods: {
           alt: {
-            subtitle: `UserName: ${properties[2]}`,
-            arg: `sfdx:org:open ${properties[2]}`,
-            icon: { path: alfy.icon.get("RightContainerArrowIcon") },
+            subtitle: `UserName: ${properties[2]} (Action: Set as Default Dev Hub)`,
+            arg: `sfdx:config:set:defaultdevhubusername ${properties[2]}`,
+            icon: { path: alfy.icon.get("SidebarUtilitiesFolder") },
           },
           cmd: {
-            subtitle: `OrgId: ${properties[3]}`,
-            arg: `sfdx:org:open ${properties[2]}`,
-            icon: { path: alfy.icon.get("RightContainerArrowIcon") },
+            subtitle: `Alias: ${properties[1]}`,
           },
           ctrl: {
-            subtitle: `Alia: ${properties[1]}`,
+            subtitle: `OrgId: ${properties[3]} (Action: Open in Browser)`,
             arg: `sfdx:org:open ${properties[2]}`,
             icon: { path: alfy.icon.get("RightContainerArrowIcon") },
           },

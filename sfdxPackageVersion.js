@@ -65,5 +65,5 @@ async function queryPackageVersions(packageId) {
         },
       };
     })
-    .filter((item) => !!item.arg);
+    .filter((item) => !!item.title);
 }

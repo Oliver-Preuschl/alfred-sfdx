@@ -27,34 +27,36 @@ async function queryPackages(searchTerm) {
   );
   sfdxOutputLines = sfdxOutputLines.slice(3);
 
-  return sfdxOutputLines.map((line) => {
-    const packageValues = [];
-    let position = 0;
-    for (let i = 1; i <= 6; i++) {
-      const value = line.slice(
-        position,
-        position + separatorLineGroups[i].length + 2
-      );
-      packageValues.push(value.trim());
-      position += separatorLineGroups[i].length + 2;
-    }
-    return {
-      title:
-        (packageValues[0] ? `${packageValues[0]}.` : "") + packageValues[1],
-      subtitle: `Id: ${packageValues[2]}`,
-      icon: { path: alfy.icon.get("SidebarGenericFolder") },
-      arg: `sfdx:package:version ${packageValues[2]}`,
-      mods: {
-        alt: {
-          subtitle: `Description: ${packageValues[4]}`,
+  return sfdxOutputLines
+    .map((line) => {
+      const packageValues = [];
+      let position = 0;
+      for (let i = 1; i <= 6; i++) {
+        const value = line.slice(
+          position,
+          position + separatorLineGroups[i].length + 2
+        );
+        packageValues.push(value.trim());
+        position += separatorLineGroups[i].length + 2;
+      }
+      return {
+        title:
+          (packageValues[0] ? `${packageValues[0]}.` : "") + packageValues[1],
+        subtitle: `Id: ${packageValues[2]}`,
+        icon: { path: alfy.icon.get("SidebarGenericFolder") },
+        arg: `sfdx:package:version ${packageValues[2]}`,
+        mods: {
+          alt: {
+            subtitle: `Description: ${packageValues[4]}`,
+          },
+          cmd: {
+            subtitle: `Type: ${packageValues[5]}`,
+          },
+          ctrl: {
+            subtitle: `Alias: ${packageValues[3]}`,
+          },
         },
-        cmd: {
-          subtitle: `Type: ${packageValues[5]}`,
-        },
-        ctrl: {
-          subtitle: `Alias: ${packageValues[3]}`,
-        },
-      },
-    };
-  });
+      };
+    })
+    .filter((line) => !!line.title);
 }

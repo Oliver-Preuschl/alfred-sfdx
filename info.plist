@@ -140,6 +140,18 @@
 			</dict>
 			<dict>
 				<key>destinationuid</key>
+				<string>69BB2A4B-A7E0-4FD0-9287-C959D3D02DE4</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>E40AB2FF-290A-4082-80AE-0817F00A943E</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
 				<string>F359ED22-BB85-478B-BC56-A95D992AF1F1</string>
 				<key>modifiers</key>
 				<integer>0</integer>
@@ -227,6 +239,18 @@
 				<key>vitoclose</key>
 				<false/>
 			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>44C4CA1D-0680-4EA4-99F5-2C95280BF0F4</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>5F90BE3A-E757-4F0B-8568-CA839533C1AA</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
 		</array>
 	</dict>
 	<key>createdby</key>
@@ -273,7 +297,7 @@
 				<key>subtext</key>
 				<string></string>
 				<key>title</key>
-				<string>Getting Scratch Org Details...</string>
+				<string>Getting Org Details...</string>
 				<key>type</key>
 				<integer>0</integer>
 				<key>withspace</key>
@@ -304,6 +328,20 @@
 						<string>sfdx:org:open</string>
 						<key>uid</key>
 						<string>C39FD540-51F2-4574-88AC-21261776A117</string>
+					</dict>
+					<dict>
+						<key>inputstring</key>
+						<string></string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>0</integer>
+						<key>matchstring</key>
+						<string>sfdx</string>
+						<key>outputlabel</key>
+						<string>sfdx</string>
+						<key>uid</key>
+						<string>E40AB2FF-290A-4082-80AE-0817F00A943E</string>
 					</dict>
 				</array>
 				<key>elselabel</key>
@@ -419,6 +457,20 @@
 						<key>uid</key>
 						<string>7EEF4C6F-9336-44F7-AFF6-C2B981C9B20E</string>
 					</dict>
+					<dict>
+						<key>inputstring</key>
+						<string></string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>4</integer>
+						<key>matchstring</key>
+						<string>sfdx:config:set:defaultdevhubusername\s+\S*</string>
+						<key>outputlabel</key>
+						<string>sfdx:config:set:defaultdevhubusername</string>
+						<key>uid</key>
+						<string>5F90BE3A-E757-4F0B-8568-CA839533C1AA</string>
+					</dict>
 				</array>
 				<key>elselabel</key>
 				<string>else</string>
@@ -433,21 +485,25 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>autopaste</key>
+				<key>concurrently</key>
 				<false/>
-				<key>clipboardtext</key>
-				<string>{query}</string>
-				<key>ignoredynamicplaceholders</key>
-				<false/>
-				<key>transient</key>
-				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>./node_modules/.bin/run-node sfdxConfigSetDefaultDevHubUsername.js "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.output.clipboard</string>
+			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
-			<string>F359ED22-BB85-478B-BC56-A95D992AF1F1</string>
+			<string>44C4CA1D-0680-4EA4-99F5-2C95280BF0F4</string>
 			<key>version</key>
-			<integer>3</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -495,6 +551,21 @@
 			<string>2830AA5E-5471-4CB0-9997-3CE10E7366F6</string>
 			<key>version</key>
 			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argument</key>
+				<string>sfdx</string>
+				<key>leftcursor</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.showalfred</string>
+			<key>uid</key>
+			<string>69BB2A4B-A7E0-4FD0-9287-C959D3D02DE4</string>
+			<key>version</key>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -614,6 +685,25 @@
 			<string>alfred.workflow.input.scriptfilter</string>
 			<key>uid</key>
 			<string>EFDB9924-0B68-4DF4-BA83-E3AE64831F5E</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>F359ED22-BB85-478B-BC56-A95D992AF1F1</string>
 			<key>version</key>
 			<integer>3</integer>
 		</dict>
@@ -862,12 +952,26 @@
 			<key>ypos</key>
 			<integer>390</integer>
 		</dict>
+		<key>44C4CA1D-0680-4EA4-99F5-2C95280BF0F4</key>
+		<dict>
+			<key>xpos</key>
+			<integer>1060</integer>
+			<key>ypos</key>
+			<integer>215</integer>
+		</dict>
 		<key>5A62520E-AC11-4D73-958C-50E0A429F127</key>
 		<dict>
 			<key>xpos</key>
 			<integer>815</integer>
 			<key>ypos</key>
 			<integer>595</integer>
+		</dict>
+		<key>69BB2A4B-A7E0-4FD0-9287-C959D3D02DE4</key>
+		<dict>
+			<key>xpos</key>
+			<integer>1570</integer>
+			<key>ypos</key>
+			<integer>240</integer>
 		</dict>
 		<key>700FFC44-483B-4E84-AF40-C94F3A3C1A3D</key>
 		<dict>
@@ -909,7 +1013,7 @@
 			<key>xpos</key>
 			<integer>1565</integer>
 			<key>ypos</key>
-			<integer>105</integer>
+			<integer>90</integer>
 		</dict>
 		<key>EB47255F-26F6-4366-9811-1D663A29E1DF</key>
 		<dict>
@@ -942,14 +1046,14 @@
 		<key>F359ED22-BB85-478B-BC56-A95D992AF1F1</key>
 		<dict>
 			<key>xpos</key>
-			<integer>1565</integer>
+			<integer>1570</integer>
 			<key>ypos</key>
-			<integer>225</integer>
+			<integer>335</integer>
 		</dict>
 		<key>F436BE5B-8C3D-47E8-9A07-2EA3EC0ED37C</key>
 		<dict>
 			<key>xpos</key>
-			<integer>815</integer>
+			<integer>785</integer>
 			<key>ypos</key>
 			<integer>135</integer>
 		</dict>
