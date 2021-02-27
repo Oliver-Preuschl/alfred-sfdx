@@ -2,10 +2,13 @@ const alfy = require("alfy");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 
-const cacheKey = `sfdx:package:${alfy.input}:version`;
+const inputGroups = alfy.input.match(/(\S*)\s*(\S*)/);
+let packageId = inputGroups[2];
+
+const cacheKey = `sfdx:package:${packageId}:version`;
 let packageVersions;
 if (!alfy.cache.has(cacheKey)) {
-  packageVersions = await queryPackageVersions(alfy.input);
+  packageVersions = await queryPackageVersions(packageId);
   alfy.cache.set(cacheKey, packageVersions, {
     maxAge: 300000,
   });
@@ -22,7 +25,7 @@ async function queryPackageVersions(packageId) {
   let sfdxOutputLines = stdout.split("\n");
   const separatorLine = sfdxOutputLines[2];
   const separatorLineGroups = separatorLine.match(
-    /(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)/
+    /\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)/
   );
   sfdxOutputLines = sfdxOutputLines.slice(3);
 
@@ -45,7 +48,8 @@ async function queryPackageVersions(packageId) {
           " - " +
           packageVersionValues[3],
         subtitle: packageVersionValues[4],
-        arg: packageVersionValues[4] + ' ',
+        icon: { path: alfy.icon.get("SidebarGenericFile") },
+        arg: `sfdx:package:version:report ${packageVersionValues[4]} `,
         id: packageVersionValues[4],
         version: packageVersionValues[3],
         mods: {

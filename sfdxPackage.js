@@ -9,7 +9,7 @@ const cacheKey = "sfdx:package";
 let packages;
 if (!alfy.cache.has(cacheKey)) {
   packages = await queryPackages(searchTerm);
-  alfy.cache.set(cacheKey, packages, { maxAge: 300000 });
+  alfy.cache.set(cacheKey, packages, { maxAge: process.env.cacheMaxAge });
 } else {
   packages = alfy.cache.get(cacheKey);
 }
@@ -23,7 +23,7 @@ async function queryPackages(searchTerm) {
   let sfdxOutputLines = stdout.split("\n");
   const separatorLine = sfdxOutputLines[2];
   const separatorLineGroups = separatorLine.match(
-    /(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)/
+    /\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)/
   );
   sfdxOutputLines = sfdxOutputLines.slice(3);
 
@@ -42,7 +42,8 @@ async function queryPackages(searchTerm) {
       title:
         (packageValues[0] ? `${packageValues[0]}.` : "") + packageValues[1],
       subtitle: `Id: ${packageValues[2]}`,
-      arg: packageValues[2],
+      icon: { path: alfy.icon.get("SidebarGenericFolder") },
+      arg: `sfdx:package:version ${packageValues[2]}`,
       mods: {
         alt: {
           subtitle: `Description: ${packageValues[4]}`,

@@ -2,16 +2,16 @@ const alfy = require("alfy");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 
-const inputGroups = alfy.input.match(/(\S*)\s*(\S*)/);
-let packageVersionId = inputGroups[1];
-let searchTerm = inputGroups[2];
+const inputGroups = alfy.input.match(/(\S*)\s*(\S*)\s*(\S*)/);
+let packageVersionId = inputGroups[2];
+let searchTerm = inputGroups[3];
 
 const cacheKey = `sfdx:package:${packageVersionId}:report`;
 let packageVersionReport;
 if (!alfy.cache.has(cacheKey)) {
   packageVersionReport = await queryPackageVersionReport(packageVersionId);
   alfy.cache.set(cacheKey, packageVersionReport, {
-    maxAge: 300000,
+    maxAge: process.env.cacheMaxAge,
   });
 } else {
   packageVersionReport = alfy.cache.get(cacheKey);
@@ -26,7 +26,7 @@ async function queryPackageVersionReport(packageVersionId) {
   let sfdxOutputLines = stdout.split("\n");
 
   const separatorLine = sfdxOutputLines[2];
-  const separatorLineGroups = separatorLine.match(/(─*)\s*(─*)/);
+  const separatorLineGroups = separatorLine.match(/\s*(─*)\s*(─*)/);
 
   sfdxOutputLines = sfdxOutputLines.slice(3);
 
@@ -45,6 +45,7 @@ async function queryPackageVersionReport(packageVersionId) {
       return {
         title: packageVersionValues[1],
         subtitle: packageVersionValues[0],
+        icon:{path: alfy.icon.info},
         arg: packageVersionValues[1],
       };
     })

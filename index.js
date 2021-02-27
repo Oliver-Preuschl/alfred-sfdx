@@ -1,20 +1,22 @@
 const alfy = require("alfy");
 
-alfy.output([
+const options = [
   {
-    title: "Org - Scratch",
-    arg: "orgScratch ",
+    title: "sfdx:org:scratch",
+    arg: "sfdx:org:scratch ",
   },
   {
-    title: "Org - Conected",
-    arg: "orgConnected ",
+    title: "sfdx:org:connected",
+    arg: "sfdx:org:connected ",
   },
   {
-    title: "Package",
-    arg: "package ",
+    title: "sfdx:package",
+    arg: "sfdx:package ",
   },
   {
-    title: "Clear Cache",
-    arg: "clearCache",
+    title: "sfdx:clearcache",
+    arg: "sfdx:clearcache",
   },
-]);
+];
+
+alfy.output(alfy.matches(alfy.input, options, "title"));
