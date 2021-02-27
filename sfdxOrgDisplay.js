@@ -1,6 +1,5 @@
 const alfy = require("alfy");
-const util = require("util");
-const exec = util.promisify(require("child_process").exec);
+const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
 const inputGroups = alfy.input.match(/(\S*)\s*(\S*)\s*(\S*)/);
 let orgId = inputGroups[2];
@@ -23,29 +22,13 @@ if (!alfy.cache.has(cacheKey)) {
 alfy.output(addActions(alfy.matches(searchTerm, orgDetails, "subtitle")));
 
 async function queryOrgDisplay(orgId) {
-  const { stdout, stderr } = await exec(
-    `cd  alfred-sfdx; sfdx force:org:display --targetusername=${orgId} --verbose`
+  const sfdxPropertyLines = await getSfdxPropertyLines(
+    `cd  alfred-sfdx; sfdx force:org:display --targetusername=${orgId} --verbose`,
+    2,
+    4
   );
-
-  let sfdxOutputLines = stdout.split("\n");
-
-  const separatorLine = sfdxOutputLines[4];
-  const separatorLineGroups = separatorLine.match(/\s*(─*)\s*(─*)/);
-
-  sfdxOutputLines = sfdxOutputLines.slice(5);
-
-  return sfdxOutputLines
-    .map((line) => {
-      const properties = [];
-      let position = 0;
-      for (let i = 1; i <= 2; i++) {
-        const value = line.slice(
-          position,
-          position + separatorLineGroups[i].length + 2
-        );
-        properties.push(value.trim());
-        position += separatorLineGroups[i].length + 2;
-      }
+  return sfdxPropertyLines
+    .map((properties) => {
       if (properties[0] === "Username") {
         username = properties[1];
       } else if (properties[0] === "Dev Hub Id") {

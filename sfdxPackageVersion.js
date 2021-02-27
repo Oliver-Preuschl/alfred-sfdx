@@ -1,6 +1,5 @@
 const alfy = require("alfy");
-const util = require("util");
-const exec = util.promisify(require("child_process").exec);
+const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
 const inputGroups = alfy.input.match(/(\S*)\s*(\S*)\s*(\S*)/);
 let packageId = inputGroups[2];
@@ -25,29 +24,13 @@ alfy.output(
 );
 
 async function queryPackageVersions(packageId) {
-  const { stdout, stderr } = await exec(
-    `cd  alfred-sfdx; sfdx force:package:version:list --packages=${packageId}`
+  const sfdxPropertyLines = await getSfdxPropertyLines(
+    `cd  alfred-sfdx; sfdx force:package:version:list --packages=${packageId}`,
+    12,
+    2
   );
-
-  let sfdxOutputLines = stdout.split("\n");
-  const separatorLine = sfdxOutputLines[2];
-  const separatorLineGroups = separatorLine.match(
-    /\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)\s*(─*)/
-  );
-  sfdxOutputLines = sfdxOutputLines.slice(3);
-
-  return sfdxOutputLines
-    .map((line) => {
-      const properties = [];
-      let position = 0;
-      for (let i = 1; i <= 12; i++) {
-        const value = line.slice(
-          position,
-          position + separatorLineGroups[i].length + 2
-        );
-        properties.push(value.trim());
-        position += separatorLineGroups[i].length + 2;
-      }
+  return sfdxPropertyLines
+    .map((properties) => {
       return {
         title:
           (properties[1] ? `${properties[1]}.` : "") +
