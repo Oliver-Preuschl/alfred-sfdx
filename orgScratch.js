@@ -43,7 +43,7 @@ async function queryOrgs(searchTerm) {
       return {
         title: properties[0],
         subtitle: `Expiration Date: ${properties[3]}`,
-        arg: properties[1],
+        arg: properties[1] + ' ',
         mods: {
           alt: {
             subtitle: `UserName: ${properties[1]}`,

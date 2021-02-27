@@ -2,17 +2,21 @@ const alfy = require("alfy");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 
-const cacheKey = `sfdx:package:${alfy.input}:report`;
+const inputGroups = alfy.input.match(/(\S*)\s*(\S*)/);
+let packageVersionId = inputGroups[1];
+let searchTerm = inputGroups[2];
+
+const cacheKey = `sfdx:package:${packageVersionId}:report`;
 let packageVersionReport;
 if (!alfy.cache.has(cacheKey)) {
-  packageVersionReport = await queryPackageVersionReport(alfy.input);
+  packageVersionReport = await queryPackageVersionReport(packageVersionId);
   alfy.cache.set(cacheKey, packageVersionReport, {
     maxAge: 300000,
   });
 } else {
   packageVersionReport = alfy.cache.get(cacheKey);
 }
-alfy.output(packageVersionReport);
+alfy.output(alfy.matches(searchTerm, packageVersionReport, "subtitle"));
 
 async function queryPackageVersionReport(packageVersionId) {
   const { stdout, stderr } = await exec(

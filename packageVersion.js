@@ -45,7 +45,7 @@ async function queryPackageVersions(packageId) {
           " - " +
           packageVersionValues[3],
         subtitle: packageVersionValues[4],
-        arg: packageVersionValues[4],
+        arg: packageVersionValues[4] + ' ',
         id: packageVersionValues[4],
         version: packageVersionValues[3],
         mods: {
