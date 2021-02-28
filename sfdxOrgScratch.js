@@ -2,8 +2,8 @@ const alfy = require("alfy");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 
-const inputGroups = alfy.input.match(/(\S*)\s*(\S*)/);
-let searchTerm = inputGroups[2];
+const inputGroups = alfy.input.match(/(?:sfdx:org:scratch)?\s*(\S*)/);
+let searchTerm = inputGroups[1];
 
 const cacheKey = "sfdx:org:scratch";
 let packages;

@@ -1,9 +1,11 @@
 const alfy = require("alfy");
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
-const inputGroups = alfy.input.match(/(\S*)\s*(\S*)\s*(\S*)/);
-let packageVersionId = inputGroups[2];
-let searchTerm = inputGroups[3];
+const inputGroups = alfy.input.match(
+  /(?:sfdx:package:version:report)?\s*(\S*)\s*(\S*)/
+);
+let packageVersionId = inputGroups[1];
+let searchTerm = inputGroups[2];
 
 const cacheKey = `sfdx:package:${packageVersionId}:report`;
 let packageVersionReport;

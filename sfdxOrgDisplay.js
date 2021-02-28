@@ -1,9 +1,9 @@
 const alfy = require("alfy");
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
-const inputGroups = alfy.input.match(/(\S*)\s*(\S*)\s*(\S*)/);
-let orgId = inputGroups[2];
-let searchTerm = inputGroups[3];
+const inputGroups = alfy.input.match(/(?:sfdx:org:display)?\s*(\S*)\s*(\S*)/);
+let orgId = inputGroups[1];
+let searchTerm = inputGroups[2];
 
 let username;
 let isDevHubAvailable = false;
