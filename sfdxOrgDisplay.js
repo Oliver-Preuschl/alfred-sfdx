@@ -1,54 +1,64 @@
-'use strict';
+"use strict";
 
 const alfy = require("alfy");
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
+const {
+  getKey2PropertyLineFromPropertyLines,
+} = require("./lib/sfdxExecutor.js");
 
 const inputGroups = alfy.input.match(/(?:sfdx:org:display)?\s*(\S*)\s*(\S*)/);
 let orgId = inputGroups[1];
 let searchTerm = inputGroups[2];
 
-let username;
-let isDevHubAvailable = false;
-let isConnectedStatusAvailable = false;
-
 const cacheKey = `sfdx:org:${orgId}:display`;
-let orgDetails;
+let sfdxPropertyLines;
 if (!alfy.cache.has(cacheKey)) {
-  orgDetails = await queryOrgDisplay(orgId);
-  alfy.cache.set(cacheKey, orgDetails, {
+  sfdxPropertyLines = await getSfdxPropertyLines(
+    `cd  alfred-sfdx; sfdx force:org:display --targetusername=${orgId} --verbose`,
+    2,
+    4,
+    { propertyNames: ["key", "value"] }
+  );
+  alfy.cache.set(cacheKey, sfdxPropertyLines, {
     maxAge: process.env.cacheMaxAge,
   });
 } else {
-  orgDetails = alfy.cache.get(cacheKey);
+  sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
-alfy.output(addActions(alfy.matches(searchTerm, orgDetails, "subtitle")));
+const orgDetails = await buildOrgDetailItems(sfdxPropertyLines);
+const orgDetailName2OrgDetail = getKey2PropertyLineFromPropertyLines(
+  sfdxPropertyLines,
+  "key"
+);
+const username = orgDetailName2OrgDetail.get("Username").value;
+const isDevHubAvailable = orgDetailName2OrgDetail.has("Dev Hub Id");
+const isConnectedStatusAvailable = orgDetailName2OrgDetail.has(
+  "Connected Status"
+);
+const isDevHub = !isDevHubAvailable && !isConnectedStatusAvailable;
 
-async function queryOrgDisplay(orgId) {
-  const sfdxPropertyLines = await getSfdxPropertyLines(
-    `cd  alfred-sfdx; sfdx force:org:display --targetusername=${orgId} --verbose`,
-    2,
-    4
-  );
+alfy.output(
+  addActions(
+    alfy.matches(searchTerm, orgDetails, "subtitle"),
+    username,
+    isDevHub
+  )
+);
+
+async function buildOrgDetailItems(sfdxPropertyLines) {
   return sfdxPropertyLines
     .map((properties) => {
-      if (properties[0] === "Username") {
-        username = properties[1];
-      } else if (properties[0] === "Dev Hub Id") {
-        isDevHubAvailable = true;
-      } else if (properties[0] === "Connected Status") {
-        isConnectedStatusAvailable = true;
-      }
       return {
-        title: properties[1],
-        subtitle: properties[0],
+        title: properties.value,
+        subtitle: properties.key,
         icon: { path: alfy.icon.info },
-        arg: properties[1],
+        arg: properties.value,
       };
     })
     .filter((item) => !!item.arg);
 }
 
-function addActions(items) {
+function addActions(items, username, isDevHub) {
   const actions = [
     {
       title: "Back",
@@ -63,7 +73,7 @@ function addActions(items) {
       arg: `sfdx:org:open ${username}`,
     },
   ];
-  if (!isDevHubAvailable && !isConnectedStatusAvailable) {
+  if (isDevHub) {
     actions.push({
       title: "Set as Default",
       subtitle: "Set as Default Dev Hub",

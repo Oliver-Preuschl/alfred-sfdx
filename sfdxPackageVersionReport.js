@@ -1,3 +1,5 @@
+"use strict";
+
 const alfy = require("alfy");
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
@@ -8,32 +10,37 @@ let packageVersionId = inputGroups[1];
 let searchTerm = inputGroups[2];
 
 const cacheKey = `sfdx:package:${packageVersionId}:report`;
-let packageVersionReport;
+
+let sfdxPropertyLines;
 if (!alfy.cache.has(cacheKey)) {
-  packageVersionReport = await queryPackageVersionReport(packageVersionId);
-  alfy.cache.set(cacheKey, packageVersionReport, {
+  sfdxPropertyLines = await getSfdxPropertyLines(
+    `cd  alfred-sfdx; sfdx force:package:version:report --package=${packageVersionId}`,
+    2,
+    2,
+    { propertyNames: ["key", "value"] }
+  );
+  alfy.cache.set(cacheKey, sfdxPropertyLines, {
     maxAge: process.env.cacheMaxAge,
   });
 } else {
-  packageVersionReport = alfy.cache.get(cacheKey);
+  sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
+const packageVersionReport = await buildPackageVersionReportItems(
+  sfdxPropertyLines
+);
+
 alfy.output(
   addActions(alfy.matches(searchTerm, packageVersionReport, "subtitle"))
 );
 
-async function queryPackageVersionReport(packageVersionId) {
-  const sfdxPropertyLines = await getSfdxPropertyLines(
-    `cd  alfred-sfdx; sfdx force:package:version:report --package=${packageVersionId}`,
-    2,
-    2
-  );
+async function buildPackageVersionReportItems(packageVersionId) {
   return sfdxPropertyLines
     .map((properties) => {
       return {
-        title: properties[1],
-        subtitle: properties[0],
+        title: properties.value,
+        subtitle: properties.key,
         icon: { path: alfy.icon.info },
-        arg: properties[1],
+        arg: properties.value,
       };
     })
     .filter((item) => !!item.arg);

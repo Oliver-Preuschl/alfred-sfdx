@@ -7,42 +7,52 @@ const inputGroups = alfy.input.match(/(?:sfdx:org:connected)?\s*(\S*)/);
 let searchTerm = inputGroups[1];
 
 const cacheKey = "sfdx:org:connected";
-let packages;
+let sfdxPropertyLines;
 if (!alfy.cache.has(cacheKey)) {
-  packages = await queryOrgs(searchTerm);
-  alfy.cache.set(cacheKey, packages, { maxAge: process.env.cacheMaxAge });
-} else {
-  packages = alfy.cache.get(cacheKey);
-}
-alfy.output(addActions(alfy.matches(searchTerm, packages, "title")));
-
-async function queryOrgs(searchTerm) {
-  const sfdxPropertyLines = await getSfdxPropertyLines(
+  sfdxPropertyLines = await getSfdxPropertyLines(
     "cd  alfred-sfdx; sfdx force:org:list",
     5,
     2,
-    { endLineKeyword: "EXPIRATION DATE" }
+    {
+      endLineKeyword: "EXPIRATION DATE",
+      propertyNames: [
+        "default",
+        "alias",
+        "username",
+        "orgId",
+        "connectionStatus",
+      ],
+    }
   );
+  alfy.cache.set(cacheKey, sfdxPropertyLines, {
+    maxAge: process.env.cacheMaxAge,
+  });
+} else {
+  sfdxPropertyLines = alfy.cache.get(cacheKey);
+}
+const packages = await queryOrgs(searchTerm);
+alfy.output(addActions(alfy.matches(searchTerm, packages, "title")));
 
+async function queryOrgs(searchTerm) {
   return sfdxPropertyLines
     .map((properties) => {
       return {
-        title: `${properties[0]} ${properties[1]}`,
-        subtitle: `Connection Status: ${properties[4]}`,
-        arg: `sfdx:org:display ${properties[2]} `,
+        title: `${properties.default} ${properties.alias}`,
+        subtitle: `Connection Status: ${properties.connectionStatus}`,
+        arg: `sfdx:org:display ${properties.username} `,
         icon: { path: alfy.icon.get("SidebariCloud") },
         mods: {
           alt: {
-            subtitle: `[SET DEFAULT DEV HUB] UserName: ${properties[2]}`,
-            arg: `sfdx:config:set:defaultdevhubusername ${properties[2]}`,
+            subtitle: `[SET DEFAULT DEV HUB] UserName: ${properties.username}`,
+            arg: `sfdx:config:set:defaultdevhubusername ${properties.username}`,
             icon: { path: alfy.icon.get("SidebarUtilitiesFolder") },
           },
           cmd: {
-            subtitle: `Org Id: ${properties[3]}`,
+            subtitle: `Org Id: ${properties.orgId}`,
           },
           ctrl: {
-            subtitle: `[OPEN] UserName: ${properties[2]}`,
-            arg: `sfdx:org:open ${properties[2]}`,
+            subtitle: `[OPEN] UserName: ${properties.username}`,
+            arg: `sfdx:org:open ${properties.username}`,
             icon: { path: alfy.icon.get("SidebarNetwork") },
           },
         },

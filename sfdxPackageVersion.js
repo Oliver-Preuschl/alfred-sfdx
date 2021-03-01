@@ -8,15 +8,36 @@ let packageId = inputGroups[1];
 let searchTerm = inputGroups[2];
 
 const cacheKey = `sfdx:package:${packageId}:version`;
-let packageVersions;
+let sfdxPropertyLines;
 if (!alfy.cache.has(cacheKey)) {
-  packageVersions = await queryPackageVersions(packageId);
-  alfy.cache.set(cacheKey, packageVersions, {
+  sfdxPropertyLines = await getSfdxPropertyLines(
+    `cd  alfred-sfdx; sfdx force:package:version:list --packages=${packageId}`,
+    12,
+    2,
+    {
+      propertyNames: [
+        "packageName",
+        "namespace",
+        "versionName",
+        "version",
+        "packageVersionId",
+        "alias",
+        "installationKey",
+        "released",
+        "validationSkipped",
+        "ancestor",
+        "ancestorVersion",
+        "branch",
+      ],
+    }
+  );
+  alfy.cache.set(cacheKey, sfdxPropertyLines, {
     maxAge: 300000,
   });
 } else {
-  packageVersions = alfy.cache.get(cacheKey);
+  sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
+const packageVersions = await buildPackageVersionItems(sfdxPropertyLines);
 alfy.output(
   addActions(
     alfy
@@ -25,34 +46,29 @@ alfy.output(
   )
 );
 
-async function queryPackageVersions(packageId) {
-  const sfdxPropertyLines = await getSfdxPropertyLines(
-    `cd  alfred-sfdx; sfdx force:package:version:list --packages=${packageId}`,
-    12,
-    2
-  );
+async function buildPackageVersionItems(sfdxPropertyLines) {
   return sfdxPropertyLines
     .map((properties) => {
       return {
         title:
-          (properties[1] ? `${properties[1]}.` : "") +
-          properties[0] +
+          (properties.namespace ? `${properties.namespace}.` : "") +
+          properties.packageName +
           " - " +
-          properties[3],
-        subtitle: properties[4],
+          properties.version,
+        subtitle: properties.packageVersionId,
         icon: { path: alfy.icon.get("SidebarGenericFile") },
-        arg: `sfdx:package:version:report ${properties[4]} `,
-        id: properties[4],
-        version: properties[3],
+        arg: `sfdx:package:version:report ${properties.packageVersionId} `,
+        id: properties.packageVersionId,
+        version: properties.version,
         mods: {
           alt: {
-            subtitle: `Released: ${properties[7]}`,
+            subtitle: `Released: ${properties.released}`,
           },
           cmd: {
-            subtitle: `Ancestor: ${properties[9]}`,
+            subtitle: `Ancestor: ${properties.ancestor}`,
           },
           ctrl: {
-            subtitle: `Key: ${properties[6]}`,
+            subtitle: `Key: ${properties.installationKey}`,
           },
         },
       };
