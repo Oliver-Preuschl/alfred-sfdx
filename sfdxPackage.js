@@ -12,7 +12,9 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   packages = alfy.cache.get(cacheKey);
 }
-alfy.output(addActions(alfy.matches(searchTerm, packages, "title")));
+alfy.output(
+  addActions(alfy.matches(searchTerm, enrichWithProjectPath(packages), "title"))
+);
 
 async function queryPackages() {
   const sfdxPropertyLines = await getSfdxPropertyLines(
@@ -36,12 +38,26 @@ async function queryPackages() {
             subtitle: `Type: ${properties[5]}`,
           },
           ctrl: {
-            subtitle: `Alias: ${properties[3]}`,
+            subtitle: `[SET] Project Path: -`,
+            arg: `sfdx:package:config:searchpath ${properties[2]} `,
+            icon: { path: alfy.icon.get("SidebarUtilitiesFolder") },
           },
         },
       };
     })
     .filter((line) => !!line.title);
+}
+
+function enrichWithProjectPath(packages) {
+  return packages.map((sfdxPackage) => {
+    const sfdxPackageToReturn = { ...sfdxPackage };
+    const configKey = `sfdx:package:${sfdxPackageToReturn.id}:config:path`;
+    if (alfy.config.has(configKey)) {
+      const projectPath = alfy.config.get(configKey);
+      sfdxPackageToReturn.mods.ctrl.subtitle = `[SET] Project Path: ${projectPath}`;
+    }
+    return sfdxPackageToReturn;
+  });
 }
 
 function addActions(items) {
