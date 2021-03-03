@@ -1,9 +1,7 @@
 const alfy = require("alfy");
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
-const inputGroups = alfy.input.match(
-  /(?:sfdx:package:version)?\s*(\S*)\s*(\S*)/
-);
+const inputGroups = alfy.input.match(/(\S*)\s*(\S*)/);
 let packageId = inputGroups[1];
 let searchTerm = inputGroups[2];
 
@@ -37,16 +35,13 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
-const packageVersions = await buildPackageVersionItems(sfdxPropertyLines);
-alfy.output(
-  addActions(
-    alfy
-      .matches(searchTerm, packageVersions, "title")
-      .sort((a, b) => (a.id > b.id ? -1 : 1))
-  )
-);
+const actionItems = getActionItems();
+const packageVersionItems = alfy
+  .matches(searchTerm, await getPackageVersionItems(sfdxPropertyLines), "title")
+  .sort((a, b) => (a.id > b.id ? -1 : 1));
+alfy.output([...actionItems, ...packageVersionItems]);
 
-async function buildPackageVersionItems(sfdxPropertyLines) {
+async function getPackageVersionItems(sfdxPropertyLines) {
   return sfdxPropertyLines
     .map((propertyLine) => {
       const packageNameWithNamespace =
@@ -77,8 +72,8 @@ async function buildPackageVersionItems(sfdxPropertyLines) {
     .filter((item) => !!item.id);
 }
 
-function addActions(items) {
-  const actions = [
+function getActionItems() {
+  return [
     {
       title: "Back",
       subtitle: "Go to Start",
@@ -86,5 +81,4 @@ function addActions(items) {
       arg: `sfdx`,
     },
   ];
-  return [...actions, ...items];
 }

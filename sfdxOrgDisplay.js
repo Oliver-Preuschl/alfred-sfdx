@@ -6,7 +6,7 @@ const {
   getKey2PropertyLineFromPropertyLines,
 } = require("./lib/sfdxExecutor.js");
 
-const inputGroups = alfy.input.match(/(?:sfdx:org:display)?\s*(\S*)\s*(\S*)/);
+const inputGroups = alfy.input.match(/(\S*)\s*(\S*)/);
 let orgId = inputGroups[1];
 let searchTerm = inputGroups[2];
 
@@ -25,7 +25,11 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
-const orgDetails = await buildOrgDetailItems(sfdxPropertyLines);
+const orgDetailItems = alfy.matches(
+  searchTerm,
+  await getOrgDetailItems(sfdxPropertyLines),
+  "subtitle"
+);
 const orgDetailName2OrgDetail = getKey2PropertyLineFromPropertyLines(
   sfdxPropertyLines,
   "key"
@@ -36,16 +40,11 @@ const isConnectedStatusAvailable = orgDetailName2OrgDetail.has(
   "Connected Status"
 );
 const isDevHub = !isDevHubAvailable && !isConnectedStatusAvailable;
+const actionItems = getActionItems(username, isDevHub);
 
-alfy.output(
-  addActions(
-    alfy.matches(searchTerm, orgDetails, "subtitle"),
-    username,
-    isDevHub
-  )
-);
+alfy.output([...actionItems, ...orgDetailItems]);
 
-async function buildOrgDetailItems(sfdxPropertyLines) {
+async function getOrgDetailItems(sfdxPropertyLines) {
   return sfdxPropertyLines
     .map((properties) => {
       return {
@@ -58,7 +57,7 @@ async function buildOrgDetailItems(sfdxPropertyLines) {
     .filter((item) => !!item.arg);
 }
 
-function addActions(items, username, isDevHub) {
+function getActionItems(username, isDevHub) {
   const actions = [
     {
       title: "Back",
@@ -81,5 +80,5 @@ function addActions(items, username, isDevHub) {
       arg: `sfdx:config:set:defaultdevhubusername ${username}`,
     });
   }
-  return [...actions, ...items];
+  return actions;
 }

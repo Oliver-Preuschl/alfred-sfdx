@@ -3,24 +3,28 @@ const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
-const inputGroups = alfy.input.match(/(\S*)/);
-let searchTerm = inputGroups[1];
+const inputGroups = alfy.input.match(/"(.*)"\s*(\S*)/);
+let projectPath = inputGroups[1];
+let searchTerm = inputGroups[2];
 
-const cacheKey = "sfdx:org:connected";
+const cacheKey = "sfdx:org:scratch";
 let sfdxPropertyLines;
 if (!alfy.cache.has(cacheKey)) {
   sfdxPropertyLines = await getSfdxPropertyLines(
-    "cd  alfred-sfdx; sfdx force:org:list",
-    5,
-    2,
+    "cd  alfred-sfdx; sfdx force:org:list --verbose",
+    8,
+    1,
     {
-      endLineKeyword: "EXPIRATION DATE",
+      startLineKeyword: "EXPIRATION DATE",
       propertyNames: [
-        "default",
         "alias",
         "username",
         "orgId",
-        "connectionStatus",
+        "status",
+        "devHub",
+        "createdDate",
+        "instanceUrl",
+        "expirationDate",
       ],
     }
   );
@@ -31,27 +35,23 @@ if (!alfy.cache.has(cacheKey)) {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
 const actionItems = getActionItems();
-const orgItems = alfy.matches(searchTerm, await queryOrgs(searchTerm), "title");
-alfy.output([...actionItems, ...orgItems]);
+const orgItems = await buildOrgItems(projectPath);
+alfy.output([...actionItems, ...alfy.matches(searchTerm, orgItems, "title")]);
 
-async function queryOrgs(searchTerm) {
+async function buildOrgItems(projectPath) {
   return sfdxPropertyLines
     .map((properties) => {
       return {
-        title:
-          (properties.default ? `${properties.default} ` : "") +
-          properties.alias,
-        subtitle: `Connection Status: ${properties.connectionStatus}`,
-        arg: `sfdx:org:display ${properties.username} `,
+        title: properties.alias,
+        subtitle: `${properties.status} (Expiration Date: ${properties.expirationDate})`,
+        arg: `sfdx:project:assignscratchorg ${projectPath} ${properties.username} `,
         icon: { path: alfy.icon.get("SidebariCloud") },
         mods: {
           alt: {
-            subtitle: `[SET DEFAULT-DEV-HUB] "${properties.username}"`,
-            arg: `sfdx:config:set:defaultdevhubusername ${properties.username}`,
-            icon: { path: alfy.icon.get("SidebarUtilitiesFolder") },
+            subtitle: `OrgId: ${properties.orgId}`,
           },
           cmd: {
-            subtitle: `Org Id: ${properties.orgId}`,
+            subtitle: `Instance URL: ${properties.instanceUrl}`,
           },
           ctrl: {
             subtitle: `[OPEN] "${properties.username}"`,

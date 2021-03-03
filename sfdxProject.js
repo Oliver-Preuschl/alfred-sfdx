@@ -3,7 +3,7 @@ const {
   findFolderWithMatchingFileInWorkspace,
 } = require("./lib/fileSearch.js");
 
-const inputGroups = alfy.input.match(/(?:sfdx:project)?\s*(\S*)/);
+const inputGroups = alfy.input.match(/(\S*)/);
 let searchTerm = inputGroups[1];
 
 const cacheKey = `sfdx:project:paths`;
@@ -18,8 +18,13 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxProjectFiles = alfy.cache.get(cacheKey);
 }
-const availablePathItems = await getAvailableProjectPathItems(sfdxProjectFiles);
-alfy.output(addActions(alfy.matches(searchTerm, availablePathItems, "title")));
+const actionsItems = getActionItems();
+const projectPathItems = alfy.matches(
+  searchTerm,
+  await getAvailableProjectPathItems(sfdxProjectFiles),
+  "title"
+);
+alfy.output([...actionsItems, ...projectPathItems]);
 
 async function getAvailableProjectPathItems(sfdxProjectFiles) {
   return sfdxProjectFiles
@@ -47,8 +52,8 @@ async function getAvailableProjectPathItems(sfdxProjectFiles) {
     .sort((a, b) => (a.title < b.title ? -1 : 1));
 }
 
-function addActions(items) {
-  const actions = [
+function getActionItems() {
+  return [
     {
       title: "Back",
       subtitle: "Go to Start",
@@ -56,5 +61,4 @@ function addActions(items) {
       arg: `sfdx`,
     },
   ];
-  return [...actions, ...items];
 }

@@ -3,7 +3,7 @@ const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
-const inputGroups = alfy.input.match(/(?:sfdx:org:scratch)?\s*(\S*)/);
+const inputGroups = alfy.input.match(/(\S*)/);
 let searchTerm = inputGroups[1];
 
 const cacheKey = "sfdx:org:scratch";
@@ -33,10 +33,16 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
-packages = await buildOrgItems(searchTerm);
-alfy.output(addActions(alfy.matches(searchTerm, packages, "title")));
+const actionItems = await getActionItems();
+const orgItems = alfy.matches(
+  searchTerm,
+  await getOrgItems(searchTerm),
+  "title"
+);
 
-async function buildOrgItems(searchTerm) {
+alfy.output([...actionItems, ...orgItems]);
+
+async function getOrgItems(searchTerm) {
   return sfdxPropertyLines
     .map((properties) => {
       return {
@@ -62,8 +68,8 @@ async function buildOrgItems(searchTerm) {
     .filter((item) => !!item.title);
 }
 
-function addActions(items) {
-  const actions = [
+function getActionItems() {
+  return [
     {
       title: "Back",
       subtitle: "Go to Start",
@@ -71,5 +77,4 @@ function addActions(items) {
       arg: `sfdx`,
     },
   ];
-  return [...actions, ...items];
 }

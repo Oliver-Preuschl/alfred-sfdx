@@ -6,9 +6,7 @@ const {
   getKey2PropertyLineFromPropertyLines,
 } = require("./lib/sfdxExecutor.js");
 
-const inputGroups = alfy.input.match(
-  /(?:sfdx:package:version:report)?\s*(\S*)\s*(\S*)/
-);
+const inputGroups = alfy.input.match(/(\S*)\s*(\S*)/);
 let packageVersionId = inputGroups[1];
 let searchTerm = inputGroups[2];
 
@@ -46,18 +44,17 @@ const installationUrlItem = {
   }`,
   icon: { path: alfy.icon.get("SidebarNetwork") },
 };
-const packageVersionReport = await buildPackageVersionReportItems(
-  sfdxPropertyLines
+
+const actionItems = getActionItems();
+const packageVersionReportItems = alfy.matches(
+  searchTerm,
+  await getPackageVersionReportItems(sfdxPropertyLines),
+  "subtitle"
 );
 
-alfy.output(
-  addActions([
-    installationUrlItem,
-    ...alfy.matches(searchTerm, packageVersionReport, "subtitle"),
-  ])
-);
+alfy.output([...actionItems, ...packageVersionReportItems]);
 
-async function buildPackageVersionReportItems(packageVersionId) {
+async function getPackageVersionReportItems(packageVersionId) {
   return sfdxPropertyLines
     .map((properties) => {
       return {
@@ -70,8 +67,8 @@ async function buildPackageVersionReportItems(packageVersionId) {
     .filter((item) => !!item.arg);
 }
 
-function addActions(items) {
-  const actions = [
+function getActionItems() {
+  return [
     {
       title: "Back",
       subtitle: "Go to Start",
@@ -79,5 +76,4 @@ function addActions(items) {
       arg: `sfdx`,
     },
   ];
-  return [...actions, ...items];
 }

@@ -1,7 +1,7 @@
 const alfy = require("alfy");
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
-const inputGroups = alfy.input.match(/(?:sfdx:package)?\s*(\S*)/);
+const inputGroups = alfy.input.match(/(\S*)/);
 let searchTerm = inputGroups[1];
 
 const cacheKey = "sfdx:package";
@@ -29,12 +29,13 @@ if (!alfy.cache.has(cacheKey)) {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
 //alfy.log(sfdxPropertyLines);
-const packages = await buildPackageItems(sfdxPropertyLines);
-alfy.output(
-  addActions(alfy.matches(searchTerm, enrichWithProjectPath(packages), "title"))
+const packageItems = enrichWithProjectPath(
+  alfy.matches(searchTerm, await getPackageItems(sfdxPropertyLines), "title")
 );
+const actionItems = getActionItems();
+alfy.output([...actionItems, ...packageItems]);
 
-async function buildPackageItems(sfdxPropertyLines) {
+async function getPackageItems(sfdxPropertyLines) {
   return sfdxPropertyLines
     .map((properties) => {
       return {
@@ -52,11 +53,11 @@ async function buildPackageItems(sfdxPropertyLines) {
           cmd: {
             subtitle: `Type: ${properties.type}`,
           },
-          ctrl: {
+          /*ctrl: {
             subtitle: `[SET PROJECT-PATH] -`,
             arg: `sfdx:package:config:searchpath ${properties.id} `,
             icon: { path: alfy.icon.get("SidebarUtilitiesFolder") },
-          },
+          },*/
         },
       };
     })
@@ -69,14 +70,14 @@ function enrichWithProjectPath(packages) {
     const configKey = `sfdx:package:${sfdxPackageToReturn.id}:config:path`;
     if (alfy.config.has(configKey)) {
       const projectPath = alfy.config.get(configKey);
-      sfdxPackageToReturn.mods.ctrl.subtitle = `[SET] [PROJECT PATH] "${projectPath}"`;
+      //sfdxPackageToReturn.mods.ctrl.subtitle = `[SET] [PROJECT PATH] "${projectPath}"`;
     }
     return sfdxPackageToReturn;
   });
 }
 
-function addActions(items) {
-  const actions = [
+function getActionItems() {
+  return [
     {
       title: "Back",
       subtitle: "Go to Start",
@@ -84,5 +85,4 @@ function addActions(items) {
       arg: `sfdx`,
     },
   ];
-  return [...actions, ...items];
 }
