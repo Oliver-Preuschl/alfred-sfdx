@@ -18,36 +18,44 @@ const currentPathItem = {
 };
 
 const cacheKey = `sfdx:project:paths`;
-let availablePaths;
+let availableProjectPathItems;
 if (!alfy.cache.has(cacheKey)) {
-  availablePaths = await getAvailablePaths();
-  alfy.cache.set(cacheKey, availablePaths, { maxAge: process.env.cacheMaxAge });
+  availableProjectPathItems = await getAvailableProjectPathItems();
+  alfy.cache.set(cacheKey, availableProjectPathItems, {
+    maxAge: process.env.cacheMaxAge,
+  });
 } else {
-  availablePaths = alfy.cache.get(cacheKey);
+  availableProjectPathItems = alfy.cache.get(cacheKey);
 }
 alfy.output(
   addActions([
     currentPathItem,
-    ...alfy.matches(searchTerm, enrichWithArg(availablePaths), "title"),
+    ...alfy.matches(
+      searchTerm,
+      enrichWithArg(availableProjectPathItems),
+      "title"
+    ),
   ])
 );
 
-async function getAvailablePaths() {
-  const sfdxProjectFolders = await findFolderWithMatchingFileInWorkspace(
+async function getAvailableProjectPathItems() {
+  const sfdxProjectFiles = await findFolderWithMatchingFileInWorkspace(
     "sfdx-project.json"
   );
-  return sfdxProjectFolders.map((sfdxProjectFolder) => ({
-    title: sfdxProjectFolder,
-    subtitle: `[SET] ${sfdxProjectFolder}`,
-    icon: { path: alfy.icon.get("SidebarGenericFolder") },
-    folder: sfdxProjectFolder,
-  }));
+  return sfdxProjectFiles
+    .map((sfdxProjectFile) => ({
+      title: sfdxProjectFile.folder,
+      subtitle: `[SET] "${sfdxProjectFile.path}"`,
+      icon: { path: alfy.icon.get("SidebarGenericFolder") },
+      path: sfdxProjectFile.path,
+    }))
+    .sort((a, b) => (a.title < b.title ? -1 : 1));
 }
 
-function enrichWithArg(paths) {
-  return paths.map((path) => ({
-    ...path,
-    arg: `sfdx:package:config:setpath ${packageId} ${path.folder}`,
+function enrichWithArg(projectPathItems) {
+  return projectPathItems.map((projectPathItem) => ({
+    ...projectPathItem,
+    arg: `sfdx:package:config:setpath ${packageId} ${projectPathItem.path}`,
   }));
 }
 

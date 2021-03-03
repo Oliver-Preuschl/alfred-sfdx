@@ -37,13 +37,15 @@ async function queryOrgs(searchTerm) {
   return sfdxPropertyLines
     .map((properties) => {
       return {
-        title: `${properties.default} ${properties.alias}`,
+        title:
+          (properties.default ? `${properties.default} ` : "") +
+          properties.alias,
         subtitle: `Connection Status: ${properties.connectionStatus}`,
         arg: `sfdx:org:display ${properties.username} `,
         icon: { path: alfy.icon.get("SidebariCloud") },
         mods: {
           alt: {
-            subtitle: `[SET DEFAULT DEV HUB] UserName: ${properties.username}`,
+            subtitle: `[SET DEFAULT-DEV-HUB] "${properties.username}"`,
             arg: `sfdx:config:set:defaultdevhubusername ${properties.username}`,
             icon: { path: alfy.icon.get("SidebarUtilitiesFolder") },
           },
@@ -51,7 +53,7 @@ async function queryOrgs(searchTerm) {
             subtitle: `Org Id: ${properties.orgId}`,
           },
           ctrl: {
-            subtitle: `[OPEN] UserName: ${properties.username}`,
+            subtitle: `[OPEN] "${properties.username}"`,
             arg: `sfdx:org:open ${properties.username}`,
             icon: { path: alfy.icon.get("SidebarNetwork") },
           },

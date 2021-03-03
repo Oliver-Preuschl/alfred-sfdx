@@ -1,8 +1,8 @@
 "use strict";
 
 const alfy = require("alfy");
-const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 const {
+  getSfdxPropertyLines,
   getKey2PropertyLineFromPropertyLines,
 } = require("./lib/sfdxExecutor.js");
 

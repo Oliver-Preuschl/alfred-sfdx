@@ -52,7 +52,7 @@ async function buildOrgItems(searchTerm) {
             subtitle: `Instance URL: ${properties.instanceUrl}`,
           },
           ctrl: {
-            subtitle: `[OPEN] Username: ${properties.username}`,
+            subtitle: `[OPEN] "${properties.username}"`,
             arg: `sfdx:org:open ${properties.username}`,
             icon: { path: alfy.icon.get("SidebarNetwork") },
           },

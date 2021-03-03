@@ -2,6 +2,11 @@ const alfy = require("alfy");
 
 const options = [
   {
+    title: "sfdx:project",
+    arg: "sfdx:project ",
+    icon: { path: alfy.icon.get("SidebarAllMyFiles") },
+  },
+  {
     title: "sfdx:org:scratch",
     arg: "sfdx:org:scratch ",
     icon: { path: alfy.icon.get("SidebariCloud") },

@@ -1,7 +1,10 @@
 "use strict";
 
 const alfy = require("alfy");
-const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
+const {
+  getSfdxPropertyLines,
+  getKey2PropertyLineFromPropertyLines,
+} = require("./lib/sfdxExecutor.js");
 
 const inputGroups = alfy.input.match(
   /(?:sfdx:package:version:report)?\s*(\S*)\s*(\S*)/
@@ -25,12 +28,33 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
+const packageVersionDetailName2PackageVersionDetail = getKey2PropertyLineFromPropertyLines(
+  sfdxPropertyLines,
+  "key"
+);
+const installationUrlItem = {
+  title: `/packaging/installPackage.apexp?p0=${
+    packageVersionDetailName2PackageVersionDetail.get(
+      "Subscriber Package Version Id"
+    ).value
+  }`,
+  subtitle: "Installation URL",
+  arg: `/packaging/installPackage.apexp?p0=${
+    packageVersionDetailName2PackageVersionDetail.get(
+      "Subscriber Package Version Id"
+    ).value
+  }`,
+  icon: { path: alfy.icon.get("SidebarNetwork") },
+};
 const packageVersionReport = await buildPackageVersionReportItems(
   sfdxPropertyLines
 );
 
 alfy.output(
-  addActions(alfy.matches(searchTerm, packageVersionReport, "subtitle"))
+  addActions([
+    installationUrlItem,
+    ...alfy.matches(searchTerm, packageVersionReport, "subtitle"),
+  ])
 );
 
 async function buildPackageVersionReportItems(packageVersionId) {

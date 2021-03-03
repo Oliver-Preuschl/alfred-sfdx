@@ -48,27 +48,28 @@ alfy.output(
 
 async function buildPackageVersionItems(sfdxPropertyLines) {
   return sfdxPropertyLines
-    .map((properties) => {
+    .map((propertyLine) => {
+      const packageNameWithNamespace =
+        (propertyLine.namespace ? `${propertyLine.namespace}.` : "") +
+        propertyLine.packageName;
+      const releasedStatus =
+        propertyLine.released === "true" ? " (Released)" : "";
       return {
-        title:
-          (properties.namespace ? `${properties.namespace}.` : "") +
-          properties.packageName +
-          " - " +
-          properties.version,
-        subtitle: properties.packageVersionId,
+        title: `${packageNameWithNamespace} - ${propertyLine.version}${releasedStatus}`,
+        subtitle: propertyLine.packageVersionId,
         icon: { path: alfy.icon.get("SidebarGenericFile") },
-        arg: `sfdx:package:version:report ${properties.packageVersionId} `,
-        id: properties.packageVersionId,
-        version: properties.version,
+        arg: `sfdx:package:version:report ${propertyLine.packageVersionId} `,
+        id: propertyLine.packageVersionId,
+        version: propertyLine.version,
         mods: {
           alt: {
-            subtitle: `Released: ${properties.released}`,
+            subtitle: `Version Name: ${propertyLine.versionName}`,
           },
           cmd: {
-            subtitle: `Ancestor: ${properties.ancestor}`,
+            subtitle: `Ancestor: ${propertyLine.ancestor}`,
           },
           ctrl: {
-            subtitle: `Key: ${properties.installationKey}`,
+            subtitle: `Installation URL: /packaging/installPackage.apexp?p0=${propertyLine.packageVersionId}`,
           },
         },
       };

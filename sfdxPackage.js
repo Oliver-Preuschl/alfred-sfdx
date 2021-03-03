@@ -53,7 +53,7 @@ async function buildPackageItems(sfdxPropertyLines) {
             subtitle: `Type: ${properties.type}`,
           },
           ctrl: {
-            subtitle: `[SET] Project Path: -`,
+            subtitle: `[SET PROJECT-PATH] -`,
             arg: `sfdx:package:config:searchpath ${properties.id} `,
             icon: { path: alfy.icon.get("SidebarUtilitiesFolder") },
           },
@@ -69,7 +69,7 @@ function enrichWithProjectPath(packages) {
     const configKey = `sfdx:package:${sfdxPackageToReturn.id}:config:path`;
     if (alfy.config.has(configKey)) {
       const projectPath = alfy.config.get(configKey);
-      sfdxPackageToReturn.mods.ctrl.subtitle = `[SET] Project Path: ${projectPath}`;
+      sfdxPackageToReturn.mods.ctrl.subtitle = `[SET] [PROJECT PATH] "${projectPath}"`;
     }
     return sfdxPackageToReturn;
   });
