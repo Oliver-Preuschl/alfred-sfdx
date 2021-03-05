@@ -62,6 +62,8 @@ async function getOrgDetailItems(sfdxPropertyLines) {
           },
           alt: {
             subtitle: properties.key,
+            icon: { path: "./icn/copy.icns" },
+            arg: properties.value,
           },
         },
       };

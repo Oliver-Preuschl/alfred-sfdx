@@ -20,10 +20,16 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   packages = alfy.cache.get(cacheKey);
 }
-const actionItems = [...getGlobalActionItems(), ...getActionItems()];
+const globalActionItems = getGlobalActionItems();
 const packageItems = await getPackageItems(packages);
 const scratchOrgItems = await getScratchOrgItem(projectPath);
-alfy.output([...actionItems, ...packageItems, ...scratchOrgItems]);
+const pushPullActionItems = getActionPushPullActionItems();
+alfy.output([
+  ...globalActionItems,
+  ...packageItems,
+  ...scratchOrgItems,
+  ...pushPullActionItems,
+]);
 
 async function getPackageItems(packages) {
   return packages
@@ -60,6 +66,7 @@ async function getScratchOrgItem(projectPath) {
       title: assignedScratchOrg ? assignedScratchOrg : "NOT ASSIGNED",
       subtitle: "Assigned Scratch Org",
       icon: { path: "./icn/cloud.icns" },
+      arg: `sfdx:project:searchscratchorg "${projectPath}" `,
       mods: {
         ctrl: {
           title: assignedScratchOrg ? assignedScratchOrg : "NOT ASSIGNED",
@@ -68,40 +75,38 @@ async function getScratchOrgItem(projectPath) {
           arg: `sfdx:project:searchscratchorg "${projectPath}" `,
         },
         alt: {
-          subtitle: "[COPY] Assigned Scratch Org",
+          subtitle: "[CREATE] Assigned Scratch Org",
+          icon: { path: "./icn/plus-circle.icns" },
+          arg: `sfdx:project:searchscratchorgdefinition "${projectPath}" `,
         },
       },
     },
   ];
 }
 
-function getActionItems() {
+function getActionPushPullActionItems() {
   return [
     {
       title: "Push",
-      subtitle: "[PUSH METADATA]",
+      subtitle: "",
       icon: { path: "./icn/cloud-upload.icns" },
       arg: `sfdx`,
       mods: {
-        ctrl: {
-          subtitle: "[PUSH METADATA]",
-        },
-        alt: {
-          subtitle: "[PUSH METADATA]",
-        },
+        ctrl: { subtitle: "" },
+        alt: { subtitle: "" },
       },
     },
     {
       title: "Pull",
-      subtitle: "[PULL METADATA]",
+      subtitle: "",
       icon: { path: "./icn/cloud-download.icns" },
       arg: `sfdx`,
       mods: {
         ctrl: {
-          subtitle: "[PULL METADATA]",
+          subtitle: "",
         },
         alt: {
-          subtitle: "[PULL METADATA]",
+          subtitle: "",
         },
       },
     },

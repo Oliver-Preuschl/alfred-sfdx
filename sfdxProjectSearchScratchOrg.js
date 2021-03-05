@@ -50,16 +50,18 @@ async function buildOrgItems(projectPath) {
         arg: `sfdx:project:assignscratchorg "${projectPath}" ${properties.username}`,
         icon: { path: "./icn/cloud.icns" },
         mods: {
-          alt: {
-            subtitle: `[COPY] OrgId: ${properties.orgId}`,
-          },
-          cmd: {
-            subtitle: `[COPY] Instance URL: ${properties.instanceUrl}`,
-          },
           ctrl: {
             subtitle: `[OPEN] "${properties.username}"`,
             arg: `sfdx:org:open ${properties.username}`,
             icon: { path: "./icn/external-link.icns" },
+          },
+          alt: {
+            subtitle: `[COPY] OrgId: ${properties.orgId}`,
+            arg: properties.orgId,
+          },
+          cmd: {
+            subtitle: `[COPY] Instance URL: ${properties.instanceUrl}`,
+            arg: properties.instanceUrl,
           },
         },
       };

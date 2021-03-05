@@ -58,9 +58,13 @@ async function getPackageVersionReportItems(packageVersionId) {
         mods: {
           ctrl: {
             subtitle: properties.key,
+            icon: { path: "./icn/copy.icns" },
+            arg: properties.value,
           },
           alt: {
             subtitle: properties.key,
+            icon: { path: "./icn/copy.icns" },
+            arg: properties.value,
           },
         },
       };

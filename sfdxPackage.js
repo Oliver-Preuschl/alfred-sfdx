@@ -51,13 +51,16 @@ async function getPackageItems(sfdxPropertyLines) {
         arg: `sfdx:package:version ${properties.id}`,
         id: properties.id,
         mods: {
-          alt: {
-            subtitle: `Description: ${properties.description}`,
-            arg: null,
-          },
           ctrl: {
+            subtitle: `[COPY] ${properties.id}`,
+            icon: { path: "./icn/copy.icns" },
+            arg: properties.id,
+          },
+          alt: {
             subtitle: `Type: ${properties.type}`,
-            arg: null,
+          },
+          cmd: {
+            subtitle: `Description: ${properties.description}`,
           },
         },
       };
