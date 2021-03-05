@@ -1,6 +1,7 @@
 "use strict";
 
 const alfy = require("alfy");
+const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const {
   getSfdxPropertyLines,
   getKey2PropertyLineFromPropertyLines,
@@ -25,6 +26,7 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
+const globalActionsItems = getGlobalActionItems();
 const orgDetailItems = alfy.matches(
   searchTerm,
   await getOrgDetailItems(sfdxPropertyLines),
@@ -42,7 +44,7 @@ const isConnectedStatusAvailable = orgDetailName2OrgDetail.has(
 const isDevHub = !isDevHubAvailable && !isConnectedStatusAvailable;
 const actionItems = getActionItems(username, isDevHub);
 
-alfy.output([...actionItems, ...orgDetailItems]);
+alfy.output([...globalActionsItems, ...actionItems, ...orgDetailItems]);
 
 async function getOrgDetailItems(sfdxPropertyLines) {
   return sfdxPropertyLines
@@ -50,8 +52,18 @@ async function getOrgDetailItems(sfdxPropertyLines) {
       return {
         title: properties.value,
         subtitle: properties.key,
-        icon: { path: alfy.icon.info },
+        icon: { path: "./icn/info-circle.icns" },
         arg: properties.value,
+        mods: {
+          ctrl: {
+            subtitle: `[COPY] ${properties.key}`,
+            icon: { path: "./icn/copy.icns" },
+            arg: properties.value,
+          },
+          alt: {
+            subtitle: properties.key,
+          },
+        },
       };
     })
     .filter((item) => !!item.arg);
@@ -60,24 +72,34 @@ async function getOrgDetailItems(sfdxPropertyLines) {
 function getActionItems(username, isDevHub) {
   const actions = [
     {
-      title: "Back",
-      subtitle: "Go to Start",
-      icon: { path: alfy.icon.get("BackwardArrowIcon") },
-      arg: `sfdx`,
-    },
-    {
       title: "Open",
       subtitle: "Open Org in Browser",
-      icon: { path: alfy.icon.get("SidebarNetwork") },
+      icon: { path: "./icn/external-link.icns" },
       arg: `sfdx:org:open ${username}`,
+      mods: {
+        ctrl: {
+          subtitle: "Open Org in Browser",
+        },
+        alt: {
+          subtitle: "Open Org in Browser",
+        },
+      },
     },
   ];
   if (isDevHub) {
     actions.push({
       title: "Set as Default",
       subtitle: "Set as Default Dev Hub",
-      icon: { path: alfy.icon.get("SidebarUtilitiesFolder") },
+      icon: { path: "./icn/gear.icns" },
       arg: `sfdx:config:set:defaultdevhubusername ${username}`,
+      mods: {
+        ctrl: {
+          subtitle: "Set as Default Dev Hub",
+        },
+        alt: {
+          subtitle: "Set as Default Dev Hub",
+        },
+      },
     });
   }
   return actions;

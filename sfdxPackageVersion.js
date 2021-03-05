@@ -1,4 +1,7 @@
+"use strict";
+
 const alfy = require("alfy");
+const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
 const inputGroups = alfy.input.match(/(\S*)\s*(\S*)/);
@@ -35,7 +38,7 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
-const actionItems = getActionItems();
+const actionItems = getGlobalActionItems();
 const packageVersionItems = alfy
   .matches(searchTerm, await getPackageVersionItems(sfdxPropertyLines), "title")
   .sort((a, b) => (a.id > b.id ? -1 : 1));
@@ -51,34 +54,25 @@ async function getPackageVersionItems(sfdxPropertyLines) {
         propertyLine.released === "true" ? " (Released)" : "";
       return {
         title: `${packageNameWithNamespace} - ${propertyLine.version}${releasedStatus}`,
-        subtitle: propertyLine.packageVersionId,
-        icon: { path: alfy.icon.get("SidebarGenericFile") },
+        subtitle: `${propertyLine.packageVersionId}`,
+        icon: { path: "./icn/gift.icns" },
         arg: `sfdx:package:version:report ${propertyLine.packageVersionId} `,
         id: propertyLine.packageVersionId,
         version: propertyLine.version,
         mods: {
+          ctrl: {
+            subtitle: `[COPY] Installation URL: /packaging/installPackage.apexp?p0=${propertyLine.packageVersionId}`,
+            icon: { path: "./icn/copy.icns" },
+            arg: propertyLine.packageVersionId,
+          },
           alt: {
             subtitle: `Version Name: ${propertyLine.versionName}`,
           },
           cmd: {
             subtitle: `Ancestor: ${propertyLine.ancestor}`,
           },
-          ctrl: {
-            subtitle: `Installation URL: /packaging/installPackage.apexp?p0=${propertyLine.packageVersionId}`,
-          },
         },
       };
     })
     .filter((item) => !!item.id);
-}
-
-function getActionItems() {
-  return [
-    {
-      title: "Back",
-      subtitle: "Go to Start",
-      icon: { path: alfy.icon.get("BackwardArrowIcon") },
-      arg: `sfdx`,
-    },
-  ];
 }

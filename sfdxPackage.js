@@ -1,4 +1,7 @@
+"use strict";
+
 const alfy = require("alfy");
+const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
 const inputGroups = alfy.input.match(/(\S*)/);
@@ -28,11 +31,12 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
-//alfy.log(sfdxPropertyLines);
-const packageItems = enrichWithProjectPath(
-  alfy.matches(searchTerm, await getPackageItems(sfdxPropertyLines), "title")
+const packageItems = alfy.matches(
+  searchTerm,
+  await getPackageItems(sfdxPropertyLines),
+  "title"
 );
-const actionItems = getActionItems();
+const actionItems = getGlobalActionItems();
 alfy.output([...actionItems, ...packageItems]);
 
 async function getPackageItems(sfdxPropertyLines) {
@@ -43,46 +47,20 @@ async function getPackageItems(sfdxPropertyLines) {
           (properties.namespace ? `${properties.namespace}.` : "") +
           properties.name,
         subtitle: `Id: ${properties.id}`,
-        icon: { path: alfy.icon.get("SidebarGenericFolder") },
+        icon: { path: "./icn/gift.icns" },
         arg: `sfdx:package:version ${properties.id}`,
         id: properties.id,
         mods: {
           alt: {
             subtitle: `Description: ${properties.description}`,
+            arg: null,
           },
-          cmd: {
+          ctrl: {
             subtitle: `Type: ${properties.type}`,
+            arg: null,
           },
-          /*ctrl: {
-            subtitle: `[SET PROJECT-PATH] -`,
-            arg: `sfdx:package:config:searchpath ${properties.id} `,
-            icon: { path: alfy.icon.get("SidebarUtilitiesFolder") },
-          },*/
         },
       };
     })
     .filter((line) => !!line.title);
-}
-
-function enrichWithProjectPath(packages) {
-  return packages.map((sfdxPackage) => {
-    const sfdxPackageToReturn = { ...sfdxPackage };
-    const configKey = `sfdx:package:${sfdxPackageToReturn.id}:config:path`;
-    if (alfy.config.has(configKey)) {
-      const projectPath = alfy.config.get(configKey);
-      //sfdxPackageToReturn.mods.ctrl.subtitle = `[SET] [PROJECT PATH] "${projectPath}"`;
-    }
-    return sfdxPackageToReturn;
-  });
-}
-
-function getActionItems() {
-  return [
-    {
-      title: "Back",
-      subtitle: "Go to Start",
-      icon: { path: alfy.icon.get("BackwardArrowIcon") },
-      arg: `sfdx`,
-    },
-  ];
 }

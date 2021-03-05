@@ -1,6 +1,9 @@
+"use strict";
+
 const alfy = require("alfy");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
+const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
 const inputGroups = alfy.input.match(/(\S*)/);
@@ -30,7 +33,7 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
-const actionItems = getActionItems();
+const actionItems = getGlobalActionItems();
 const orgItems = alfy.matches(searchTerm, await queryOrgs(searchTerm), "title");
 alfy.output([...actionItems, ...orgItems]);
 
@@ -43,34 +46,24 @@ async function queryOrgs(searchTerm) {
           properties.alias,
         subtitle: `Connection Status: ${properties.connectionStatus}`,
         arg: `sfdx:org:display ${properties.username} `,
-        icon: { path: alfy.icon.get("SidebariCloud") },
+        icon: { path: "./icn/cloud.icns" },
         mods: {
-          alt: {
-            subtitle: `[SET DEFAULT-DEV-HUB] "${properties.username}"`,
-            arg: `sfdx:config:set:defaultdevhubusername ${properties.username}`,
-            icon: { path: alfy.icon.get("SidebarUtilitiesFolder") },
-          },
-          cmd: {
-            subtitle: `Org Id: ${properties.orgId}`,
-          },
           ctrl: {
             subtitle: `[OPEN] "${properties.username}"`,
             arg: `sfdx:org:open ${properties.username}`,
-            icon: { path: alfy.icon.get("SidebarNetwork") },
+            icon: { path: "./icn/external-link.icns" },
+          },
+          alt: {
+            subtitle: `[SET DEFAULT-DEV-HUB] "${properties.username}"`,
+            arg: `sfdx:config:set:defaultdevhubusername ${properties.username}`,
+            icon: { path: "./icn/gear.icns" },
+          },
+          cmd: {
+            subtitle: `[COPY] Org Id: ${properties.orgId}`,
+            icon: { path: "./icn/copy.icns" },
           },
         },
       };
     })
     .filter((item) => !!item.title);
-}
-
-function getActionItems() {
-  return [
-    {
-      title: "Back",
-      subtitle: "Go to Start",
-      icon: { path: alfy.icon.get("BackwardArrowIcon") },
-      arg: `sfdx`,
-    },
-  ];
 }

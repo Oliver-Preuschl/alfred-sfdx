@@ -1,3 +1,5 @@
+"use strict";
+
 const alfy = require("alfy");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);

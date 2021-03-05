@@ -1,5 +1,8 @@
+"use strict";
+
 const alfy = require("alfy");
 const util = require("util");
+const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const exec = util.promisify(require("child_process").exec);
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
@@ -34,7 +37,7 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
-const actionItems = getActionItems();
+const actionItems = getGlobalActionItems();
 const orgItems = await buildOrgItems(projectPath);
 alfy.output([...actionItems, ...alfy.matches(searchTerm, orgItems, "title")]);
 
@@ -43,34 +46,23 @@ async function buildOrgItems(projectPath) {
     .map((properties) => {
       return {
         title: properties.alias,
-        subtitle: `${properties.status} (Expiration Date: ${properties.expirationDate})`,
-        arg: `sfdx:project:assignscratchorg ${projectPath} ${properties.username} `,
-        icon: { path: alfy.icon.get("SidebariCloud") },
+        subtitle: `[ASSIGN] ${properties.status} (Expiration Date: ${properties.expirationDate})`,
+        arg: `sfdx:project:assignscratchorg "${projectPath}" ${properties.username}`,
+        icon: { path: "./icn/cloud.icns" },
         mods: {
           alt: {
-            subtitle: `OrgId: ${properties.orgId}`,
+            subtitle: `[COPY] OrgId: ${properties.orgId}`,
           },
           cmd: {
-            subtitle: `Instance URL: ${properties.instanceUrl}`,
+            subtitle: `[COPY] Instance URL: ${properties.instanceUrl}`,
           },
           ctrl: {
             subtitle: `[OPEN] "${properties.username}"`,
             arg: `sfdx:org:open ${properties.username}`,
-            icon: { path: alfy.icon.get("SidebarNetwork") },
+            icon: { path: "./icn/external-link.icns" },
           },
         },
       };
     })
     .filter((item) => !!item.title);
-}
-
-function getActionItems() {
-  return [
-    {
-      title: "Back",
-      subtitle: "Go to Start",
-      icon: { path: alfy.icon.get("BackwardArrowIcon") },
-      arg: `sfdx`,
-    },
-  ];
 }

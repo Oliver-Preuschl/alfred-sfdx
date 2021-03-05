@@ -1,6 +1,7 @@
 "use strict";
 
 const alfy = require("alfy");
+const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const {
   getSfdxPropertyLines,
   getKey2PropertyLineFromPropertyLines,
@@ -30,29 +31,21 @@ const packageVersionDetailName2PackageVersionDetail = getKey2PropertyLineFromPro
   sfdxPropertyLines,
   "key"
 );
-const installationUrlItem = {
-  title: `/packaging/installPackage.apexp?p0=${
-    packageVersionDetailName2PackageVersionDetail.get(
-      "Subscriber Package Version Id"
-    ).value
-  }`,
-  subtitle: "Installation URL",
-  arg: `/packaging/installPackage.apexp?p0=${
-    packageVersionDetailName2PackageVersionDetail.get(
-      "Subscriber Package Version Id"
-    ).value
-  }`,
-  icon: { path: alfy.icon.get("SidebarNetwork") },
-};
 
-const actionItems = getActionItems();
+const installationUrlItem = getInstallationLinkItem();
+
+const actionItems = getGlobalActionItems();
 const packageVersionReportItems = alfy.matches(
   searchTerm,
   await getPackageVersionReportItems(sfdxPropertyLines),
   "subtitle"
 );
 
-alfy.output([...actionItems, ...packageVersionReportItems]);
+alfy.output([
+  ...actionItems,
+  installationUrlItem,
+  ...packageVersionReportItems,
+]);
 
 async function getPackageVersionReportItems(packageVersionId) {
   return sfdxPropertyLines
@@ -60,20 +53,48 @@ async function getPackageVersionReportItems(packageVersionId) {
       return {
         title: properties.value,
         subtitle: properties.key,
-        icon: { path: alfy.icon.info },
+        icon: { path: "./icn/info-circle.icns" },
         arg: properties.value,
+        mods: {
+          ctrl: {
+            subtitle: properties.key,
+          },
+          alt: {
+            subtitle: properties.key,
+          },
+        },
       };
     })
     .filter((item) => !!item.arg);
 }
 
-function getActionItems() {
-  return [
-    {
-      title: "Back",
-      subtitle: "Go to Start",
-      icon: { path: alfy.icon.get("BackwardArrowIcon") },
-      arg: `sfdx`,
+function getInstallationLinkItem() {
+  return {
+    title: `/packaging/installPackage.apexp?p0=${
+      packageVersionDetailName2PackageVersionDetail.get(
+        "Subscriber Package Version Id"
+      ).value
+    }`,
+    subtitle: "Installation URL",
+    arg: `/packaging/installPackage.apexp?p0=${
+      packageVersionDetailName2PackageVersionDetail.get(
+        "Subscriber Package Version Id"
+      ).value
+    }`,
+    icon: { path: "./icn/link.icns" },
+    mods: {
+      ctrl: {
+        subtitle: "[COPY] Installation URL",
+        arg: `/packaging/installPackage.apexp?p0=${
+          packageVersionDetailName2PackageVersionDetail.get(
+            "Subscriber Package Version Id"
+          ).value
+        }`,
+        icon: { path: "./icn/copy.icns" },
+      },
+      alt: {
+        subtitle: "Installation URL",
+      },
     },
-  ];
+  };
 }

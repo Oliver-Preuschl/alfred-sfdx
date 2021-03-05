@@ -1,7 +1,10 @@
+"use strict";
+
 const alfy = require("alfy");
+const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const {
   findFolderWithMatchingFileInWorkspace,
-} = require("./lib/fileSearch.js");
+} = require("./lib/fileSearcher.js");
 
 const inputGroups = alfy.input.match(/(\S*)/);
 let searchTerm = inputGroups[1];
@@ -18,7 +21,7 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxProjectFiles = alfy.cache.get(cacheKey);
 }
-const actionsItems = getActionItems();
+const actionsItems = getGlobalActionItems();
 const projectPathItems = alfy.matches(
   searchTerm,
   await getAvailableProjectPathItems(sfdxProjectFiles),
@@ -31,34 +34,23 @@ async function getAvailableProjectPathItems(sfdxProjectFiles) {
     .map((sfdxProjectFile) => ({
       title: sfdxProjectFile.folder,
       subtitle: `...${sfdxProjectFile.path}`,
-      icon: { path: alfy.icon.get("SidebarGenericFolder") },
+      icon: { path: "./icn/folder.icns" },
       arg: `sfdx:project:details "${sfdxProjectFile.path}"`,
       path: sfdxProjectFile.path,
       mods: {
         ctrl: {
           title: sfdxProjectFile.folder,
-          subtitle: `[OPEN] "...${sfdxProjectFile.path}/sfdx-project.json"`,
-          icon: { path: alfy.icon.get("SidebarGenericFile") },
+          subtitle: `[OPEN PROJECT FILE] "...${sfdxProjectFile.path}/sfdx-project.json"`,
+          icon: { path: "./icn/eye.icns" },
           arg: `sfdx:project:open:file ${sfdxProjectFile.path}/sfdx-project.json`,
         },
         alt: {
           title: sfdxProjectFile.folder,
-          subtitle: `[OPEN] "...${sfdxProjectFile.path}"`,
-          icon: { path: alfy.icon.get("SidebarGenericFolder") },
+          subtitle: `[OPEN PROJECT FOLDER] "...${sfdxProjectFile.path}"`,
+          icon: { path: "./icn/eye.icns" },
           arg: `sfdx:project:open:file ${sfdxProjectFile.path}`,
         },
       },
     }))
     .sort((a, b) => (a.title < b.title ? -1 : 1));
-}
-
-function getActionItems() {
-  return [
-    {
-      title: "Back",
-      subtitle: "Go to Start",
-      icon: { path: alfy.icon.get("BackwardArrowIcon") },
-      arg: `sfdx`,
-    },
-  ];
 }

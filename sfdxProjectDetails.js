@@ -1,5 +1,8 @@
+"use strict";
+
 const alfy = require("alfy");
-const { getPackagesForProject } = require("./lib/fileSearch.js");
+const { getGlobalActionItems } = require("./lib/actionCreator.js");
+const { getPackagesForProject } = require("./lib/fileSearcher.js");
 
 const inputGroups = alfy.input.match(/"(.*)"\s*(\S*)/);
 let projectPath = inputGroups[1];
@@ -17,7 +20,7 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   packages = alfy.cache.get(cacheKey);
 }
-const actionItems = getActionItems();
+const actionItems = [...getGlobalActionItems(), ...getActionItems()];
 const packageItems = await getPackageItems(packages);
 const scratchOrgItems = await getScratchOrgItem(projectPath);
 alfy.output([...actionItems, ...packageItems, ...scratchOrgItems]);
@@ -27,15 +30,19 @@ async function getPackageItems(packages) {
     .map((sfdxPackage) => ({
       title: sfdxPackage.name,
       subtitle: "Package",
-      icon: { path: alfy.icon.info },
+      icon: { path: "./icn/info-circle.icns" },
       mods: {
         ctrl: {
+          subtitle: "[COPY] Package",
+          icon: { path: "./icn/copy.icns" },
+          arg: sfdxPackage.name,
+        },
+        alt: {
           subtitle:
             "Package Dependencies: " +
             sfdxPackage.dependencies
               .map((packageDependency) => packageDependency.package)
               .join(", "),
-          icon: { path: alfy.icon.info },
         },
       },
     }))
@@ -43,18 +50,25 @@ async function getPackageItems(packages) {
 }
 
 async function getScratchOrgItem(projectPath) {
+  let assignedScratchOrg;
+  const configKey = `sfdx:project:${projectPath}:assignedscratchorg`;
+  if (alfy.config.has(configKey)) {
+    assignedScratchOrg = alfy.config.get(configKey);
+  }
   return [
     {
-      title: "NOT ASSIGNED",
-      subtitle: "Scratch Org",
-      icon: { path: alfy.icon.get("SidebariCloud") },
-      arg: `sfdx:project:searchscratchorg "${projectPath}" `,
+      title: assignedScratchOrg ? assignedScratchOrg : "NOT ASSIGNED",
+      subtitle: "Assigned Scratch Org",
+      icon: { path: "./icn/cloud.icns" },
       mods: {
         ctrl: {
-          title: "NOT ASSIGNED",
+          title: assignedScratchOrg ? assignedScratchOrg : "NOT ASSIGNED",
           subtitle: "[ASSIGN] Scratch Org",
-          icon: { path: alfy.icon.get("SidebarUtilitiesFolder") },
+          icon: { path: "./icn/gear.icns" },
           arg: `sfdx:project:searchscratchorg "${projectPath}" `,
+        },
+        alt: {
+          subtitle: "[COPY] Assigned Scratch Org",
         },
       },
     },
@@ -64,10 +78,32 @@ async function getScratchOrgItem(projectPath) {
 function getActionItems() {
   return [
     {
-      title: "Back",
-      subtitle: "Go to Start",
-      icon: { path: alfy.icon.get("BackwardArrowIcon") },
+      title: "Push",
+      subtitle: "[PUSH METADATA]",
+      icon: { path: "./icn/cloud-upload.icns" },
       arg: `sfdx`,
+      mods: {
+        ctrl: {
+          subtitle: "[PUSH METADATA]",
+        },
+        alt: {
+          subtitle: "[PUSH METADATA]",
+        },
+      },
+    },
+    {
+      title: "Pull",
+      subtitle: "[PULL METADATA]",
+      icon: { path: "./icn/cloud-download.icns" },
+      arg: `sfdx`,
+      mods: {
+        ctrl: {
+          subtitle: "[PULL METADATA]",
+        },
+        alt: {
+          subtitle: "[PULL METADATA]",
+        },
+      },
     },
   ];
 }
