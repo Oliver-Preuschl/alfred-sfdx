@@ -38,7 +38,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>45F66910-7633-45E2-B31B-276B4C370EDD</string>
+				<string>BD9A7F67-C190-497E-9A67-1CFC00F87EA4</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -104,6 +104,18 @@
 			</dict>
 			<dict>
 				<key>destinationuid</key>
+				<string>682053BD-5C55-4C90-94CB-4E115E670E14</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>3D2796BC-46C7-40E8-BCCB-F0DF6D81A6C9</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
 				<string>5F6B8FA5-CA86-4BB1-8AFE-A88E7195C225</string>
 				<key>modifiers</key>
 				<integer>0</integer>
@@ -126,6 +138,18 @@
 			</dict>
 			<dict>
 				<key>destinationuid</key>
+				<string>5F6B8FA5-CA86-4BB1-8AFE-A88E7195C225</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>3090C36F-4478-41BA-92D2-DB2E429386C1</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
 				<string>69BB2A4B-A7E0-4FD0-9287-C959D3D02DE4</string>
 				<key>modifiers</key>
 				<integer>0</integer>
@@ -133,19 +157,6 @@
 				<string></string>
 				<key>sourceoutputuid</key>
 				<string>F27AA44D-7C7F-4A6D-918B-F377EAC2797C</string>
-				<key>vitoclose</key>
-				<false/>
-			</dict>
-		</array>
-		<key>45F66910-7633-45E2-B31B-276B4C370EDD</key>
-		<array>
-			<dict>
-				<key>destinationuid</key>
-				<string>821F0473-CA37-4C3D-AC8F-FD45E4815F26</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
 				<key>vitoclose</key>
 				<false/>
 			</dict>
@@ -234,6 +245,19 @@
 				<string></string>
 				<key>sourceoutputuid</key>
 				<string>E8DDD4EA-BCBF-4E99-97FB-231D1B44365E</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>682053BD-5C55-4C90-94CB-4E115E670E14</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>69BB2A4B-A7E0-4FD0-9287-C959D3D02DE4</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
 				<key>vitoclose</key>
 				<false/>
 			</dict>
@@ -529,6 +553,19 @@
 		</array>
 		<key>BB45C395-9564-4CB1-A5A4-60AA509B4F17</key>
 		<array/>
+		<key>BD9A7F67-C190-497E-9A67-1CFC00F87EA4</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>821F0473-CA37-4C3D-AC8F-FD45E4815F26</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>BE05471A-E5A9-4EB0-89B3-DD705BB3366B</key>
 		<array>
 			<dict>
@@ -842,7 +879,7 @@
 						<key>matchmode</key>
 						<integer>4</integer>
 						<key>matchstring</key>
-						<string>sfdx:project:open:file\s+\S</string>
+						<string>sfdx:project:open:file</string>
 						<key>outputlabel</key>
 						<string>sfdx:project:open:file</string>
 						<key>uid</key>
@@ -856,11 +893,39 @@
 						<key>matchmode</key>
 						<integer>4</integer>
 						<key>matchstring</key>
-						<string>sfdx:project:searchscratchorg\s+\S</string>
+						<string>sfdx:project:searchscratchorg</string>
 						<key>outputlabel</key>
 						<string>sfdx:project:searchscratchorg</string>
 						<key>uid</key>
 						<string>7FA25833-6D47-43BF-A781-5A19CE8459FA</string>
+					</dict>
+					<dict>
+						<key>inputstring</key>
+						<string></string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>4</integer>
+						<key>matchstring</key>
+						<string>sfdx:project: searchscratchorgdefinition</string>
+						<key>outputlabel</key>
+						<string>sfdx:project: searchscratchorgdefinition</string>
+						<key>uid</key>
+						<string>3090C36F-4478-41BA-92D2-DB2E429386C1</string>
+					</dict>
+					<dict>
+						<key>inputstring</key>
+						<string></string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>4</integer>
+						<key>matchstring</key>
+						<string>sfdx:project:unlinkscratchorg</string>
+						<key>outputlabel</key>
+						<string>sfdx:project:unlinkscratchorg</string>
+						<key>uid</key>
+						<string>3D2796BC-46C7-40E8-BCCB-F0DF6D81A6C9</string>
 					</dict>
 				</array>
 				<key>elselabel</key>
@@ -962,7 +1027,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>./node_modules/.bin/run-node sfdxProjectAssignScratchOrg.js "$1"</string>
+				<string>./node_modules/.bin/run-node sfdxProjectUnlinkScratchOrg.js "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -973,7 +1038,7 @@
 			<key>type</key>
 			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
-			<string>871CBD88-5101-43F8-B3B6-91779C66E889</string>
+			<string>682053BD-5C55-4C90-94CB-4E115E670E14</string>
 			<key>version</key>
 			<integer>2</integer>
 		</dict>
@@ -1039,9 +1104,9 @@
 						<key>matchmode</key>
 						<integer>4</integer>
 						<key>matchstring</key>
-						<string>sfdx:project:assignscratchorg</string>
+						<string>sfdx:project:linkscratchorg</string>
 						<key>outputlabel</key>
-						<string>sfdx:project:assignscratchorg</string>
+						<string>sfdx:project:linkscratchorg</string>
 						<key>uid</key>
 						<string>A3D3AEBA-0293-4EE9-818D-74D5EF8D7E33</string>
 					</dict>
@@ -1053,6 +1118,50 @@
 			<string>alfred.workflow.utility.conditional</string>
 			<key>uid</key>
 			<string>703FCFE0-4974-445F-BA26-92C9B792E9DC</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>./node_modules/.bin/run-node sfdxProjectLinkScratchOrg.js "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>871CBD88-5101-43F8-B3B6-91779C66E889</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<false/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string></string>
+				<key>title</key>
+				<string>Creating Scratch Org...</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>BD9A7F67-C190-497E-9A67-1CFC00F87EA4</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -1078,27 +1187,6 @@
 			<string>821F0473-CA37-4C3D-AC8F-FD45E4815F26</string>
 			<key>version</key>
 			<integer>2</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>lastpathcomponent</key>
-				<false/>
-				<key>onlyshowifquerypopulated</key>
-				<false/>
-				<key>removeextension</key>
-				<false/>
-				<key>text</key>
-				<string></string>
-				<key>title</key>
-				<string>Creating Scratch Org...</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.notification</string>
-			<key>uid</key>
-			<string>45F66910-7633-45E2-B31B-276B4C370EDD</string>
-			<key>version</key>
-			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -2033,7 +2121,7 @@
 			<key>xpos</key>
 			<integer>765</integer>
 			<key>ypos</key>
-			<integer>545</integer>
+			<integer>650</integer>
 		</dict>
 		<key>3773A6CA-0F34-418C-AE14-4215ABFC59AA</key>
 		<dict>
@@ -2062,13 +2150,6 @@
 			<integer>775</integer>
 			<key>ypos</key>
 			<integer>190</integer>
-		</dict>
-		<key>45F66910-7633-45E2-B31B-276B4C370EDD</key>
-		<dict>
-			<key>xpos</key>
-			<integer>1055</integer>
-			<key>ypos</key>
-			<integer>510</integer>
 		</dict>
 		<key>4B54BFF5-B58F-4863-9110-6CB835A08729</key>
 		<dict>
@@ -2105,6 +2186,13 @@
 			<key>ypos</key>
 			<integer>1655</integer>
 		</dict>
+		<key>682053BD-5C55-4C90-94CB-4E115E670E14</key>
+		<dict>
+			<key>xpos</key>
+			<integer>1135</integer>
+			<key>ypos</key>
+			<integer>315</integer>
+		</dict>
 		<key>69BB2A4B-A7E0-4FD0-9287-C959D3D02DE4</key>
 		<dict>
 			<key>xpos</key>
@@ -2124,7 +2212,7 @@
 			<key>xpos</key>
 			<integer>780</integer>
 			<key>ypos</key>
-			<integer>375</integer>
+			<integer>400</integer>
 		</dict>
 		<key>72F3B05C-CB19-4911-9929-55604EAC3B55</key>
 		<dict>
@@ -2143,9 +2231,9 @@
 		<key>821F0473-CA37-4C3D-AC8F-FD45E4815F26</key>
 		<dict>
 			<key>xpos</key>
-			<integer>1265</integer>
+			<integer>1400</integer>
 			<key>ypos</key>
-			<integer>510</integer>
+			<integer>615</integer>
 		</dict>
 		<key>8676F383-D641-4124-B254-05AC8BE7A7C8</key>
 		<dict>
@@ -2157,9 +2245,9 @@
 		<key>871CBD88-5101-43F8-B3B6-91779C66E889</key>
 		<dict>
 			<key>xpos</key>
-			<integer>1090</integer>
+			<integer>1140</integer>
 			<key>ypos</key>
-			<integer>340</integer>
+			<integer>450</integer>
 		</dict>
 		<key>8FA056E5-431C-43E2-93B9-850DD7BE47F9</key>
 		<dict>
@@ -2231,6 +2319,13 @@
 			<key>ypos</key>
 			<integer>935</integer>
 		</dict>
+		<key>BD9A7F67-C190-497E-9A67-1CFC00F87EA4</key>
+		<dict>
+			<key>xpos</key>
+			<integer>1145</integer>
+			<key>ypos</key>
+			<integer>615</integer>
+		</dict>
 		<key>BE05471A-E5A9-4EB0-89B3-DD705BB3366B</key>
 		<dict>
 			<key>xpos</key>
@@ -2250,7 +2345,7 @@
 			<key>xpos</key>
 			<integer>555</integer>
 			<key>ypos</key>
-			<integer>525</integer>
+			<integer>630</integer>
 		</dict>
 		<key>EB47255F-26F6-4366-9811-1D663A29E1DF</key>
 		<dict>

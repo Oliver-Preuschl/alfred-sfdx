@@ -39,13 +39,11 @@ async function getAvailableProjectPathItems(sfdxProjectFiles) {
       path: sfdxProjectFile.path,
       mods: {
         ctrl: {
-          title: sfdxProjectFile.folder,
           subtitle: `[OPEN PROJECT FILE] "...${sfdxProjectFile.path}/sfdx-project.json"`,
           icon: { path: "./icn/eye.icns" },
           arg: `sfdx:project:open:file ${sfdxProjectFile.path}/sfdx-project.json`,
         },
         alt: {
-          title: sfdxProjectFile.folder,
           subtitle: `[OPEN PROJECT FOLDER] "...${sfdxProjectFile.path}"`,
           icon: { path: "./icn/eye.icns" },
           arg: `sfdx:project:open:file ${sfdxProjectFile.path}`,

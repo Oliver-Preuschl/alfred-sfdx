@@ -47,7 +47,7 @@ async function buildOrgItems(projectPath) {
       return {
         title: properties.alias,
         subtitle: `[ASSIGN] ${properties.status} (Expiration Date: ${properties.expirationDate})`,
-        arg: `sfdx:project:assignscratchorg "${projectPath}" ${properties.username}`,
+        arg: `sfdx:project:linkscratchorg "${projectPath}" ${properties.username}`,
         icon: { path: "./icn/cloud.icns" },
         mods: {
           ctrl: {

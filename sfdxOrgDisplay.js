@@ -8,14 +8,14 @@ const {
 } = require("./lib/sfdxExecutor.js");
 
 const inputGroups = alfy.input.match(/(\S*)\s*(\S*)/);
-let orgId = inputGroups[1];
+let inputUsername = inputGroups[1];
 let searchTerm = inputGroups[2];
 
-const cacheKey = `sfdx:org:${orgId}:display`;
+const cacheKey = `sfdx:org:${inputUsername}:display`;
 let sfdxPropertyLines;
 if (!alfy.cache.has(cacheKey)) {
   sfdxPropertyLines = await getSfdxPropertyLines(
-    `cd  alfred-sfdx; sfdx force:org:display --targetusername=${orgId} --verbose`,
+    `cd  alfred-sfdx; sfdx force:org:display --targetusername=${inputUsername} --verbose`,
     2,
     4,
     { propertyNames: ["key", "value"] }
