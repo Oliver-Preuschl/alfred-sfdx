@@ -45,7 +45,7 @@ const orgItems = alfy.matches(
 
 alfy.output([...actionItems, ...orgItems]);
 
-async function getOrgItems(searchTerm) {
+async function getOrgItems(sfdxPropertyLines) {
   return sfdxPropertyLines
     .map((properties) => {
       return {
