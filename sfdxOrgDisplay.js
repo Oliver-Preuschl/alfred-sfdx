@@ -16,9 +16,7 @@ let sfdxPropertyLines;
 if (!alfy.cache.has(cacheKey)) {
   sfdxPropertyLines = await getSfdxPropertyLines(
     `cd  alfred-sfdx; sfdx force:org:display --targetusername=${inputUsername} --verbose`,
-    2,
-    4,
-    { propertyNames: ["key", "value"] }
+    4
   );
   alfy.cache.set(cacheKey, sfdxPropertyLines, {
     maxAge: process.env.cacheMaxAge,
@@ -34,9 +32,9 @@ const orgDetailItems = alfy.matches(
 );
 const orgDetailName2OrgDetail = getKey2PropertyLineFromPropertyLines(
   sfdxPropertyLines,
-  "key"
+  "KEY"
 );
-const username = orgDetailName2OrgDetail.get("Username").value;
+const username = orgDetailName2OrgDetail.get("Username")["VALUE"];
 const isDevHubAvailable = orgDetailName2OrgDetail.has("Dev Hub Id");
 const isConnectedStatusAvailable = orgDetailName2OrgDetail.has(
   "Connected Status"
@@ -50,20 +48,20 @@ async function getOrgDetailItems(sfdxPropertyLines) {
   return sfdxPropertyLines
     .map((properties) => {
       return {
-        title: properties.value,
-        subtitle: properties.key,
+        title: properties["VALUE"],
+        subtitle: properties["KEY"],
         icon: { path: "./icn/info-circle.icns" },
-        arg: properties.value,
+        arg: properties["VALUE"],
         mods: {
           ctrl: {
-            subtitle: `[COPY] ${properties.key}`,
+            subtitle: `[COPY] ${properties["KEY"]}`,
             icon: { path: "./icn/copy.icns" },
-            arg: properties.value,
+            arg: properties["VALUE"],
           },
           alt: {
-            subtitle: properties.key,
+            subtitle: properties["KEY"],
             icon: { path: "./icn/copy.icns" },
-            arg: properties.value,
+            arg: properties["VALUE"],
           },
         },
       };

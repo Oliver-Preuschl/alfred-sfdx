@@ -12,18 +12,7 @@ let sfdxPropertyLines;
 if (!alfy.cache.has(cacheKey)) {
   sfdxPropertyLines = await getSfdxPropertyLines(
     "cd  alfred-sfdx; sfdx force:package:list",
-    6,
-    2,
-    {
-      propertyNames: [
-        "namespace",
-        "name",
-        "id",
-        "alias",
-        "description",
-        "type",
-      ],
-    }
+    2
   );
   alfy.cache.set(cacheKey, sfdxPropertyLines, {
     maxAge: process.env.cacheMaxAge,
@@ -44,23 +33,24 @@ async function getPackageItems(sfdxPropertyLines) {
     .map((properties) => {
       return {
         title:
-          (properties.namespace ? `${properties.namespace}.` : "") +
-          properties.name,
-        subtitle: `Id: ${properties.id}`,
+          (properties["Namespace Prefix"]
+            ? `${properties["Namespace Prefix"]}.`
+            : "") + properties["Name"],
+        subtitle: `Id: ${properties["Id"]}`,
         icon: { path: "./icn/gift.icns" },
-        arg: `sfdx:package:version ${properties.id}`,
-        id: properties.id,
+        arg: `sfdx:package:version ${properties["Id"]}`,
+        id: properties["Id"],
         mods: {
           ctrl: {
-            subtitle: `[COPY] ${properties.id}`,
+            subtitle: `[COPY] ${properties["Id"]}`,
             icon: { path: "./icn/copy.icns" },
-            arg: properties.id,
+            arg: properties["Id"],
           },
           alt: {
-            subtitle: `Type: ${properties.type}`,
+            subtitle: `Type: ${properties["Type"]}`,
           },
           cmd: {
-            subtitle: `Description: ${properties.description}`,
+            subtitle: `Description: ${properties["Description"]}`,
           },
         },
       };

@@ -13,24 +13,7 @@ let sfdxPropertyLines;
 if (!alfy.cache.has(cacheKey)) {
   sfdxPropertyLines = await getSfdxPropertyLines(
     `cd  alfred-sfdx; sfdx force:package:version:list --packages=${packageId}`,
-    12,
-    2,
-    {
-      propertyNames: [
-        "packageName",
-        "namespace",
-        "versionName",
-        "version",
-        "packageVersionId",
-        "alias",
-        "installationKey",
-        "released",
-        "validationSkipped",
-        "ancestor",
-        "ancestorVersion",
-        "branch",
-      ],
-    }
+    2
   );
   alfy.cache.set(cacheKey, sfdxPropertyLines, {
     maxAge: 300000,
@@ -48,28 +31,28 @@ async function getPackageVersionItems(sfdxPropertyLines) {
   return sfdxPropertyLines
     .map((propertyLine) => {
       const packageNameWithNamespace =
-        (propertyLine.namespace ? `${propertyLine.namespace}.` : "") +
-        propertyLine.packageName;
+        (propertyLine["Namespace"] ? `${propertyLine["Namespace"]}.` : "") +
+        propertyLine["Package Name"];
       const releasedStatus =
-        propertyLine.released === "true" ? " (Released)" : "";
+        propertyLine["Released"] === "true" ? " (Released)" : "";
       return {
-        title: `${packageNameWithNamespace} - ${propertyLine.version}${releasedStatus}`,
-        subtitle: `${propertyLine.packageVersionId}`,
+        title: `${packageNameWithNamespace} - ${propertyLine["Version"]}${releasedStatus}`,
+        subtitle: `${propertyLine["Subscriber Package Version Id"]}`,
         icon: { path: "./icn/gift.icns" },
-        arg: `sfdx:package:version:report ${propertyLine.packageVersionId} `,
-        id: propertyLine.packageVersionId,
-        version: propertyLine.version,
+        arg: `sfdx:package:version:report ${propertyLine["Subscriber Package Version Id"]} `,
+        id: propertyLine["Subscriber Package Version Id"],
+        version: propertyLine["Version"],
         mods: {
           ctrl: {
-            subtitle: `[COPY] Installation URL: /packaging/installPackage.apexp?p0=${propertyLine.packageVersionId}`,
+            subtitle: `[COPY] Installation URL: /packaging/installPackage.apexp?p0=${propertyLine["Subscriber Package Version Id"]}`,
             icon: { path: "./icn/copy.icns" },
-            arg: propertyLine.packageVersionId,
+            arg: propertyLine["Subscriber Package Version Id"],
           },
           alt: {
-            subtitle: `Version Name: ${propertyLine.versionName}`,
+            subtitle: `Version Name: ${propertyLine["Version Name"]}`,
           },
           cmd: {
-            subtitle: `Ancestor: ${propertyLine.ancestor}`,
+            subtitle: `Ancestor: ${propertyLine["Ancestor"]}`,
           },
         },
       };

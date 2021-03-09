@@ -14,20 +14,9 @@ let sfdxPropertyLines;
 if (!alfy.cache.has(cacheKey)) {
   sfdxPropertyLines = await getSfdxPropertyLines(
     "cd  alfred-sfdx; sfdx force:org:list --verbose",
-    8,
     1,
     {
       startLineKeyword: "EXPIRATION DATE",
-      propertyNames: [
-        "alias",
-        "username",
-        "orgId",
-        "status",
-        "devHub",
-        "createdDate",
-        "instanceUrl",
-        "expirationDate",
-      ],
     }
   );
   alfy.cache.set(cacheKey, sfdxPropertyLines, {
@@ -39,7 +28,7 @@ if (!alfy.cache.has(cacheKey)) {
 const actionItems = await getGlobalActionItems();
 const orgItems = alfy.matches(
   searchTerm,
-  await getOrgItems(searchTerm),
+  await getOrgItems(sfdxPropertyLines),
   "title"
 );
 
@@ -49,25 +38,25 @@ async function getOrgItems(sfdxPropertyLines) {
   return sfdxPropertyLines
     .map((properties) => {
       return {
-        title: properties.alias,
-        subtitle: `${properties.status} (Expiration Date: ${properties.expirationDate})`,
-        arg: `sfdx:org:display ${properties.username} `,
+        title: properties["ALIAS"],
+        subtitle: `${properties["STATUS"]} (Expiration Date: ${properties["EXPIRATION DATE"]})`,
+        arg: `sfdx:org:display ${properties["USERNAME"]} `,
         icon: { path: "./icn/cloud.icns" },
         mods: {
           ctrl: {
-            subtitle: `[OPEN] "${properties.username}"`,
+            subtitle: `[OPEN] "${properties["USERNAME"]}"`,
             icon: { path: "./icn/external-link.icns" },
-            arg: `sfdx:org:open ${properties.username}`,
+            arg: `sfdx:org:open ${properties["USERNAME"]}`,
           },
           alt: {
-            subtitle: `[COPY] OrgId: ${properties.orgId}`,
+            subtitle: `[COPY] OrgId: ${properties["ORG ID"]}`,
             icon: { path: "./icn/copy.icns" },
-            arg: properties.orgId,
+            arg: properties["ORG ID"],
           },
           cmd: {
-            subtitle: `[COPY] Instance URL: ${properties.instanceUrl}`,
+            subtitle: `[COPY] Instance URL: ${properties["INSTANCE URL"]}`,
             icon: { path: "./icn/copy.icns" },
-            arg: properties.instanceUrl,
+            arg: properties["INSTANCE URL"],
           },
         },
       };

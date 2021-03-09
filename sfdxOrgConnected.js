@@ -14,17 +14,10 @@ let sfdxPropertyLines;
 if (!alfy.cache.has(cacheKey)) {
   sfdxPropertyLines = await getSfdxPropertyLines(
     "cd  alfred-sfdx; sfdx force:org:list",
-    5,
-    2,
+    1,
     {
+      startLineKeyword: "CONNECTED STATUS",
       endLineKeyword: "EXPIRATION DATE",
-      propertyNames: [
-        "default",
-        "alias",
-        "username",
-        "orgId",
-        "connectionStatus",
-      ],
     }
   );
   alfy.cache.set(cacheKey, sfdxPropertyLines, {
@@ -34,32 +27,35 @@ if (!alfy.cache.has(cacheKey)) {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
 const actionItems = getGlobalActionItems();
-const orgItems = alfy.matches(searchTerm, await queryOrgs(searchTerm), "title");
+const orgItems = alfy.matches(
+  searchTerm,
+  await getOrgItems(sfdxPropertyLines),
+  "title"
+);
 alfy.output([...actionItems, ...orgItems]);
 
-async function queryOrgs(searchTerm) {
+async function getOrgItems(sfdxPropertyLines) {
   return sfdxPropertyLines
     .map((properties) => {
       return {
         title:
-          (properties.default ? `${properties.default} ` : "") +
-          properties.alias,
-        subtitle: `Connection Status: ${properties.connectionStatus}`,
-        arg: `sfdx:org:display ${properties.username} `,
+          (properties[""] ? `${properties[""]} ` : "") + properties["ALIAS"],
+        subtitle: `Connection Status: ${properties["CONNECTED STATUS"]}`,
+        arg: `sfdx:org:display ${properties["USERNAME"]} `,
         icon: { path: "./icn/cloud.icns" },
         mods: {
           ctrl: {
-            subtitle: `[OPEN] "${properties.username}"`,
-            arg: `sfdx:org:open ${properties.username}`,
+            subtitle: `[OPEN] "${properties["USERNAME"]}"`,
+            arg: `sfdx:org:open ${properties["USERNAME"]}`,
             icon: { path: "./icn/external-link.icns" },
           },
           alt: {
-            subtitle: `[SET DEFAULT-DEV-HUB] "${properties.username}"`,
-            arg: `sfdx:config:set:defaultdevhubusername ${properties.username}`,
+            subtitle: `[SET DEFAULT-DEV-HUB] "${properties["USERNAME"]}"`,
+            arg: `sfdx:config:set:defaultdevhubusername ${properties["USERNAME"]}`,
             icon: { path: "./icn/gear.icns" },
           },
           cmd: {
-            subtitle: `[COPY] Org Id: ${properties.orgId}`,
+            subtitle: `[COPY] Org Id: ${properties["ORG ID"]}`,
             icon: { path: "./icn/copy.icns" },
           },
         },

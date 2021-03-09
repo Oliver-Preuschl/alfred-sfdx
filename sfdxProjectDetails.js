@@ -54,12 +54,18 @@ function getProjectItem(projectPath) {
       ctrl: {
         subtitle: `[OPEN PROJECT FILE] "...${projectPath}/sfdx-project.json"`,
         icon: { path: "./icn/eye.icns" },
-        arg: `sfdx:project:open:file ${projectPath}/sfdx-project.json`,
+        arg: "sfdx:project:open:file",
+        variables: {
+          pathToOpen: `${projectPath}/sfdx-project.json`,
+        },
       },
       alt: {
         subtitle: `[OPEN PROJECT FOLDER] "...${projectPath}"`,
         icon: { path: "./icn/eye.icns" },
-        arg: `sfdx:project:open:file ${projectPath}`,
+        arg: "sfdx:project:open:file",
+        variables: {
+          pathToOpen: projectPath,
+        },
       },
     },
   };

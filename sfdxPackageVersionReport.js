@@ -17,9 +17,7 @@ let sfdxPropertyLines;
 if (!alfy.cache.has(cacheKey)) {
   sfdxPropertyLines = await getSfdxPropertyLines(
     `cd  alfred-sfdx; sfdx force:package:version:report --package=${packageVersionId}`,
-    2,
-    2,
-    { propertyNames: ["key", "value"] }
+    2
   );
   alfy.cache.set(cacheKey, sfdxPropertyLines, {
     maxAge: process.env.cacheMaxAge,
@@ -29,7 +27,7 @@ if (!alfy.cache.has(cacheKey)) {
 }
 const packageVersionDetailName2PackageVersionDetail = getKey2PropertyLineFromPropertyLines(
   sfdxPropertyLines,
-  "key"
+  "Name"
 );
 
 const installationUrlItem = getInstallationLinkItem();
@@ -51,20 +49,20 @@ async function getPackageVersionReportItems(packageVersionId) {
   return sfdxPropertyLines
     .map((properties) => {
       return {
-        title: properties.value,
-        subtitle: properties.key,
+        title: properties["Value"],
+        subtitle: properties["Name"],
         icon: { path: "./icn/info-circle.icns" },
-        arg: properties.value,
+        arg: properties["Value"],
         mods: {
           ctrl: {
-            subtitle: properties.key,
+            subtitle: properties["Name"],
             icon: { path: "./icn/copy.icns" },
-            arg: properties.value,
+            arg: properties["Value"],
           },
           alt: {
-            subtitle: properties.key,
+            subtitle: properties["Name"],
             icon: { path: "./icn/copy.icns" },
-            arg: properties.value,
+            arg: properties["Value"],
           },
         },
       };
@@ -77,13 +75,13 @@ function getInstallationLinkItem() {
     title: `/packaging/installPackage.apexp?p0=${
       packageVersionDetailName2PackageVersionDetail.get(
         "Subscriber Package Version Id"
-      ).value
+      )["Value"]
     }`,
     subtitle: "Installation URL",
     arg: `/packaging/installPackage.apexp?p0=${
       packageVersionDetailName2PackageVersionDetail.get(
         "Subscriber Package Version Id"
-      ).value
+      )["Value"]
     }`,
     icon: { path: "./icn/link.icns" },
     mods: {
@@ -92,7 +90,7 @@ function getInstallationLinkItem() {
         arg: `/packaging/installPackage.apexp?p0=${
           packageVersionDetailName2PackageVersionDetail.get(
             "Subscriber Package Version Id"
-          ).value
+          )["Value"]
         }`,
         icon: { path: "./icn/copy.icns" },
       },
