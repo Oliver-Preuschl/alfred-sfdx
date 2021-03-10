@@ -115,6 +115,7 @@ async function getScratchOrgItem(projectPath, linkedScratchOrgUsername) {
         action: "sfdx:org:display",
         username: linkedScratchOrgUsername,
       },
+      valid: !!linkedScratchOrgUsername,
       mods: {
         ctrl: {
           subtitle: "CREATE Scratch Org",
