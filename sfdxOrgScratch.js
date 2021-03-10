@@ -40,23 +40,35 @@ async function getOrgItems(sfdxPropertyLines) {
       return {
         title: properties["ALIAS"],
         subtitle: `${properties["STATUS"]} (Expiration Date: ${properties["EXPIRATION DATE"]})`,
-        arg: `sfdx:org:display ${properties["USERNAME"]} `,
+        variables: {
+          action: "sfdx:org:display",
+          username: properties["USERNAME"],
+        },
         icon: { path: "./icn/cloud.icns" },
         mods: {
           ctrl: {
-            subtitle: `[OPEN] "${properties["USERNAME"]}"`,
+            subtitle: `OPEN Org`,
             icon: { path: "./icn/external-link.icns" },
-            arg: `sfdx:org:open ${properties["USERNAME"]}`,
+            variables: {
+              action: "sfdx:org:open",
+              value: properties["USERNAME"],
+            },
           },
           alt: {
-            subtitle: `[COPY] OrgId: ${properties["ORG ID"]}`,
+            subtitle: `COPY Username: "${properties["USERNAME"]}"`,
             icon: { path: "./icn/copy.icns" },
-            arg: properties["ORG ID"],
+            variables: {
+              action: "sfdx:copy",
+              value: properties["USERNAME"],
+            },
           },
           cmd: {
-            subtitle: `[COPY] Instance URL: ${properties["INSTANCE URL"]}`,
+            subtitle: `COPY Instance URL: ${properties["INSTANCE URL"]}`,
             icon: { path: "./icn/copy.icns" },
-            arg: properties["INSTANCE URL"],
+            variables: {
+              action: "sfdx:copy",
+              value: properties["INSTANCE URL"],
+            },
           },
         },
       };

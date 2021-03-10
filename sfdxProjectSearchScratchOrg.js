@@ -6,29 +6,17 @@ const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const exec = util.promisify(require("child_process").exec);
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
-const inputGroups = alfy.input.match(/"(.*)"\s*(\S*)/);
-let projectPath = inputGroups[1];
-let searchTerm = inputGroups[2];
+const projectPath = process.env.projectPath;
+const searchTerm = alfy.input;
 
 const cacheKey = "sfdx:org:scratch";
 let sfdxPropertyLines;
 if (!alfy.cache.has(cacheKey)) {
   sfdxPropertyLines = await getSfdxPropertyLines(
     "cd  alfred-sfdx; sfdx force:org:list --verbose",
-    8,
     1,
     {
       startLineKeyword: "EXPIRATION DATE",
-      propertyNames: [
-        "alias",
-        "username",
-        "orgId",
-        "status",
-        "devHub",
-        "createdDate",
-        "instanceUrl",
-        "expirationDate",
-      ],
     }
   );
   alfy.cache.set(cacheKey, sfdxPropertyLines, {
@@ -45,23 +33,40 @@ async function buildOrgItems(projectPath) {
   return sfdxPropertyLines
     .map((properties) => {
       return {
-        title: properties.alias,
-        subtitle: `[ASSIGN] ${properties.status} (Expiration Date: ${properties.expirationDate})`,
-        arg: `sfdx:project:linkscratchorg "${projectPath}" ${properties.username}`,
+        title: properties["ALIAS"],
+        subtitle: `[ASSIGN] ${properties["ALIAS"]} (Expiration Date: ${properties["EXPIRATION DATE"]})`,
         icon: { path: "./icn/cloud.icns" },
+        arg: "",
+        variables: {
+          action: "sfdx:project:linkscratchorg",
+          projectPath,
+          username: properties["USERNAME"],
+        },
         mods: {
           ctrl: {
-            subtitle: `[OPEN] "${properties.username}"`,
-            arg: `sfdx:org:open ${properties.username}`,
+            subtitle: `Username: "${properties["USERNAME"]}"`,
             icon: { path: "./icn/external-link.icns" },
+            variables: {
+              action: "sfdx:org:open",
+              projectPath,
+              username: properties["USERNAME"],
+            },
           },
           alt: {
-            subtitle: `[COPY] OrgId: ${properties.orgId}`,
-            arg: properties.orgId,
+            subtitle: `OrgId: ${properties["ORG ID"]}`,
+            icon: { path: "./icn/copy.icns" },
+            variables: {
+              action: "sfdx:copy",
+              value: properties["ORG ID"],
+            },
           },
           cmd: {
-            subtitle: `[COPY] Instance URL: ${properties.instanceUrl}`,
-            arg: properties.instanceUrl,
+            subtitle: `Instance URL: ${properties["INSTANCE URL"]}`,
+            icon: { path: "./icn/copy.icns" },
+            variables: {
+              action: "sfdx:copy",
+              value: properties["INSTANCE URL"],
+            },
           },
         },
       };

@@ -5,9 +5,7 @@ const path = require("path");
 const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const { getPackagesForProject } = require("./lib/fileSearcher.js");
 
-const inputGroups = alfy.input.match(/"(.*)"\s*(\S*)/);
-let projectPath = inputGroups[1];
-let searchTerm = inputGroups[2];
+let projectPath = process.env.projectPath;
 
 const cacheKey = `sfdx:project:${projectPath}:details`;
 let packages;
@@ -24,7 +22,7 @@ if (!alfy.cache.has(cacheKey)) {
 const linkedScratchOrgUsername = getLinkedScratchOrgUsername(projectPath);
 const globalActionItems = getGlobalActionItems();
 const projectItem = getProjectItem(projectPath);
-const packageItems = await getPackageItems(packages);
+const packageItems = await getPackageItems(packages, projectPath);
 const scratchOrgItems = await getScratchOrgItem(
   projectPath,
   linkedScratchOrgUsername
@@ -48,42 +46,47 @@ function getProjectItem(projectPath) {
     title: folder,
     subtitle: `...${projectPath}`,
     icon: { path: "./icn/folder.icns" },
-    arg: `sfdx:project:details "${projectPath}"`,
+    valid: false,
     path: projectPath,
     mods: {
       ctrl: {
-        subtitle: `[OPEN PROJECT FILE] "...${projectPath}/sfdx-project.json"`,
+        subtitle: `OPEN "...${projectPath}/sfdx-project.json"`,
         icon: { path: "./icn/eye.icns" },
-        arg: "sfdx:project:open:file",
         variables: {
+          action: "sfdx:open:file",
           pathToOpen: `${projectPath}/sfdx-project.json`,
         },
+        valid: true,
       },
       alt: {
-        subtitle: `[OPEN PROJECT FOLDER] "...${projectPath}"`,
+        subtitle: `OPEN "...${projectPath}"`,
         icon: { path: "./icn/eye.icns" },
-        arg: "sfdx:project:open:file",
         variables: {
+          action: "sfdx:open:file",
           pathToOpen: projectPath,
         },
+        valid: true,
       },
     },
   };
 }
 
-async function getPackageItems(packages) {
+async function getPackageItems(packages, projectPath) {
   return packages
     .map((sfdxPackage) => ({
       title: sfdxPackage.name,
       subtitle: "Package",
       icon: { path: "./icn/gift.icns" },
+      variables: {
+        action: "sfdx:package:version",
+        projectPath,
+        packageId: sfdxPackage.name,
+      },
       mods: {
         ctrl: {
-          subtitle:
-            "Package Dependencies: " +
-            sfdxPackage.dependencies
-              .map((packageDependency) => packageDependency.package)
-              .join(", "),
+          subtitle: `Package Dependencies: "${sfdxPackage.dependencies
+            .map((packageDependency) => packageDependency.package)
+            .join(", ")}"`,
         },
         alt: {
           subtitle: "Package",
@@ -108,25 +111,40 @@ async function getScratchOrgItem(projectPath, linkedScratchOrgUsername) {
       title: linkedScratchOrgUsername ? linkedScratchOrgUsername : "NOT LINKED",
       subtitle: "Linked Scratch Org",
       icon: { path: "./icn/cloud.icns" },
-      arg: `sfdx:org:display ${linkedScratchOrgUsername} `,
+      variables: {
+        action: "sfdx:org:display",
+        username: linkedScratchOrgUsername,
+      },
       mods: {
         ctrl: {
-          subtitle: "[CREATE] Scratch Org",
+          subtitle: "CREATE Scratch Org",
           icon: { path: "./icn/plus-circle.icns" },
-          arg: `sfdx:project:searchscratchorgdefinition "${projectPath}" `,
+          arg: "",
+          variables: {
+            action: "sfdx:project:searchscratchorgdefinition",
+            projectPath,
+          },
         },
         alt: {
           title: linkedScratchOrgUsername
             ? linkedScratchOrgUsername
             : "NOT LINKED",
-          subtitle: "[Link] Scratch Org",
+          subtitle: "LINK Scratch Org",
           icon: { path: "./icn/link.icns" },
-          arg: `sfdx:project:searchscratchorg "${projectPath}" `,
+          arg: "",
+          variables: {
+            action: "sfdx:project:searchscratchorg",
+            projectPath,
+          },
         },
         cmd: {
-          subtitle: "[Unlink] Scratch Org",
+          subtitle: "UNLINK Scratch Org",
           icon: { path: "./icn/unlink.icns" },
-          arg: `sfdx:project:unlinkscratchorg "${projectPath}" `,
+          arg: "",
+          variables: {
+            action: "sfdx:project:unlinkscratchorg",
+            projectPath,
+          },
         },
       },
     },
@@ -140,7 +158,11 @@ function getActionPushPullActionItems(projectPath, linkedScratchOrgUsername) {
         title: "Push",
         subtitle: "",
         icon: { path: "./icn/cloud-upload.icns" },
-        arg: `sfdx:project:push "${projectPath}" ${linkedScratchOrgUsername}`,
+        variables: {
+          action: "sfdx:project:push",
+          projectPath,
+          username: linkedScratchOrgUsername,
+        },
         mods: {
           ctrl: { subtitle: "" },
           alt: { subtitle: "" },
@@ -150,7 +172,11 @@ function getActionPushPullActionItems(projectPath, linkedScratchOrgUsername) {
         title: "Pull",
         subtitle: "",
         icon: { path: "./icn/cloud-download.icns" },
-        arg: `sfdx:project:pull "${projectPath}" ${linkedScratchOrgUsername}`,
+        variables: {
+          action: "sfdx:project:pull",
+          projectPath,
+          username: linkedScratchOrgUsername,
+        },
         mods: {
           ctrl: {
             subtitle: "",

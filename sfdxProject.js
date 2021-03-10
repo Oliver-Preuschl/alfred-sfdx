@@ -21,13 +21,13 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxProjectFiles = alfy.cache.get(cacheKey);
 }
-const actionsItems = getGlobalActionItems();
+const globalActionsItems = getGlobalActionItems();
 const projectPathItems = alfy.matches(
   searchTerm,
   await getAvailableProjectPathItems(sfdxProjectFiles),
   "title"
 );
-alfy.output([...actionsItems, ...projectPathItems]);
+alfy.output([...globalActionsItems, ...projectPathItems]);
 
 async function getAvailableProjectPathItems(sfdxProjectFiles) {
   return sfdxProjectFiles
@@ -35,22 +35,26 @@ async function getAvailableProjectPathItems(sfdxProjectFiles) {
       title: sfdxProjectFile.folder,
       subtitle: `...${sfdxProjectFile.path}`,
       icon: { path: "./icn/folder.icns" },
-      arg: `sfdx:project:details "${sfdxProjectFile.path}"`,
+      arg: "",
+      variables: {
+        action: "sfdx:project:details",
+        projectPath: sfdxProjectFile.path,
+      },
       path: sfdxProjectFile.path,
       mods: {
         ctrl: {
-          subtitle: `[OPEN PROJECT FILE] "...${sfdxProjectFile.path}/sfdx-project.json"`,
+          subtitle: `OPEN "...${sfdxProjectFile.path}/sfdx-project.json"`,
           icon: { path: "./icn/eye.icns" },
-          arg: "sfdx:project:open:file",
           variables: {
+            action: "sfdx:open:file",
             pathToOpen: `${sfdxProjectFile.path}/sfdx-project.json`,
           },
         },
         alt: {
-          subtitle: `[OPEN PROJECT FOLDER] "...${sfdxProjectFile.path}"`,
+          subtitle: `OPEN "...${sfdxProjectFile.path}"`,
           icon: { path: "./icn/eye.icns" },
-          arg: "sfdx:project:open:file",
           variables: {
+            action: "sfdx:open:file",
             pathToOpen: sfdxProjectFile.path,
           },
         },

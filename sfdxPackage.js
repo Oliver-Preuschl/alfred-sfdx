@@ -4,14 +4,18 @@ const alfy = require("alfy");
 const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
-const inputGroups = alfy.input.match(/(\S*)/);
-let searchTerm = inputGroups[1];
+const projectPath = process.env.projectPath;
+const devHubUsername = process.env.username;
+const searchTerm = alfy.input;
+const path = projectPath
+  ? `${process.env.workspace}/${projectPath}`
+  : "alfred-sfdx";
 
-const cacheKey = "sfdx:package";
+const cacheKey = `sfdx:package:${devHubUsername}`;
 let sfdxPropertyLines;
 if (!alfy.cache.has(cacheKey)) {
   sfdxPropertyLines = await getSfdxPropertyLines(
-    "cd  alfred-sfdx; sfdx force:package:list",
+    `cd "${path}"; sfdx force:package:list --targetdevhubusername ${devHubUsername}`,
     2
   );
   alfy.cache.set(cacheKey, sfdxPropertyLines, {
@@ -22,13 +26,13 @@ if (!alfy.cache.has(cacheKey)) {
 }
 const packageItems = alfy.matches(
   searchTerm,
-  await getPackageItems(sfdxPropertyLines),
+  await getPackageItems(sfdxPropertyLines, devHubUsername),
   "title"
 );
 const actionItems = getGlobalActionItems();
 alfy.output([...actionItems, ...packageItems]);
 
-async function getPackageItems(sfdxPropertyLines) {
+async function getPackageItems(sfdxPropertyLines, devHubUsername) {
   return sfdxPropertyLines
     .map((properties) => {
       return {
@@ -38,13 +42,19 @@ async function getPackageItems(sfdxPropertyLines) {
             : "") + properties["Name"],
         subtitle: `Id: ${properties["Id"]}`,
         icon: { path: "./icn/gift.icns" },
-        arg: `sfdx:package:version ${properties["Id"]}`,
-        id: properties["Id"],
+        variables: {
+          action: "sfdx:package:version",
+          packageId: properties["Id"],
+          devHubUsername,
+        },
         mods: {
           ctrl: {
-            subtitle: `[COPY] ${properties["Id"]}`,
+            subtitle: `COPY Id: "${properties["Id"]}"`,
             icon: { path: "./icn/copy.icns" },
-            arg: properties["Id"],
+            variables: {
+              action: "sfdx:copy",
+              packageId: properties["Id"],
+            },
           },
           alt: {
             subtitle: `Type: ${properties["Type"]}`,

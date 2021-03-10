@@ -26,13 +26,13 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
-const actionItems = getGlobalActionItems();
+const globalActionItems = getGlobalActionItems();
 const orgItems = alfy.matches(
   searchTerm,
   await getOrgItems(sfdxPropertyLines),
   "title"
 );
-alfy.output([...actionItems, ...orgItems]);
+alfy.output([...globalActionItems, ...orgItems]);
 
 async function getOrgItems(sfdxPropertyLines) {
   return sfdxPropertyLines
@@ -41,22 +41,27 @@ async function getOrgItems(sfdxPropertyLines) {
         title:
           (properties[""] ? `${properties[""]} ` : "") + properties["ALIAS"],
         subtitle: `Connection Status: ${properties["CONNECTED STATUS"]}`,
-        arg: `sfdx:org:display ${properties["USERNAME"]} `,
+        variables: {
+          action: "sfdx:org:display",
+          username: properties["USERNAME"],
+        },
         icon: { path: "./icn/cloud.icns" },
         mods: {
           ctrl: {
-            subtitle: `[OPEN] "${properties["USERNAME"]}"`,
-            arg: `sfdx:org:open ${properties["USERNAME"]}`,
+            subtitle: `OPEN "${properties["USERNAME"]}"`,
             icon: { path: "./icn/external-link.icns" },
+            variables: {
+              action: "sfdx:org:open",
+              value: properties["USERNAME"],
+            },
           },
           alt: {
-            subtitle: `[SET DEFAULT-DEV-HUB] "${properties["USERNAME"]}"`,
-            arg: `sfdx:config:set:defaultdevhubusername ${properties["USERNAME"]}`,
+            subtitle: `SHOW Packages`,
+            variables: {
+              action: "sfdx:project:package:list",
+              username: properties["USERNAME"],
+            },
             icon: { path: "./icn/gear.icns" },
-          },
-          cmd: {
-            subtitle: `[COPY] Org Id: ${properties["ORG ID"]}`,
-            icon: { path: "./icn/copy.icns" },
           },
         },
       };

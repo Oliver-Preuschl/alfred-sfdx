@@ -7,9 +7,8 @@ const {
   getKey2PropertyLineFromPropertyLines,
 } = require("./lib/sfdxExecutor.js");
 
-const inputGroups = alfy.input.match(/(\S*)\s*(\S*)/);
-let inputUsername = inputGroups[1];
-let searchTerm = inputGroups[2];
+let inputUsername = process.env.username;
+let searchTerm = alfy.input;
 
 const cacheKey = `sfdx:org:${inputUsername}:display`;
 let sfdxPropertyLines;
@@ -45,59 +44,91 @@ const actionItems = getActionItems(username, isDevHub);
 alfy.output([...globalActionsItems, ...actionItems, ...orgDetailItems]);
 
 async function getOrgDetailItems(sfdxPropertyLines) {
-  return sfdxPropertyLines
-    .map((properties) => {
-      return {
-        title: properties["VALUE"],
-        subtitle: properties["KEY"],
-        icon: { path: "./icn/info-circle.icns" },
-        arg: properties["VALUE"],
-        mods: {
-          ctrl: {
-            subtitle: `[COPY] ${properties["KEY"]}`,
-            icon: { path: "./icn/copy.icns" },
-            arg: properties["VALUE"],
-          },
-          alt: {
-            subtitle: properties["KEY"],
-            icon: { path: "./icn/copy.icns" },
-            arg: properties["VALUE"],
+  return sfdxPropertyLines.map((properties) => {
+    return {
+      title: properties["VALUE"],
+      subtitle: properties["KEY"],
+      icon: { path: "./icn/info-circle.icns" },
+      arg: "",
+      variables: {
+        action: "sfdx:nop",
+      },
+      valid: true,
+      mods: {
+        ctrl: {
+          subtitle: `COPY ${properties["KEY"]}`,
+          icon: { path: "./icn/copy.icns" },
+          variables: {
+            action: "sfdx:copy",
+            value: properties["VALUE"],
           },
         },
-      };
-    })
-    .filter((item) => !!item.arg);
+        alt: {
+          subtitle: properties["KEY"],
+          icon: { path: "./icn/info-circle.icns" },
+          variables: {},
+          valid: false,
+        },
+      },
+    };
+  });
 }
 
 function getActionItems(username, isDevHub) {
   const actions = [
     {
       title: "Open",
-      subtitle: "Open Org in Browser",
+      subtitle: "OPEN Org",
       icon: { path: "./icn/external-link.icns" },
-      arg: `sfdx:org:open ${username}`,
+      arg: "",
+      variables: {
+        action: "sfdx:org:open",
+        username,
+      },
+      valid: true,
       mods: {
         ctrl: {
-          subtitle: "Open Org in Browser",
+          subtitle: "OPEN Org",
+          variables: {
+            action: "sfdx:org:open",
+            username,
+          },
         },
         alt: {
-          subtitle: "Open Org in Browser",
+          subtitle: "OPEN Org",
+          variables: {
+            action: "sfdx:org:open",
+            username,
+          },
         },
       },
     },
   ];
   if (isDevHub) {
     actions.push({
-      title: "Set as Default",
-      subtitle: "Set as Default Dev Hub",
-      icon: { path: "./icn/gear.icns" },
-      arg: `sfdx:config:set:defaultdevhubusername ${username}`,
+      title: "Packages",
+      subtitle: "SHOW Packages",
+      icon: { path: "./icn/gift.icns" },
+      arg: "",
+      variables: {
+        action: "sfdx:project:package:list",
+        username,
+      },
+      valid: true,
       mods: {
         ctrl: {
-          subtitle: "Set as Default Dev Hub",
+          subtitle: "SHOW Packages",
+          variables: {
+            action: "sfdx:project:package:list",
+            username,
+          },
         },
         alt: {
-          subtitle: "Set as Default Dev Hub",
+          subtitle: "SHOW Packages",
+          variables: {
+            action: "sfdx:project:package:list",
+            username,
+          },
         },
       },
     });

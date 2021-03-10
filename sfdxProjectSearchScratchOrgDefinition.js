@@ -5,9 +5,8 @@ const util = require("util");
 const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const { getScratchOrgDefinitionFiles } = require("./lib/fileSearcher.js");
 
-const inputGroups = alfy.input.match(/"(.*)"\s*(\S*)/);
-let projectPath = inputGroups[1];
-let searchTerm = inputGroups[2];
+let projectPath = process.env.projectPath;
+let searchTerm = alfy.input;
 
 const scratchOrgDefinitionFiles = getScratchOrgDefinitionFiles(
   projectPath + "/config"
@@ -27,8 +26,10 @@ async function buildScratchOrgDefinitionItems(scratchOrgDefinitionFiles) {
       title: sfdxProjectFile.file,
       subtitle: `...${sfdxProjectFile.path}`,
       icon: { path: "./icn/file.icns" },
-      arg: `sfdx:project:createscratchorg "${sfdxProjectFile.path}/${sfdxProjectFile.file}"`,
-      path: sfdxProjectFile.path,
+      variables: {
+        action: "sfdx:project:createscratchorg",
+        scratchOrgDefinitionFilePath: `${sfdxProjectFile.path}/${sfdxProjectFile.file}`,
+      },
       mods: {
         ctrl: {
           subtitle: `...${sfdxProjectFile.path}`,

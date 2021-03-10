@@ -7,16 +7,23 @@ const {
   getKey2PropertyLineFromPropertyLines,
 } = require("./lib/sfdxExecutor.js");
 
-const inputGroups = alfy.input.match(/(\S*)\s*(\S*)/);
-let packageVersionId = inputGroups[1];
-let searchTerm = inputGroups[2];
+const projectPath = process.env.projectPath;
+const path = projectPath
+  ? `${process.env.workspace}/${projectPath}`
+  : "alfred-sfdx";
+const devHubUsername = process.env.username;
+const targetDevHubUsernameArg = devHubUsername
+  ? `--targetdevhubusername ${devHubUsername}`
+  : "";
+let packageVersionId = process.env.packageVersionId;
+const searchTerm = alfy.input;
 
 const cacheKey = `sfdx:package:${packageVersionId}:report`;
 
 let sfdxPropertyLines;
 if (!alfy.cache.has(cacheKey)) {
   sfdxPropertyLines = await getSfdxPropertyLines(
-    `cd  alfred-sfdx; sfdx force:package:version:report --package=${packageVersionId}`,
+    `cd "${path}"; sfdx force:package:version:report ${targetDevHubUsernameArg} --package=${packageVersionId}`,
     2
   );
   alfy.cache.set(cacheKey, sfdxPropertyLines, {
@@ -46,28 +53,23 @@ alfy.output([
 ]);
 
 async function getPackageVersionReportItems(packageVersionId) {
-  return sfdxPropertyLines
-    .map((properties) => {
-      return {
-        title: properties["Value"],
-        subtitle: properties["Name"],
-        icon: { path: "./icn/info-circle.icns" },
-        arg: properties["Value"],
-        mods: {
-          ctrl: {
-            subtitle: properties["Name"],
-            icon: { path: "./icn/copy.icns" },
-            arg: properties["Value"],
-          },
-          alt: {
-            subtitle: properties["Name"],
-            icon: { path: "./icn/copy.icns" },
-            arg: properties["Value"],
-          },
+  return sfdxPropertyLines.map((properties) => {
+    return {
+      title: properties["Value"],
+      subtitle: properties["Name"],
+      icon: { path: "./icn/info-circle.icns" },
+      mods: {
+        ctrl: {
+          subtitle: properties["Name"],
+          icon: { path: "./icn/copy.icns" },
         },
-      };
-    })
-    .filter((item) => !!item.arg);
+        alt: {
+          subtitle: properties["Name"],
+          icon: { path: "./icn/copy.icns" },
+        },
+      },
+    };
+  });
 }
 
 function getInstallationLinkItem() {
@@ -86,7 +88,7 @@ function getInstallationLinkItem() {
     icon: { path: "./icn/link.icns" },
     mods: {
       ctrl: {
-        subtitle: "[COPY] Installation URL",
+        subtitle: "COPY Installation URL",
         arg: `/packaging/installPackage.apexp?p0=${
           packageVersionDetailName2PackageVersionDetail.get(
             "Subscriber Package Version Id"

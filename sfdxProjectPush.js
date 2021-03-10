@@ -4,21 +4,33 @@ const alfy = require("alfy");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 
-const inputGroups = alfy.input.match(/(?:sfdx:project:push)?\s+"(.*)"\s+(\S*)/);
-let projectPath = inputGroups[1];
-let username = inputGroups[2];
+let projectPath = process.env.projectPath;
+let username = process.env.projectPath;
 
 const command = `cd "${process.env.workspace}/${projectPath}"; sfdx force:source:push --targetusername "${username}"`;
 try {
   const { stdout, stderr } = await exec(command);
-  alfy.output([
-    {
-      title: `Source successfully pushed`,
-      subtitle: `Username: ${username}`,
-      icon: { path: "./icn/check-circle-o.icns" },
-      arg: "sfdx",
-    },
-  ]);
+  console.log(
+    JSON.stringify({
+      alfredworkflow: {
+        arg: "",
+        variables: {
+          action: "sfdx:status:largeType:success",
+          message: `Source successfully pushed to ${username}`,
+        },
+      },
+    })
+  );
 } catch (e) {
-  alfy.error(`ERROR: ${e.message}`);
+  console.log(
+    JSON.stringify({
+      alfredworkflow: {
+        arg: "",
+        variables: {
+          action: "sfdx:status:largeType:error",
+          message: `Error while pushing source to ${username}: ${e.message}`,
+        },
+      },
+    })
+  );
 }
