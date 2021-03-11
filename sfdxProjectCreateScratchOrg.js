@@ -3,6 +3,7 @@
 const alfy = require("alfy");
 const exec = require("child_process").exec;
 const path = require("path");
+const { getDateTime } = require("./lib/dateTimeFormatter.js");
 
 let scratchOrgDefinitionFilePath = process.env.scratchOrgDefinitionFilePath;
 
@@ -10,8 +11,7 @@ const pathParts = path.dirname(scratchOrgDefinitionFilePath).split(path.sep);
 const projectPath = pathParts.slice(0, -1).join("/");
 const folder = pathParts[pathParts.length - 2];
 
-const dateTime = new Date(Date.now());
-const formattedDateTime = `${dateTime.getFullYear()}-${dateTime.getMonth()}-${dateTime.getDate()}-${dateTime.getHours()}-${dateTime.getMinutes()}-${dateTime.getSeconds()}`;
+const formattedDateTime = getDateTime();
 
 const command = `cd "${process.env.workspace}/${projectPath}"; sfdx force:org:create -a "${folder}" -f "${process.env.workspace}/${scratchOrgDefinitionFilePath}" --durationdays 30`;
 exec(command, function (error, stdout, stderr) {
@@ -31,6 +31,9 @@ exec(command, function (error, stdout, stderr) {
   } else {
     message = `Error while creating org\n\n${stdout}`;
   }
+  const logFileName = !error
+    ? `${formattedDateTime}_success_org-create.log`
+    : `${formattedDateTime}_error_org-create.log`;
   console.log(
     JSON.stringify({
       alfredworkflow: {
@@ -38,7 +41,7 @@ exec(command, function (error, stdout, stderr) {
         variables: {
           action,
           message,
-          formattedDateTime,
+          logFileName,
         },
       },
     })

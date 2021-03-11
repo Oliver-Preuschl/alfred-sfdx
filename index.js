@@ -2,30 +2,35 @@ const alfy = require("alfy");
 
 const options = [
   {
-    title: "sfdx:project",
+    title: "project",
     arg: "sfdx:project ",
-    icon: { path: alfy.icon.get("SidebarAllMyFiles") },
+    icon: { path: "./icn/folder.icns" },
   },
   {
-    title: "sfdx:org:scratch",
+    title: "org:scratch",
     arg: "sfdx:org:scratch ",
-    icon: { path: alfy.icon.get("SidebariCloud") },
+    icon: { path: "./icn/cloud.icns" },
   },
   {
-    title: "sfdx:org:connected",
+    title: "org:connected",
     arg: "sfdx:org:connected ",
-    icon: { path: alfy.icon.get("SidebariCloud") },
+    icon: { path: "./icn/cloud.icns" },
   },
   {
-    title: "sfdx:package",
-    arg: "sfdx:package ",
-    icon: { path: alfy.icon.get("SidebarGenericFolder") },
-  },
-  {
-    title: "sfdx:clearcache",
+    title: "clearcache",
     arg: "sfdx:clearcache",
-    icon: { path: alfy.icon.get("ToolbarDeleteIcon") },
+    icon: { path: "./icn/trash-o.icns" },
   },
 ];
+
+if (alfy.cache.has("sfdx:lastviewedconfig")) {
+  const lastViewedConfig = alfy.cache.get("sfdx:lastviewedconfig");
+  options.unshift({
+    title: lastViewedConfig.title,
+    icon: { path: "./icn/history-solid.icns" },
+    arg: "",
+    variables: lastViewedConfig.variables,
+  });
+}
 
 alfy.output(alfy.matches(alfy.input, options, "title"));

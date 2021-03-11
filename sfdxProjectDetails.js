@@ -7,6 +7,18 @@ const { getPackagesForProject } = require("./lib/fileSearcher.js");
 
 let projectPath = process.env.projectPath;
 
+alfy.cache.set(
+  "sfdx:lastviewedconfig",
+  {
+    title: `Project Details (${projectPath})`,
+    variables: {
+      action: "sfdx:project:details",
+      projectPath,
+    },
+  },
+  { maxAge: 60000 }
+);
+
 const cacheKey = `sfdx:project:${projectPath}:details`;
 let packages;
 if (!alfy.cache.has(cacheKey)) {
