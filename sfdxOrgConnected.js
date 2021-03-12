@@ -1,8 +1,7 @@
 "use strict";
 
 const alfy = require("alfy");
-const util = require("util");
-const exec = util.promisify(require("child_process").exec);
+const { getPathItem } = require("./lib/pathItemCreator.js");
 const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
@@ -26,13 +25,14 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
+const pathItem = getPathItem("Orgs (Connected)");
 const globalActionItems = getGlobalActionItems();
 const orgItems = alfy.matches(
   searchTerm,
   await getOrgItems(sfdxPropertyLines),
   "title"
 );
-alfy.output([...globalActionItems, ...orgItems]);
+alfy.output([pathItem, ...globalActionItems, ...orgItems]);
 
 async function getOrgItems(sfdxPropertyLines) {
   return sfdxPropertyLines
@@ -59,7 +59,7 @@ async function getOrgItems(sfdxPropertyLines) {
             subtitle: `SHOW Packages`,
             variables: {
               action: "sfdx:project:package:list",
-              username: properties["USERNAME"],
+              devHubUsername: properties["USERNAME"],
             },
             icon: { path: "./icn/gear.icns" },
           },

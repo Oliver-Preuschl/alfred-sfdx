@@ -1,22 +1,43 @@
 "use strict";
 
 const alfy = require("alfy");
+const { getPathItem } = require("./lib/pathItemCreator.js");
 const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const {
   getSfdxPropertyLines,
   getKey2PropertyLineFromPropertyLines,
 } = require("./lib/sfdxExecutor.js");
 
-const projectPath = process.env.projectPath;
+const {
+  projectPath,
+  devHubUsername,
+  packageVersionId,
+  packageNameWithNamespace,
+} = process.env;
+
 const path = projectPath
   ? `${process.env.workspace}/${projectPath}`
   : "alfred-sfdx";
-const devHubUsername = process.env.username;
 const targetDevHubUsernameArg = devHubUsername
   ? `--targetdevhubusername ${devHubUsername}`
   : "";
-let packageVersionId = process.env.packageVersionId;
 const searchTerm = alfy.input;
+
+alfy.cache.set(
+  "sfdx:lastviewedconfig",
+  {
+    title: "Package Details",
+    subtitle: packageNameWithNamespace,
+    variables: {
+      action: "sfdx:package:version:report",
+      projectPath,
+      devHubUsername,
+      packageVersionId,
+      packageNameWithNamespace,
+    },
+  },
+  { maxAge: process.env.cacheMaxAge }
+);
 
 const cacheKey = `sfdx:package:${packageVersionId}:report`;
 
@@ -39,6 +60,7 @@ const packageVersionDetailName2PackageVersionDetail = getKey2PropertyLineFromPro
 
 const installationUrlItem = getInstallationLinkItem();
 
+const pathItem = getPathItem("Project", "Package", "Version", "Details");
 const actionItems = getGlobalActionItems();
 const packageVersionReportItems = alfy.matches(
   searchTerm,
@@ -47,6 +69,7 @@ const packageVersionReportItems = alfy.matches(
 );
 
 alfy.output([
+  pathItem,
   ...actionItems,
   installationUrlItem,
   ...packageVersionReportItems,
@@ -80,21 +103,20 @@ function getInstallationLinkItem() {
       )["Value"]
     }`,
     subtitle: "Installation URL",
-    arg: `/packaging/installPackage.apexp?p0=${
-      packageVersionDetailName2PackageVersionDetail.get(
-        "Subscriber Package Version Id"
-      )["Value"]
-    }`,
     icon: { path: "./icn/link.icns" },
+    arg: "",
     mods: {
       ctrl: {
         subtitle: "COPY Installation URL",
-        arg: `/packaging/installPackage.apexp?p0=${
-          packageVersionDetailName2PackageVersionDetail.get(
-            "Subscriber Package Version Id"
-          )["Value"]
-        }`,
         icon: { path: "./icn/copy.icns" },
+        variables: {
+          action: "sfdx:copy",
+          value: `/packaging/installPackage.apexp?p0=${
+            packageVersionDetailName2PackageVersionDetail.get(
+              "Subscriber Package Version Id"
+            )["Value"]
+          }`,
+        },
       },
       alt: {
         subtitle: "Installation URL",

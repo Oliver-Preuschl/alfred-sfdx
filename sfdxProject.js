@@ -1,6 +1,7 @@
 "use strict";
 
 const alfy = require("alfy");
+const { getPathItem } = require("./lib/pathItemCreator.js");
 const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const {
   findFolderWithMatchingFileInWorkspace,
@@ -21,15 +22,41 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxProjectFiles = alfy.cache.get(cacheKey);
 }
+const pathItem = getPathItem("Projects");
+const addProjectItem = getAddProjectItem();
 const globalActionsItems = getGlobalActionItems();
 const projectPathItems = alfy.matches(
   searchTerm,
   await getAvailableProjectPathItems(sfdxProjectFiles),
   "title"
 );
-alfy.output([...globalActionsItems, ...projectPathItems]);
+alfy.output([
+  pathItem,
+  addProjectItem,
+  ...globalActionsItems,
+  ...projectPathItems,
+]);
 
-async function getAvailableProjectPathItems(sfdxProjectFiles) {
+function getAddProjectItem() {
+  return {
+    title: "Add Project",
+    icon: { path: "./icn/plus-circle.icns" },
+    arg: "",
+    variables: {
+      action: "sfdx:project:add",
+    },
+    mods: {
+      ctrl: {
+        subtitle: "",
+      },
+      alt: {
+        subtitle: "",
+      },
+    },
+  };
+}
+
+function getAvailableProjectPathItems(sfdxProjectFiles) {
   return sfdxProjectFiles
     .map((sfdxProjectFile) => ({
       title: sfdxProjectFile.folder,

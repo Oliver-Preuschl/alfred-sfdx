@@ -115,6 +115,18 @@
 				<key>vitoclose</key>
 				<false/>
 			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>F2637605-829D-4FF8-9ABE-36777000F685</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>42B4B9D1-3EA5-4EAD-920C-6A516628210C</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
 		</array>
 		<key>355B955C-689A-4516-A112-E1E0F8C1F462</key>
 		<array>
@@ -879,7 +891,7 @@
 			<key>config</key>
 			<dict>
 				<key>openwith</key>
-				<string></string>
+				<string>/Applications/IntelliJ IDEA.app</string>
 				<key>sourcefile</key>
 				<string>{var:workspace}/{var:pathToOpen}</string>
 			</dict>
@@ -908,6 +920,20 @@
 						<string>sfdx</string>
 						<key>uid</key>
 						<string>79BBB02E-85F6-40F8-BA3D-8CEC66FFEDA5</string>
+					</dict>
+					<dict>
+						<key>inputstring</key>
+						<string>{var:action}</string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>0</integer>
+						<key>matchstring</key>
+						<string>sfdx:project:add</string>
+						<key>outputlabel</key>
+						<string>sfdx:project:add</string>
+						<key>uid</key>
+						<string>B039B290-09FF-4BA2-9445-CD39CFE8C232</string>
 					</dict>
 					<dict>
 						<key>inputstring</key>
@@ -1053,7 +1079,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>./node_modules/.bin/run-node sfdxProjectCreateScratchOrg.js "$1"</string>
+				<string>./node_modules/.bin/run-node sfdxProjectScratchOrgCreate.js "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -1094,7 +1120,7 @@
 				<key>runningsubtext</key>
 				<string>Searching Scratch Org Definitions...</string>
 				<key>script</key>
-				<string>./node_modules/.bin/run-node sfdxProjectSearchScratchOrgDefinition.js "$1"</string>
+				<string>./node_modules/.bin/run-node sfdxProjectScratchOrgCreateChooseDefinition.js "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -1170,9 +1196,9 @@
 						<key>matchmode</key>
 						<integer>0</integer>
 						<key>matchstring</key>
-						<string>sfdx:project:searchscratchorgdefinition</string>
+						<string>sfdx:project:scratchorg:create:choosedefinition</string>
 						<key>outputlabel</key>
-						<string>sfdx:project: searchscratchorgdefinition</string>
+						<string>sfdx:project:scratchorg:create:choosedefinition</string>
 						<key>uid</key>
 						<string>3090C36F-4478-41BA-92D2-DB2E429386C1</string>
 					</dict>
@@ -1184,9 +1210,9 @@
 						<key>matchmode</key>
 						<integer>0</integer>
 						<key>matchstring</key>
-						<string>sfdx:project:searchscratchorg</string>
+						<string>sfdx:project:scratchorg:link:chooseorg</string>
 						<key>outputlabel</key>
-						<string>sfdx:project:searchscratchorg</string>
+						<string>sfdx:project:scratchorg:link:chooseorg</string>
 						<key>uid</key>
 						<string>7FA25833-6D47-43BF-A781-5A19CE8459FA</string>
 					</dict>
@@ -1198,9 +1224,9 @@
 						<key>matchmode</key>
 						<integer>0</integer>
 						<key>matchstring</key>
-						<string>sfdx:project:unlinkscratchorg</string>
+						<string>sfdx:project:scratchorg:unlink</string>
 						<key>outputlabel</key>
-						<string>sfdx:project:unlinkscratchorg</string>
+						<string>sfdx:project:scratchorg:unlink</string>
 						<key>uid</key>
 						<string>3D2796BC-46C7-40E8-BCCB-F0DF6D81A6C9</string>
 					</dict>
@@ -1270,9 +1296,9 @@
 						<key>matchmode</key>
 						<integer>0</integer>
 						<key>matchstring</key>
-						<string>sfdx:project:createscratchorg</string>
+						<string>sfdx:project:scratchorg:create</string>
 						<key>outputlabel</key>
-						<string>sfdx:project:createscratchorg</string>
+						<string>sfdx:project:scratchorg:create</string>
 						<key>uid</key>
 						<string>3E32C2EF-FF6D-45B1-8550-8EAAA944D56B</string>
 					</dict>
@@ -1365,7 +1391,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>./node_modules/.bin/run-node sfdxProjectLinkScratchOrg.js "$1"</string>
+				<string>./node_modules/.bin/run-node sfdxProjectScratchOrgLink.js "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -1406,7 +1432,7 @@
 				<key>runningsubtext</key>
 				<string>Searching Scratch Orgs...</string>
 				<key>script</key>
-				<string>./node_modules/.bin/run-node sfdxProjectSearchScratchOrg.js "$1"</string>
+				<string>./node_modules/.bin/run-node sfdxProjectScratchOrgLinkChooseOrg.js "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -1469,9 +1495,9 @@
 						<key>matchmode</key>
 						<integer>0</integer>
 						<key>matchstring</key>
-						<string>sfdx:project:linkscratchorg</string>
+						<string>sfdx:project:scratchorg:link</string>
 						<key>outputlabel</key>
-						<string>sfdx:project:linkscratchorg</string>
+						<string>sfdx:project:scratchorg:link</string>
 						<key>uid</key>
 						<string>A3D3AEBA-0293-4EE9-818D-74D5EF8D7E33</string>
 					</dict>
@@ -1538,7 +1564,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>./node_modules/.bin/run-node sfdxProjectUnlinkScratchOrg.js "$1"</string>
+				<string>./node_modules/.bin/run-node sfdxProjectScratchOrgUnlink.js "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -1807,6 +1833,20 @@
 						<string>sfdx:project:details</string>
 						<key>uid</key>
 						<string>4C4E1160-885F-4DD4-88D9-5DB7523F4AA6</string>
+					</dict>
+					<dict>
+						<key>inputstring</key>
+						<string>{var:action}</string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>0</integer>
+						<key>matchstring</key>
+						<string>sfdx:package:version:report</string>
+						<key>outputlabel</key>
+						<string>sfdx:package:version:report</string>
+						<key>uid</key>
+						<string>42B4B9D1-3EA5-4EAD-920C-6A516628210C</string>
 					</dict>
 				</array>
 				<key>elselabel</key>
@@ -2312,7 +2352,7 @@
 						<key>matchstring</key>
 						<string>sfdx:package:version:report</string>
 						<key>outputlabel</key>
-						<string>sfdx:package:version</string>
+						<string>sfdx:package:version:report</string>
 						<key>uid</key>
 						<string>3561879D-DB9F-487F-95AC-873B9C0FA9D0</string>
 					</dict>

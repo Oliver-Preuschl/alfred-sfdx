@@ -1,15 +1,15 @@
 "use strict";
 
 const alfy = require("alfy");
+const { getPathItem } = require("./lib/pathItemCreator.js");
 const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
-const projectPath = process.env.projectPath;
+const { projectPath, packageId, devHubUsername } = process.env;
+
 const path = projectPath
   ? `${process.env.workspace}/${projectPath}`
   : "alfred-sfdx";
-const packageId = process.env.packageId;
-const devHubUsername = process.env.username;
 const targetDevHubUsernameArg = devHubUsername
   ? `--targetdevhubusername ${devHubUsername}`
   : "";
@@ -28,13 +28,18 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
-const actionItems = getGlobalActionItems();
+const pathItem = getPathItem("Project", "Package", "Versions");
+const globalActionItems = getGlobalActionItems();
 const packageVersionItems = alfy
-  .matches(searchTerm, await getPackageVersionItems(sfdxPropertyLines), "title")
+  .matches(
+    searchTerm,
+    await getPackageVersionItems(sfdxPropertyLines, devHubUsername),
+    "title"
+  )
   .sort((a, b) => (a.id > b.id ? -1 : 1));
-alfy.output([...actionItems, ...packageVersionItems]);
+alfy.output([pathItem, ...globalActionItems, ...packageVersionItems]);
 
-async function getPackageVersionItems(sfdxPropertyLines) {
+async function getPackageVersionItems(sfdxPropertyLines, devHubUsername) {
   return sfdxPropertyLines
     .map((propertyLine) => {
       const packageNameWithNamespace =
@@ -51,6 +56,7 @@ async function getPackageVersionItems(sfdxPropertyLines) {
           packageVersionId: propertyLine["Subscriber Package Version Id"],
           projectPath,
           devHubUsername,
+          packageNameWithNamespace,
         },
         id: propertyLine["Subscriber Package Version Id"],
         version: propertyLine["Version"],

@@ -1,6 +1,7 @@
 "use strict";
 
 const alfy = require("alfy");
+const { getPathItem } = require("./lib/pathItemCreator.js");
 const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const {
   getSfdxPropertyLines,
@@ -23,6 +24,7 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
+const pathItem = getPathItem("Org", "Details");
 const globalActionsItems = getGlobalActionItems();
 const orgDetailItems = alfy.matches(
   searchTerm,
@@ -41,7 +43,12 @@ const isConnectedStatusAvailable = orgDetailName2OrgDetail.has(
 const isDevHub = !isDevHubAvailable && !isConnectedStatusAvailable;
 const actionItems = getActionItems(username, isDevHub);
 
-alfy.output([...globalActionsItems, ...actionItems, ...orgDetailItems]);
+alfy.output([
+  pathItem,
+  ...globalActionsItems,
+  ...actionItems,
+  ...orgDetailItems,
+]);
 
 async function getOrgDetailItems(sfdxPropertyLines) {
   return sfdxPropertyLines.map((properties) => {

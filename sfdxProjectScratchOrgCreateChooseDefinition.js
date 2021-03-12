@@ -27,7 +27,7 @@ async function buildScratchOrgDefinitionItems(scratchOrgDefinitionFiles) {
       subtitle: `...${sfdxProjectFile.path}`,
       icon: { path: "./icn/file.icns" },
       variables: {
-        action: "sfdx:project:createscratchorg",
+        action: "sfdx:project:scratchorg:create",
         scratchOrgDefinitionFilePath: `${sfdxProjectFile.path}/${sfdxProjectFile.file}`,
       },
       mods: {

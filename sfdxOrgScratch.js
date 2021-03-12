@@ -1,8 +1,7 @@
 "use strict";
 
 const alfy = require("alfy");
-const util = require("util");
-const exec = util.promisify(require("child_process").exec);
+const { getPathItem } = require("./lib/pathItemCreator.js");
 const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
@@ -25,6 +24,7 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
+const pathItem = getPathItem("Orgs (Scratch)");
 const actionItems = await getGlobalActionItems();
 const orgItems = alfy.matches(
   searchTerm,
@@ -32,7 +32,7 @@ const orgItems = alfy.matches(
   "title"
 );
 
-alfy.output([...actionItems, ...orgItems]);
+alfy.output([pathItem, ...actionItems, ...orgItems]);
 
 async function getOrgItems(sfdxPropertyLines) {
   return sfdxPropertyLines

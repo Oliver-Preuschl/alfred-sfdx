@@ -38,7 +38,7 @@ async function buildOrgItems(projectPath) {
         icon: { path: "./icn/cloud.icns" },
         arg: "",
         variables: {
-          action: "sfdx:project:linkscratchorg",
+          action: "sfdx:project:scratchorg:link",
           projectPath,
           username: properties["USERNAME"],
         },

@@ -1,12 +1,13 @@
 "use strict";
 
 const alfy = require("alfy");
+const { getPathItem } = require("./lib/pathItemCreator.js");
 const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
-const projectPath = process.env.projectPath;
-const devHubUsername = process.env.username;
+const { projectPath, devHubUsername } = process.env;
 const searchTerm = alfy.input;
+
 const path = projectPath
   ? `${process.env.workspace}/${projectPath}`
   : "alfred-sfdx";
@@ -29,8 +30,9 @@ const packageItems = alfy.matches(
   await getPackageItems(sfdxPropertyLines, devHubUsername),
   "title"
 );
-const actionItems = getGlobalActionItems();
-alfy.output([...actionItems, ...packageItems]);
+const pathItem = getPathItem("Project", "Packages");
+const globalActionItems = getGlobalActionItems();
+alfy.output([pathItem, ...globalActionItems, ...packageItems]);
 
 async function getPackageItems(sfdxPropertyLines, devHubUsername) {
   return sfdxPropertyLines

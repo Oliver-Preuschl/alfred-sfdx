@@ -2,21 +2,23 @@
 
 const alfy = require("alfy");
 const path = require("path");
+const { getPathItem } = require("./lib/pathItemCreator.js");
 const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const { getPackagesForProject } = require("./lib/fileSearcher.js");
 
-let projectPath = process.env.projectPath;
+let { projectPath } = process.env;
 
 alfy.cache.set(
   "sfdx:lastviewedconfig",
   {
-    title: `Project Details (${projectPath})`,
+    title: "Project Details",
+    subtitle: projectPath,
     variables: {
       action: "sfdx:project:details",
       projectPath,
     },
   },
-  { maxAge: 60000 }
+  { maxAge: process.env.cacheMaxAge }
 );
 
 const cacheKey = `sfdx:project:${projectPath}:details`;
@@ -32,6 +34,7 @@ if (!alfy.cache.has(cacheKey)) {
   packages = alfy.cache.get(cacheKey);
 }
 const linkedScratchOrgUsername = getLinkedScratchOrgUsername(projectPath);
+const pathItem = getPathItem("Project", "Details");
 const globalActionItems = getGlobalActionItems();
 const projectItem = getProjectItem(projectPath);
 const packageItems = await getPackageItems(packages, projectPath);
@@ -44,6 +47,7 @@ const pushPullActionItems = getActionPushPullActionItems(
   linkedScratchOrgUsername
 );
 alfy.output([
+  pathItem,
   ...globalActionItems,
   projectItem,
   ...packageItems,
@@ -134,7 +138,7 @@ async function getScratchOrgItem(projectPath, linkedScratchOrgUsername) {
           icon: { path: "./icn/plus-circle.icns" },
           arg: "",
           variables: {
-            action: "sfdx:project:searchscratchorgdefinition",
+            action: "sfdx:project:scratchorg:create:choosedefinition",
             projectPath,
           },
         },
@@ -146,7 +150,7 @@ async function getScratchOrgItem(projectPath, linkedScratchOrgUsername) {
           icon: { path: "./icn/link.icns" },
           arg: "",
           variables: {
-            action: "sfdx:project:searchscratchorg",
+            action: "sfdx:project:scratchorg:link:chooseorg",
             projectPath,
           },
         },
@@ -155,7 +159,7 @@ async function getScratchOrgItem(projectPath, linkedScratchOrgUsername) {
           icon: { path: "./icn/unlink.icns" },
           arg: "",
           variables: {
-            action: "sfdx:project:unlinkscratchorg",
+            action: "sfdx:project:scratchorg:unlink",
             projectPath,
           },
         },
