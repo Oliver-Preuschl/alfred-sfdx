@@ -28,7 +28,9 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
-const pathItem = getPathItem("Project", "Package", "Versions");
+const pathItem = getPathItem(["Project", "Package", "Versions"], {
+  description: packageId,
+});
 const globalActionItems = getGlobalActionItems();
 const packageVersionItems = alfy
   .matches(

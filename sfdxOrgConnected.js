@@ -25,7 +25,7 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
-const pathItem = getPathItem("Orgs (Connected)");
+const pathItem = getPathItem(["Orgs (Connected)"]);
 const globalActionItems = getGlobalActionItems();
 const orgItems = alfy.matches(
   searchTerm,

@@ -58,9 +58,13 @@ const packageVersionDetailName2PackageVersionDetail = getKey2PropertyLineFromPro
   "Name"
 );
 
-const installationUrlItem = getInstallationLinkItem();
+const installationUrlItem = getInstallationLinkItem(
+  packageVersionDetailName2PackageVersionDetail
+);
 
-const pathItem = getPathItem("Project", "Package", "Version", "Details");
+const pathItem = getPathItem(["Project", "Package", "Version", "Details"], {
+  description: packageNameWithNamespace,
+});
 const actionItems = getGlobalActionItems();
 const packageVersionReportItems = alfy.matches(
   searchTerm,
@@ -95,7 +99,9 @@ async function getPackageVersionReportItems(packageVersionId) {
   });
 }
 
-function getInstallationLinkItem() {
+function getInstallationLinkItem(
+  packageVersionDetailName2PackageVersionDetail
+) {
   return {
     title: `/packaging/installPackage.apexp?p0=${
       packageVersionDetailName2PackageVersionDetail.get(

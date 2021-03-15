@@ -4,7 +4,7 @@ const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
 const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const {
-  findFolderWithMatchingFileInWorkspace,
+  findDirsWithMatchingFileInWorkspace,
 } = require("./lib/fileSearcher.js");
 
 const inputGroups = alfy.input.match(/(\S*)/);
@@ -13,7 +13,7 @@ let searchTerm = inputGroups[1];
 const cacheKey = `sfdx:project:paths`;
 let sfdxProjectFiles;
 if (!alfy.cache.has(cacheKey)) {
-  sfdxProjectFiles = await findFolderWithMatchingFileInWorkspace(
+  sfdxProjectFiles = await findDirsWithMatchingFileInWorkspace(
     "sfdx-project.json"
   );
   alfy.cache.set(cacheKey, sfdxProjectFiles, {
@@ -22,7 +22,7 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxProjectFiles = alfy.cache.get(cacheKey);
 }
-const pathItem = getPathItem("Projects");
+const pathItem = getPathItem(["Projects"]);
 const addProjectItem = getAddProjectItem();
 const globalActionsItems = getGlobalActionItems();
 const projectPathItems = alfy.matches(
@@ -43,7 +43,7 @@ function getAddProjectItem() {
     icon: { path: "./icn/plus-circle.icns" },
     arg: "",
     variables: {
-      action: "sfdx:project:add",
+      action: "sfdx:project:add:choosefolder",
     },
     mods: {
       ctrl: {
@@ -59,7 +59,7 @@ function getAddProjectItem() {
 function getAvailableProjectPathItems(sfdxProjectFiles) {
   return sfdxProjectFiles
     .map((sfdxProjectFile) => ({
-      title: sfdxProjectFile.folder,
+      title: sfdxProjectFile.dir,
       subtitle: `...${sfdxProjectFile.path}`,
       icon: { path: "./icn/folder.icns" },
       arg: "",

@@ -1,22 +1,24 @@
 "use strict";
 
 const alfy = require("alfy");
-const util = require("util");
-const { getGlobalActionItems } = require("./lib/actionCreator.js");
+const { getPathItem } = require("./lib/pathItemCreator.js");
 const { getScratchOrgDefinitionFiles } = require("./lib/fileSearcher.js");
 
 let projectPath = process.env.projectPath;
 let searchTerm = alfy.input;
 
+const pathItem = getPathItem(["Org (Scratch)", "Create"], {
+  description: "Please choose org definition",
+});
+
 const scratchOrgDefinitionFiles = getScratchOrgDefinitionFiles(
   projectPath + "/config"
 );
-const actionItems = getGlobalActionItems();
 const scratchOrgDefinitionItems = await buildScratchOrgDefinitionItems(
   scratchOrgDefinitionFiles
 );
 alfy.output([
-  ...actionItems,
+  pathItem,
   ...alfy.matches(searchTerm, scratchOrgDefinitionItems, "title"),
 ]);
 
@@ -24,18 +26,18 @@ async function buildScratchOrgDefinitionItems(scratchOrgDefinitionFiles) {
   return scratchOrgDefinitionFiles
     .map((sfdxProjectFile) => ({
       title: sfdxProjectFile.file,
-      subtitle: `...${sfdxProjectFile.path}`,
+      subtitle: `...${sfdxProjectFile.relativeDirPath}`,
       icon: { path: "./icn/file.icns" },
       variables: {
         action: "sfdx:project:scratchorg:create",
-        scratchOrgDefinitionFilePath: `${sfdxProjectFile.path}/${sfdxProjectFile.file}`,
+        scratchOrgDefinitionFilePath: `${sfdxProjectFile.relativeDirPath}/${sfdxProjectFile.file}`,
       },
       mods: {
         ctrl: {
-          subtitle: `...${sfdxProjectFile.path}`,
+          subtitle: `...${sfdxProjectFile.relativeDirPath}`,
         },
         alt: {
-          subtitle: `...${sfdxProjectFile.path}`,
+          subtitle: `...${sfdxProjectFile.relativeDirPath}`,
         },
       },
     }))

@@ -2,7 +2,6 @@
 
 const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
-const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const {
   getSfdxPropertyLines,
   getKey2PropertyLineFromPropertyLines,
@@ -24,17 +23,15 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
-const pathItem = getPathItem("Org", "Details");
-const globalActionsItems = getGlobalActionItems();
-const orgDetailItems = alfy.matches(
-  searchTerm,
-  await getOrgDetailItems(sfdxPropertyLines),
-  "subtitle"
-);
+const orgDetails = getOrgDetailItems(sfdxPropertyLines);
 const orgDetailName2OrgDetail = getKey2PropertyLineFromPropertyLines(
   sfdxPropertyLines,
   "KEY"
 );
+const pathItem = getPathItem(["Org", "Details"], {
+  description: orgDetailName2OrgDetail.get("Alias")["VALUE"],
+});
+const orgDetailItems = alfy.matches(searchTerm, orgDetails, "subtitle");
 const username = orgDetailName2OrgDetail.get("Username")["VALUE"];
 const isDevHubAvailable = orgDetailName2OrgDetail.has("Dev Hub Id");
 const isConnectedStatusAvailable = orgDetailName2OrgDetail.has(
@@ -43,14 +40,9 @@ const isConnectedStatusAvailable = orgDetailName2OrgDetail.has(
 const isDevHub = !isDevHubAvailable && !isConnectedStatusAvailable;
 const actionItems = getActionItems(username, isDevHub);
 
-alfy.output([
-  pathItem,
-  ...globalActionsItems,
-  ...actionItems,
-  ...orgDetailItems,
-]);
+alfy.output([pathItem, ...actionItems, ...orgDetailItems]);
 
-async function getOrgDetailItems(sfdxPropertyLines) {
+function getOrgDetailItems(sfdxPropertyLines) {
   return sfdxPropertyLines.map((properties) => {
     return {
       title: properties["VALUE"],
@@ -119,23 +111,15 @@ function getActionItems(username, isDevHub) {
       arg: "",
       variables: {
         action: "sfdx:project:package:list",
-        username,
+        devhubUsername: username,
       },
       valid: true,
       mods: {
         ctrl: {
           subtitle: "SHOW Packages",
-          variables: {
-            action: "sfdx:project:package:list",
-            username,
-          },
         },
         alt: {
           subtitle: "SHOW Packages",
-          variables: {
-            action: "sfdx:project:package:list",
-            username,
-          },
         },
       },
     });

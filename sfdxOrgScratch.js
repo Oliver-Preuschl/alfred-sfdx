@@ -24,7 +24,7 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
-const pathItem = getPathItem("Orgs (Scratch)");
+const pathItem = getPathItem(["Orgs (Scratch)"]);
 const actionItems = await getGlobalActionItems();
 const orgItems = alfy.matches(
   searchTerm,

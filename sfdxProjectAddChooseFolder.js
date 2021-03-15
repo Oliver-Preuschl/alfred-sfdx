@@ -3,89 +3,50 @@
 const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
 const { getGlobalActionItems } = require("./lib/actionCreator.js");
-const {
-  findFolderWithMatchingFileInWorkspace,
-} = require("./lib/fileSearcher.js");
+const { getWorkspaceDirs } = require("./lib/fileSearcher.js");
 
 const inputGroups = alfy.input.match(/(\S*)/);
 let searchTerm = inputGroups[1];
 
 const cacheKey = `sfdx:workspace:paths`;
-let sfdxProjectPaths;
+let sfdxWorkspacePaths;
 if (!alfy.cache.has(cacheKey)) {
-  sfdxProjectPaths = await findFolderWithMatchingFileInWorkspace(
-    "sfdx-project.json"
-  );
-  alfy.cache.set(cacheKey, sfdxProjectPaths, {
+  sfdxWorkspacePaths = await getWorkspaceDirs();
+  alfy.cache.set(cacheKey, sfdxWorkspacePaths, {
     maxAge: process.env.cacheMaxAge,
   });
 } else {
-  sfdxProjectPaths = alfy.cache.get(cacheKey);
+  sfdxWorkspacePaths = alfy.cache.get(cacheKey);
 }
-const pathItem = getPathItem("Projects");
-const addProjectItem = getAddProjectItem();
+const pathItem = getPathItem(["Projects", "Add"], {
+  description: "Please choose Folder",
+});
 const globalActionsItems = getGlobalActionItems();
-const projectPathItems = alfy.matches(
+const workspacePathItems = alfy.matches(
   searchTerm,
-  await getAvailableProjectPathItems(sfdxProjectPaths),
+  await getAvailableWorkspacePathItems(sfdxWorkspacePaths),
   "title"
 );
-alfy.output([
-  pathItem,
-  addProjectItem,
-  ...globalActionsItems,
-  ...projectPathItems,
-]);
+alfy.output([pathItem, ...globalActionsItems, ...workspacePathItems]);
 
-function getAddProjectItem() {
-  return {
-    title: "Add Project",
-    icon: { path: "./icn/plus-circle.icns" },
-    arg: "",
-    variables: {
-      action: "sfdx:project:add",
-    },
-    mods: {
-      ctrl: {
-        subtitle: "",
-      },
-      alt: {
-        subtitle: "",
-      },
-    },
-  };
-}
-
-function getAvailableProjectPathItems(sfdxProjectFiles) {
-  return sfdxProjectFiles
-  .map((sfdxProjectFile) => ({
-    title: sfdxProjectFile.folder,
-    subtitle: `...${sfdxProjectFile.path}`,
+function getAvailableWorkspacePathItems(sfdxWorkspacePaths) {
+  return sfdxWorkspacePaths.map((workspaceDir) => ({
+    title: workspaceDir.relativePath,
+    subtitle: `...${workspaceDir.path}`,
     icon: { path: "./icn/folder.icns" },
     arg: "",
     variables: {
-      action: "sfdx:project:details",
-      projectPath: sfdxProjectFile.path,
+      action: "sfdx:project:add:entername",
+      projectPath: workspaceDir.path,
     },
-    path: sfdxProjectFile.path,
+    path: workspaceDir.relativePath,
     mods: {
       ctrl: {
-        subtitle: `OPEN "...${sfdxProjectFile.path}/sfdx-project.json"`,
-        icon: { path: "./icn/eye.icns" },
-        variables: {
-          action: "sfdx:open:file",
-          pathToOpen: `${sfdxProjectFile.path}/sfdx-project.json`,
-        },
+        subtitle: `...${workspaceDir.path}`,
       },
       alt: {
-        subtitle: `OPEN "...${sfdxProjectFile.path}"`,
-        icon: { path: "./icn/eye.icns" },
-        variables: {
-          action: "sfdx:open:file",
-          pathToOpen: sfdxProjectFile.path,
-        },
+        subtitle: `...${workspaceDir.path}`,
       },
     },
-  }))
-  .sort((a, b) => (a.title < b.title ? -1 : 1));
+  }));
 }

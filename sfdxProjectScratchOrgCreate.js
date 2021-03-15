@@ -8,12 +8,12 @@ const { getDateTime } = require("./lib/dateTimeFormatter.js");
 let scratchOrgDefinitionFilePath = process.env.scratchOrgDefinitionFilePath;
 
 const pathParts = path.dirname(scratchOrgDefinitionFilePath).split(path.sep);
-const projectPath = pathParts.slice(0, -1).join("/");
-const folder = pathParts[pathParts.length - 2];
+const projectDirPath = pathParts.slice(0, -1).join("/");
+const projectDir = pathParts[pathParts.length - 2];
 
 const formattedDateTime = getDateTime();
 
-const command = `cd "${process.env.workspace}/${projectPath}"; sfdx force:org:create -a "${folder}" -f "${process.env.workspace}/${scratchOrgDefinitionFilePath}" --durationdays 30`;
+const command = `cd "${process.env.workspace}/${projectDirPath}"; sfdx force:org:create -a "${projectDir}" -f "${process.env.workspace}/${scratchOrgDefinitionFilePath}" --setdefaultusername --durationdays 30`;
 exec(command, function (error, stdout, stderr) {
   const action = !error
     ? "sfdx:status:largeType:success"
@@ -26,7 +26,7 @@ exec(command, function (error, stdout, stderr) {
     const orgId = scratchOrgGenerationResponseGroups[1];
     const username = scratchOrgGenerationResponseGroups[2];
     message = `Success\n\n${stdout}`;
-    const configKey = `sfdx:project:${projectPath}:linkedscratchorg`;
+    const configKey = `sfdx:project:${projectDirPath}:linkedscratchorg`;
     alfy.config.set(configKey, username);
   } else {
     message = `Error while creating org\n\n${stdout}`;

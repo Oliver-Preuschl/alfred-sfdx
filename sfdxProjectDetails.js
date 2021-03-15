@@ -3,10 +3,11 @@
 const alfy = require("alfy");
 const path = require("path");
 const { getPathItem } = require("./lib/pathItemCreator.js");
-const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const { getPackagesForProject } = require("./lib/fileSearcher.js");
 
 let { projectPath } = process.env;
+const projectPathParts = projectPath.split(path.sep);
+const projectDir = projectPathParts[projectPathParts.length - 1];
 
 alfy.cache.set(
   "sfdx:lastviewedconfig",
@@ -34,9 +35,10 @@ if (!alfy.cache.has(cacheKey)) {
   packages = alfy.cache.get(cacheKey);
 }
 const linkedScratchOrgUsername = getLinkedScratchOrgUsername(projectPath);
-const pathItem = getPathItem("Project", "Details");
-const globalActionItems = getGlobalActionItems();
-const projectItem = getProjectItem(projectPath);
+const pathItem = getPathItem(["Project", "Details"], {
+  description: projectDir,
+});
+const projectOpenItem = getProjectItem(projectPath, projectDir);
 const packageItems = await getPackageItems(packages, projectPath);
 const scratchOrgItems = await getScratchOrgItem(
   projectPath,
@@ -48,21 +50,22 @@ const pushPullActionItems = getActionPushPullActionItems(
 );
 alfy.output([
   pathItem,
-  ...globalActionItems,
-  projectItem,
+  projectOpenItem,
   ...packageItems,
   ...scratchOrgItems,
   ...pushPullActionItems,
 ]);
 
-function getProjectItem(projectPath) {
-  const pathParts = projectPath.split(path.sep);
-  const folder = pathParts[pathParts.length - 1];
+function getProjectItem(projectPath, projectDir) {
   return {
-    title: folder,
-    subtitle: `...${projectPath}`,
-    icon: { path: "./icn/folder.icns" },
-    valid: false,
+    title: projectDir,
+    subtitle: `OPEN "...${projectPath}"`,
+    icon: { path: "./icn/eye.icns" },
+    variables: {
+      action: "sfdx:open:file",
+      pathToOpen: projectPath,
+    },
+    valid: true,
     path: projectPath,
     mods: {
       ctrl: {
@@ -76,12 +79,6 @@ function getProjectItem(projectPath) {
       },
       alt: {
         subtitle: `OPEN "...${projectPath}"`,
-        icon: { path: "./icn/eye.icns" },
-        variables: {
-          action: "sfdx:open:file",
-          pathToOpen: projectPath,
-        },
-        valid: true,
       },
     },
   };
