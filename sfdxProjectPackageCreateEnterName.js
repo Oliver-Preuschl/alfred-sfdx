@@ -2,7 +2,7 @@
 
 const alfy = require("alfy");
 
-const { projectPath } = process.env;
+const { projectPath, packageDir } = process.env;
 const packageName = alfy.input;
 
 const inputRequestItem = {
@@ -14,8 +14,9 @@ const confirmItem = {
   title: "OK",
   icon: { path: "./icn/check-circle-o.icns" },
   variables: {
-    action: "sfdx:project:add:enternamespace",
+    action: "sfdx:project:package:create:choosetype",
     projectPath,
+    packageDir,
     packageName,
   },
 };
@@ -31,7 +32,7 @@ const isPackageNameValid = packageNamePattern.test(packageName);
 const items = !packageName
   ? [inputRequestItem]
   : isPackageNameValid
-    ? [confirmItem]
-    : [invalidPackageNameItem];
+  ? [confirmItem]
+  : [invalidPackageNameItem];
 
 alfy.output(items);

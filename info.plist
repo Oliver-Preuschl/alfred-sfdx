@@ -76,6 +76,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>2D9CB070-B41C-465E-9A3A-AC063559FBEF</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>4EAE7182-3A57-46BA-B934-1EA963043DA6</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>2FB4DFD9-A1A1-4A97-AB18-959C86D31D01</key>
 		<array>
 			<dict>
@@ -330,8 +343,54 @@
 				<false/>
 			</dict>
 		</array>
+		<key>4EAE7182-3A57-46BA-B934-1EA963043DA6</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>B6525863-C570-42BB-9422-6A1EA405AB81</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>55396032-E103-420C-BCE7-E261C6D5F773</key>
 		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>72D4A951-C5C7-4DAC-BBF0-15A7E5B2E10E</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>1BA51B4E-70D0-4121-81B2-FA563F5430D9</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>58766256-F351-427F-B63F-F28A463E625F</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>ECFB63EE-8325-4DCC-88B0-BF2F53E4ABC5</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
 			<dict>
 				<key>destinationuid</key>
 				<string>72D4A951-C5C7-4DAC-BBF0-15A7E5B2E10E</string>
@@ -486,6 +545,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>81F03FA8-AD7B-43CE-9CBE-B2FC10E210FE</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>58766256-F351-427F-B63F-F28A463E625F</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>8520791C-EFBA-4A7A-B417-2F20EE781CDC</key>
 		<array>
 			<dict>
@@ -631,6 +703,19 @@
 		</array>
 		<key>B625AB5A-2756-4FCB-BFB0-FD67BA7CEC7E</key>
 		<array/>
+		<key>B6525863-C570-42BB-9422-6A1EA405AB81</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>81F03FA8-AD7B-43CE-9CBE-B2FC10E210FE</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>BA4530CD-F0E5-421C-8FEB-BA01EFB6F5D3</key>
 		<array>
 			<dict>
@@ -1216,6 +1301,50 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>argument</key>
+				<string>'{query}', {allvars}</string>
+				<key>cleardebuggertext</key>
+				<false/>
+				<key>processoutputs</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.debug</string>
+			<key>uid</key>
+			<string>ECFB63EE-8325-4DCC-88B0-BF2F53E4ABC5</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>adduuid</key>
+				<false/>
+				<key>allowemptyfiles</key>
+				<true/>
+				<key>createintermediatefolders</key>
+				<true/>
+				<key>filename</key>
+				<string>{var:workspace}/{var:projectPath}/logs/{var:logFileName}</string>
+				<key>filetext</key>
+				<string>{var:message}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>relativepathmode</key>
+				<integer>0</integer>
+				<key>type</key>
+				<integer>1</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.writefile</string>
+			<key>uid</key>
+			<string>72D4A951-C5C7-4DAC-BBF0-15A7E5B2E10E</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>conditions</key>
 				<array>
 					<dict>
@@ -1377,6 +1506,144 @@
 			<key>type</key>
 			<string>alfred.workflow.input.scriptfilter</string>
 			<key>uid</key>
+			<string>B6525863-C570-42BB-9422-6A1EA405AB81</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<false/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string></string>
+				<key>title</key>
+				<string>Creating Package in Background</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>81F03FA8-AD7B-43CE-9CBE-B2FC10E210FE</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>./node_modules/.bin/run-node sfdxProjectPackageCreate.js "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>58766256-F351-427F-B63F-F28A463E625F</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Loading...</string>
+				<key>script</key>
+				<string>./node_modules/.bin/run-node sfdxProjectPackageCreateChooseType.js "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string>Loading...</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>4EAE7182-3A57-46BA-B934-1EA963043DA6</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Loading...</string>
+				<key>script</key>
+				<string>./node_modules/.bin/run-node sfdxProjectPackageCreateChooseFolder.js "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string>Loading...</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
 			<string>2D9CB070-B41C-465E-9A3A-AC063559FBEF</string>
 			<key>version</key>
 			<integer>3</integer>
@@ -1436,9 +1703,9 @@
 						<key>matchmode</key>
 						<integer>0</integer>
 						<key>matchstring</key>
-						<string>sfdx:project:package:create:entername</string>
+						<string>sfdx:project:package:create:choosefolder</string>
 						<key>outputlabel</key>
-						<string>sfdx:project:package:create:entername</string>
+						<string>sfdx:project:package:create:choosefolder</string>
 						<key>uid</key>
 						<string>80E506D8-B8D7-4D19-AC98-11B7F7C39E91</string>
 					</dict>
@@ -1534,33 +1801,6 @@
 			<string>alfred.workflow.utility.conditional</string>
 			<key>uid</key>
 			<string>455D0C05-B357-4F93-ABC6-29C7BFAD6B17</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>adduuid</key>
-				<false/>
-				<key>allowemptyfiles</key>
-				<true/>
-				<key>createintermediatefolders</key>
-				<true/>
-				<key>filename</key>
-				<string>{var:workspace}/{var:projectPath}/logs/{var:logFileName}</string>
-				<key>filetext</key>
-				<string>{var:message}</string>
-				<key>ignoredynamicplaceholders</key>
-				<false/>
-				<key>relativepathmode</key>
-				<integer>0</integer>
-				<key>type</key>
-				<integer>1</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.writefile</string>
-			<key>uid</key>
-			<string>72D4A951-C5C7-4DAC-BBF0-15A7E5B2E10E</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -3019,12 +3259,26 @@
 			<key>ypos</key>
 			<integer>2350</integer>
 		</dict>
+		<key>4EAE7182-3A57-46BA-B934-1EA963043DA6</key>
+		<dict>
+			<key>xpos</key>
+			<integer>2365</integer>
+			<key>ypos</key>
+			<integer>890</integer>
+		</dict>
 		<key>55396032-E103-420C-BCE7-E261C6D5F773</key>
 		<dict>
 			<key>xpos</key>
 			<integer>2915</integer>
 			<key>ypos</key>
 			<integer>1025</integer>
+		</dict>
+		<key>58766256-F351-427F-B63F-F28A463E625F</key>
+		<dict>
+			<key>xpos</key>
+			<integer>2920</integer>
+			<key>ypos</key>
+			<integer>890</integer>
 		</dict>
 		<key>5A62520E-AC11-4D73-958C-50E0A429F127</key>
 		<dict>
@@ -3078,9 +3332,9 @@
 		<key>72D4A951-C5C7-4DAC-BBF0-15A7E5B2E10E</key>
 		<dict>
 			<key>xpos</key>
-			<integer>3195</integer>
+			<integer>3285</integer>
 			<key>ypos</key>
-			<integer>970</integer>
+			<integer>785</integer>
 		</dict>
 		<key>72F3B05C-CB19-4911-9929-55604EAC3B55</key>
 		<dict>
@@ -3102,6 +3356,13 @@
 			<integer>3195</integer>
 			<key>ypos</key>
 			<integer>1320</integer>
+		</dict>
+		<key>81F03FA8-AD7B-43CE-9CBE-B2FC10E210FE</key>
+		<dict>
+			<key>xpos</key>
+			<integer>2715</integer>
+			<key>ypos</key>
+			<integer>890</integer>
 		</dict>
 		<key>8520791C-EFBA-4A7A-B417-2F20EE781CDC</key>
 		<dict>
@@ -3173,6 +3434,13 @@
 			<key>ypos</key>
 			<integer>1335</integer>
 		</dict>
+		<key>B6525863-C570-42BB-9422-6A1EA405AB81</key>
+		<dict>
+			<key>xpos</key>
+			<integer>2540</integer>
+			<key>ypos</key>
+			<integer>890</integer>
+		</dict>
 		<key>BA4530CD-F0E5-421C-8FEB-BA01EFB6F5D3</key>
 		<dict>
 			<key>xpos</key>
@@ -3242,6 +3510,13 @@
 			<integer>1450</integer>
 			<key>ypos</key>
 			<integer>2390</integer>
+		</dict>
+		<key>ECFB63EE-8325-4DCC-88B0-BF2F53E4ABC5</key>
+		<dict>
+			<key>xpos</key>
+			<integer>3115</integer>
+			<key>ypos</key>
+			<integer>710</integer>
 		</dict>
 		<key>F07F347E-EC9F-46CC-AF1B-75EE1416FC16</key>
 		<dict>

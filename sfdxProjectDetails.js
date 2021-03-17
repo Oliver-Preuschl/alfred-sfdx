@@ -92,7 +92,7 @@ function getPackageCreateItem(projectPath) {
     subtitle: "Create a new package for this project",
     icon: { path: "./icn/plus-circle.icns" },
     variables: {
-      action: "sfdx:project:package:create:entername",
+      action: "sfdx:project:package:create:choosefolder",
       projectPath,
     },
     mods: {

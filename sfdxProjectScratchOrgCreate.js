@@ -41,6 +41,7 @@ exec(command, function (error, stdout, stderr) {
         variables: {
           action,
           message,
+          projectPath: projectDirPath,
           logFileName,
         },
       },

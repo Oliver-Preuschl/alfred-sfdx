@@ -2,7 +2,6 @@
 
 const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
-const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const { getWorkspaceDirs } = require("./lib/fileSearcher.js");
 
 const inputGroups = alfy.input.match(/(\S*)/);
@@ -21,13 +20,12 @@ if (!alfy.cache.has(cacheKey)) {
 const pathItem = getPathItem(["Projects", "Add"], {
   description: "Please choose Folder",
 });
-const globalActionsItems = getGlobalActionItems();
 const workspacePathItems = alfy.matches(
   searchTerm,
   await getAvailableWorkspacePathItems(sfdxWorkspacePaths),
   "title"
 );
-alfy.output([pathItem, ...globalActionsItems, ...workspacePathItems]);
+alfy.output([pathItem, ...workspacePathItems]);
 
 function getAvailableWorkspacePathItems(sfdxWorkspacePaths) {
   return sfdxWorkspacePaths.map((workspaceDir) => ({
