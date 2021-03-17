@@ -39,6 +39,7 @@ const pathItem = getPathItem(["Project", "Details"], {
   description: projectDir,
 });
 const projectOpenItem = getProjectItem(projectPath, projectDir);
+const packageCreateItem = await getPackageCreateItem(projectPath);
 const packageItems = await getPackageItems(packages, projectPath);
 const scratchOrgItems = await getScratchOrgItem(
   projectPath,
@@ -51,6 +52,7 @@ const pushPullActionItems = getActionPushPullActionItems(
 alfy.output([
   pathItem,
   projectOpenItem,
+  packageCreateItem,
   ...packageItems,
   ...scratchOrgItems,
   ...pushPullActionItems,
@@ -84,7 +86,27 @@ function getProjectItem(projectPath, projectDir) {
   };
 }
 
-async function getPackageItems(packages, projectPath) {
+function getPackageCreateItem(projectPath) {
+  return {
+    title: "Create Package",
+    subtitle: "Create a new package for this project",
+    icon: { path: "./icn/plus-circle.icns" },
+    variables: {
+      action: "sfdx:project:package:create:entername",
+      projectPath,
+    },
+    mods: {
+      ctrl: {
+        subtitle: "Create a new package for this project",
+      },
+      alt: {
+        subtitle: "Create a new package for this project",
+      },
+    },
+  };
+}
+
+function getPackageItems(packages, projectPath) {
   return packages
     .map((sfdxPackage) => ({
       title: sfdxPackage.name,

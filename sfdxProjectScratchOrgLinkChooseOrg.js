@@ -1,9 +1,7 @@
 "use strict";
 
 const alfy = require("alfy");
-const util = require("util");
-const { getGlobalActionItems } = require("./lib/actionCreator.js");
-const exec = util.promisify(require("child_process").exec);
+const { getPathItem } = require("./lib/pathItemCreator.js");
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
 const projectPath = process.env.projectPath;
@@ -25,16 +23,18 @@ if (!alfy.cache.has(cacheKey)) {
 } else {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
-const actionItems = getGlobalActionItems();
+const pathItem = getPathItem(["Project", "Org (Scratch)", "Link"], {
+  description: "Please choose Scratch Org",
+});
 const orgItems = await buildOrgItems(projectPath);
-alfy.output([...actionItems, ...alfy.matches(searchTerm, orgItems, "title")]);
+alfy.output([pathItem, ...alfy.matches(searchTerm, orgItems, "title")]);
 
 async function buildOrgItems(projectPath) {
   return sfdxPropertyLines
     .map((properties) => {
       return {
         title: properties["ALIAS"],
-        subtitle: `[ASSIGN] ${properties["ALIAS"]} (Expiration Date: ${properties["EXPIRATION DATE"]})`,
+        subtitle: `${properties["ALIAS"]} (Expiration Date: ${properties["EXPIRATION DATE"]})`,
         icon: { path: "./icn/cloud.icns" },
         arg: "",
         variables: {
@@ -44,29 +44,10 @@ async function buildOrgItems(projectPath) {
         },
         mods: {
           ctrl: {
-            subtitle: `Username: "${properties["USERNAME"]}"`,
-            icon: { path: "./icn/external-link.icns" },
-            variables: {
-              action: "sfdx:org:open",
-              projectPath,
-              username: properties["USERNAME"],
-            },
+            subtitle: `${properties["ALIAS"]} (Expiration Date: ${properties["EXPIRATION DATE"]})`,
           },
           alt: {
-            subtitle: `OrgId: ${properties["ORG ID"]}`,
-            icon: { path: "./icn/copy.icns" },
-            variables: {
-              action: "sfdx:copy",
-              value: properties["ORG ID"],
-            },
-          },
-          cmd: {
-            subtitle: `Instance URL: ${properties["INSTANCE URL"]}`,
-            icon: { path: "./icn/copy.icns" },
-            variables: {
-              action: "sfdx:copy",
-              value: properties["INSTANCE URL"],
-            },
+            subtitle: `${properties["ALIAS"]} (Expiration Date: ${properties["EXPIRATION DATE"]})`,
           },
         },
       };

@@ -113,7 +113,7 @@ function getInstallationLinkItem(
     arg: "",
     mods: {
       ctrl: {
-        subtitle: "COPY Installation URL",
+        subtitle: "Installation URL",
         icon: { path: "./icn/copy.icns" },
         variables: {
           action: "sfdx:copy",

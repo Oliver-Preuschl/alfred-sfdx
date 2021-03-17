@@ -32,20 +32,19 @@ alfy.output([pathItem, ...globalActionsItems, ...workspacePathItems]);
 function getAvailableWorkspacePathItems(sfdxWorkspacePaths) {
   return sfdxWorkspacePaths.map((workspaceDir) => ({
     title: workspaceDir.relativePath,
-    subtitle: `...${workspaceDir.path}`,
+    subtitle: `${workspaceDir.path}`,
     icon: { path: "./icn/folder.icns" },
     arg: "",
     variables: {
       action: "sfdx:project:add:entername",
-      projectPath: workspaceDir.path,
+      relativeProjectPath: workspaceDir.relativePath,
     },
-    path: workspaceDir.relativePath,
     mods: {
       ctrl: {
-        subtitle: `...${workspaceDir.path}`,
+        subtitle: `${workspaceDir.path}`,
       },
       alt: {
-        subtitle: `...${workspaceDir.path}`,
+        subtitle: `${workspaceDir.path}`,
       },
     },
   }));

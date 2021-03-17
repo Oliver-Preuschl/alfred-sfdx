@@ -2,6 +2,7 @@
 
 const alfy = require("alfy");
 
+const { relativeProjectPath, projectName } = process.env;
 const projectNamespace = alfy.input;
 
 const inputRequestItem = {
@@ -12,6 +13,12 @@ const inputRequestItem = {
 const confirmItem = {
   title: "OK",
   icon: { path: "./icn/check-circle-o.icns" },
+  variables: {
+    action: "sfdx:project:add:choosetemplate",
+    relativeProjectPath,
+    projectName,
+    projectNamespace,
+  },
 };
 const invalidProjectNamespaceItem = {
   title: "Invalid project namespace",
