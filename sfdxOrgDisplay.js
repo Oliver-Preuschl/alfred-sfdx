@@ -34,11 +34,8 @@ const pathItem = getPathItem(["Org", "Details"], {
 const orgDetailItems = alfy.matches(searchTerm, orgDetails, "subtitle");
 const username = orgDetailName2OrgDetail.get("Username")["VALUE"];
 const isDevHubAvailable = orgDetailName2OrgDetail.has("Dev Hub Id");
-const isConnectedStatusAvailable = orgDetailName2OrgDetail.has(
-  "Connected Status"
-);
-const isDevHub = !isDevHubAvailable && !isConnectedStatusAvailable;
-const actionItems = getActionItems(username, isDevHub);
+const mayBeDevHub = !isDevHubAvailable;
+const actionItems = getActionItems(username, mayBeDevHub);
 
 alfy.output([pathItem, ...actionItems, ...orgDetailItems]);
 

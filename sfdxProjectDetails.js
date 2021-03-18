@@ -124,7 +124,13 @@ function getPackageItems(packages, projectPath) {
             .join(", ")}"`,
         },
         alt: {
-          subtitle: "Package",
+          subtitle: "Create new Package Version",
+          icon: { path: "./icn/plus-circle.icns" },
+          variables: {
+            action: "sfdx:project:package:version:create:enterpassword",
+            projectPath,
+            packageId: sfdxPackage.name,
+          },
         },
       },
     }))

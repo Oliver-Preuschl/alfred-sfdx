@@ -51,7 +51,7 @@ async function getPackageItems(sfdxPropertyLines, devhubUsername) {
         },
         mods: {
           ctrl: {
-            subtitle: `COPY Id: "${properties["Id"]}"`,
+            subtitle: `Id: "${properties["Id"]}"`,
             icon: { path: "./icn/copy.icns" },
             variables: {
               action: "sfdx:copy",

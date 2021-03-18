@@ -3,32 +3,33 @@
 const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
 
-const { projectPath, packageDir, packageName } = process.env;
-const searchTerm = alfy.input;
+const { projectPath, packageDir, packageName, packageType } = process.env;
 
 const pathItem = getPathItem(["Project", "Package", "Create"], {
-  description: "Please choose a package type",
+  description: "Should the package be Org dependent?",
 });
 
 const templateItems = [
   {
-    title: "Unlocked",
+    title: "Yes",
     variables: {
-      action: "sfdx:project:package:create:chooseorgdependency",
+      action: "sfdx:project:package:create",
       projectPath,
       packageDir,
       packageName,
-      packageType: "Unlocked",
+      packageType,
+      isPackageOrgDependent: true,
     },
   },
   {
-    title: "Managed",
+    title: "No",
     variables: {
-      action: "sfdx:project:package:create:chooseorgdependency",
+      action: "sfdx:project:package:create",
       projectPath,
       packageDir,
       packageName,
-      packageType: "Managed",
+      packageType,
+      isPackageOrgDependent: false,
     },
   },
 ];

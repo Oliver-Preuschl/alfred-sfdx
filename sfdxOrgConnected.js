@@ -59,9 +59,9 @@ async function getOrgItems(sfdxPropertyLines) {
             subtitle: `SHOW Packages`,
             variables: {
               action: "sfdx:project:package:list",
-              devHubUsername: properties["USERNAME"],
+              devhubUsername: properties["USERNAME"],
             },
-            icon: { path: "./icn/gear.icns" },
+            icon: { path: "./icn/gift.icns" },
           },
         },
       };

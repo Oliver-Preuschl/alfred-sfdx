@@ -2,7 +2,6 @@
 
 const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
-const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const {
   findDirsWithMatchingFileInWorkspace,
 } = require("./lib/fileSearcher.js");
@@ -24,18 +23,12 @@ if (!alfy.cache.has(cacheKey)) {
 }
 const pathItem = getPathItem(["Projects"]);
 const addProjectItem = getAddProjectItem();
-const globalActionsItems = getGlobalActionItems();
 const projectPathItems = alfy.matches(
   searchTerm,
   await getAvailableProjectPathItems(sfdxProjectFiles),
   "title"
 );
-alfy.output([
-  pathItem,
-  addProjectItem,
-  ...globalActionsItems,
-  ...projectPathItems,
-]);
+alfy.output([pathItem, addProjectItem, ...projectPathItems]);
 
 function getAddProjectItem() {
   return {
