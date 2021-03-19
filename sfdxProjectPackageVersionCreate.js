@@ -14,7 +14,7 @@ exec(command, function (error, stdout, stderr) {
     : "sfdx:status:largeType:error";
   let message;
   if (!error) {
-    message = `Successfully created package version for package "${packageName}" from path "${process.env.workspace}/${projectPath}"\n\n${stdout}`;
+    message = `Successfully created package version for package "${packageId}" from path "${process.env.workspace}/${projectPath}"\n\n${stdout}`;
   } else {
     message = `Error creating package version\n\n${stderr}`;
   }
