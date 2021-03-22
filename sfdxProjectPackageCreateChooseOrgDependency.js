@@ -7,6 +7,7 @@ const { projectPath, packageDir, packageName, packageType } = process.env;
 
 const pathItem = getPathItem(["Project", "Package", "Create"], {
   description: "Should the package be Org dependent?",
+  hideHomeLink: true,
 });
 
 const templateItems = [

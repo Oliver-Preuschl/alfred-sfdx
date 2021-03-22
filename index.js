@@ -2,7 +2,7 @@ const alfy = require("alfy");
 
 const options = [
   {
-    title: "project",
+    title: "Projects",
     arg: "sfdx:project ",
     icon: { path: "./icn/folder.icns" },
     mods: {
@@ -15,7 +15,7 @@ const options = [
     },
   },
   {
-    title: "org:scratch",
+    title: "Scratch Orgs",
     arg: "sfdx:org:scratch ",
     icon: { path: "./icn/cloud.icns" },
     mods: {
@@ -28,7 +28,7 @@ const options = [
     },
   },
   {
-    title: "org:connected",
+    title: "Connected Orgs",
     arg: "sfdx:org:connected ",
     icon: { path: "./icn/cloud.icns" },
     mods: {
@@ -41,8 +41,11 @@ const options = [
     },
   },
   {
-    title: "clearcache",
+    title: "Clear Cache",
     arg: "sfdx:clearcache",
+    variables: {
+      action: "sfdx:clearcache",
+    },
     icon: { path: "./icn/trash-o.icns" },
     mods: {
       ctrl: {
@@ -63,6 +66,17 @@ if (alfy.cache.has("sfdx:lastviewedconfig")) {
     icon: { path: "./icn/history-solid.icns" },
     arg: "",
     variables: lastViewedConfig.variables,
+    mods: {
+      ctrl: {
+        subtitle: lastViewedConfig.subtitle,
+      },
+      alt: {
+        subtitle: lastViewedConfig.subtitle,
+      },
+      cmd: {
+        subtitle: lastViewedConfig.subtitle,
+      },
+    },
   });
 }
 

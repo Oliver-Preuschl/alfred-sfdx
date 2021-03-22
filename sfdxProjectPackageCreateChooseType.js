@@ -8,6 +8,7 @@ const searchTerm = alfy.input;
 
 const pathItem = getPathItem(["Project", "Package", "Create"], {
   description: "Please choose a package type",
+  hideHomeLink: true,
 });
 
 const templateItems = [

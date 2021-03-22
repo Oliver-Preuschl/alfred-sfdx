@@ -9,6 +9,7 @@ let searchTerm = alfy.input;
 
 const pathItem = getPathItem(["Org (Scratch)", "Create"], {
   description: "Please choose org definition",
+  hideHomeLink: true,
 });
 
 const scratchOrgDefinitionFiles = getScratchOrgDefinitionFiles(

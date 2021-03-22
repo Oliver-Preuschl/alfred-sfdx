@@ -2,7 +2,6 @@
 
 const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
-const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
 const { projectPath, devhubUsername } = process.env;
@@ -31,8 +30,7 @@ const packageItems = alfy.matches(
   "title"
 );
 const pathItem = getPathItem(["Project", "Packages"]);
-const globalActionItems = getGlobalActionItems();
-alfy.output([pathItem, ...globalActionItems, ...packageItems]);
+alfy.output([pathItem, ...packageItems]);
 
 async function getPackageItems(sfdxPropertyLines, devhubUsername) {
   return sfdxPropertyLines

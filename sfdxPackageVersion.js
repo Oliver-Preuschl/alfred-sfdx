@@ -2,7 +2,6 @@
 
 const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
-const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
 const { projectPath, packageId, devHubUsername } = process.env;
@@ -31,7 +30,6 @@ if (!alfy.cache.has(cacheKey)) {
 const pathItem = getPathItem(["Project", "Package", "Versions"], {
   description: packageId,
 });
-const globalActionItems = getGlobalActionItems();
 const packageVersionItems = alfy
   .matches(
     searchTerm,
@@ -39,7 +37,7 @@ const packageVersionItems = alfy
     "title"
   )
   .sort((a, b) => (a.id > b.id ? -1 : 1));
-alfy.output([pathItem, ...globalActionItems, ...packageVersionItems]);
+alfy.output([pathItem, ...packageVersionItems]);
 
 async function getPackageVersionItems(sfdxPropertyLines, devHubUsername) {
   return sfdxPropertyLines
@@ -64,7 +62,7 @@ async function getPackageVersionItems(sfdxPropertyLines, devHubUsername) {
         version: propertyLine["Version"],
         mods: {
           ctrl: {
-            subtitle: `[COPY] Installation URL: /packaging/installPackage.apexp?p0=${propertyLine["Subscriber Package Version Id"]}`,
+            subtitle: `COPY Installation URL: /packaging/installPackage.apexp?p0=${propertyLine["Subscriber Package Version Id"]}`,
             icon: { path: "./icn/copy.icns" },
             variables: {
               action: "sfdx:copy",
@@ -72,10 +70,15 @@ async function getPackageVersionItems(sfdxPropertyLines, devHubUsername) {
             },
           },
           alt: {
-            subtitle: `Version Name: ${propertyLine["Version Name"]}`,
+            subtitle: "PROMOTE",
+            icon: { path: "./icn/glass-cheers-solid.png" },
+            variables: {
+              action: "sfdx:package:version:promote",
+              packageVersionId: propertyLine["Subscriber Package Version Id"],
+            },
           },
           cmd: {
-            subtitle: `Ancestor: ${propertyLine["Ancestor"]}`,
+            subtitle: `${propertyLine["Subscriber Package Version Id"]}`,
           },
         },
       };

@@ -2,7 +2,6 @@
 
 const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
-const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
 
 const inputGroups = alfy.input.match(/(\S*)/);
@@ -26,13 +25,12 @@ if (!alfy.cache.has(cacheKey)) {
   sfdxPropertyLines = alfy.cache.get(cacheKey);
 }
 const pathItem = getPathItem(["Orgs (Connected)"]);
-const globalActionItems = getGlobalActionItems();
 const orgItems = alfy.matches(
   searchTerm,
   await getOrgItems(sfdxPropertyLines),
   "title"
 );
-alfy.output([pathItem, ...globalActionItems, ...orgItems]);
+alfy.output([pathItem, ...orgItems]);
 
 async function getOrgItems(sfdxPropertyLines) {
   return sfdxPropertyLines

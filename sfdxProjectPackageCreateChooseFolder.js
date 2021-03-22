@@ -9,6 +9,7 @@ let searchTerm = alfy.input;
 
 const pathItem = getPathItem(["Project", "Package", "Create"], {
   description: "Please choose Package Folder",
+  hideHomeLink: true,
 });
 
 const potentialPackageDirs = getPotentialPackageDirs(projectPath);

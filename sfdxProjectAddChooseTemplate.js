@@ -8,6 +8,7 @@ const searchTerm = alfy.input;
 
 const pathItem = getPathItem(["Project", "Add"], {
   description: "Please choose a project template",
+  hideHomeLink: true,
 });
 
 const templateItems = [

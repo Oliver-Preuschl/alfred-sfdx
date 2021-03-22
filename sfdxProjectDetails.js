@@ -110,7 +110,7 @@ function getPackageItems(packages, projectPath) {
   return packages
     .map((sfdxPackage) => ({
       title: sfdxPackage.name,
-      subtitle: "Package",
+      subtitle: "Show Package Versions",
       icon: { path: "./icn/gift.icns" },
       variables: {
         action: "sfdx:package:version",

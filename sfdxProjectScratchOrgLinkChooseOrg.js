@@ -25,6 +25,7 @@ if (!alfy.cache.has(cacheKey)) {
 }
 const pathItem = getPathItem(["Project", "Org (Scratch)", "Link"], {
   description: "Please choose Scratch Org",
+  hideHomeLink: true,
 });
 const orgItems = await buildOrgItems(projectPath);
 alfy.output([pathItem, ...alfy.matches(searchTerm, orgItems, "title")]);

@@ -2,7 +2,6 @@
 
 const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
-const { getGlobalActionItems } = require("./lib/actionCreator.js");
 const {
   getSfdxPropertyLines,
   getKey2PropertyLineFromPropertyLines,
@@ -26,7 +25,7 @@ const searchTerm = alfy.input;
 alfy.cache.set(
   "sfdx:lastviewedconfig",
   {
-    title: "Package Details",
+    title: "Package Version Details",
     subtitle: packageNameWithNamespace,
     variables: {
       action: "sfdx:package:version:report",
@@ -58,6 +57,10 @@ const packageVersionDetailName2PackageVersionDetail = getKey2PropertyLineFromPro
   "Name"
 );
 
+const promotionItem = getPromotionItem(
+  packageVersionDetailName2PackageVersionDetail
+);
+
 const installationUrlItem = getInstallationLinkItem(
   packageVersionDetailName2PackageVersionDetail
 );
@@ -65,38 +68,40 @@ const installationUrlItem = getInstallationLinkItem(
 const pathItem = getPathItem(["Project", "Package", "Version", "Details"], {
   description: packageNameWithNamespace,
 });
-const actionItems = getGlobalActionItems();
 const packageVersionReportItems = alfy.matches(
   searchTerm,
-  await getPackageVersionReportItems(sfdxPropertyLines),
+  getPackageVersionReportItems(sfdxPropertyLines),
   "subtitle"
 );
 
 alfy.output([
   pathItem,
-  ...actionItems,
+  promotionItem,
   installationUrlItem,
   ...packageVersionReportItems,
 ]);
 
-async function getPackageVersionReportItems(packageVersionId) {
-  return sfdxPropertyLines.map((properties) => {
-    return {
-      title: properties["Value"],
-      subtitle: properties["Name"],
-      icon: { path: "./icn/info-circle.icns" },
-      mods: {
-        ctrl: {
-          subtitle: properties["Name"],
-          icon: { path: "./icn/copy.icns" },
-        },
-        alt: {
-          subtitle: properties["Name"],
-          icon: { path: "./icn/copy.icns" },
-        },
+function getPromotionItem(packageVersionDetailName2PackageVersionDetail) {
+  return {
+    title: "Promote",
+    subtitle: "Promote this Version",
+    icon: { path: "./icn/glass-cheers-solid.png" },
+    arg: "",
+    variables: {
+      action: "sfdx:package:version:promote",
+      packageVersionId: packageVersionDetailName2PackageVersionDetail.get(
+        "Subscriber Package Version Id"
+      )["Value"],
+    },
+    mods: {
+      ctrl: {
+        subtitle: "Promote this Version",
       },
-    };
-  });
+      alt: {
+        subtitle: "Promote this Version",
+      },
+    },
+  };
 }
 
 function getInstallationLinkItem(
@@ -113,11 +118,11 @@ function getInstallationLinkItem(
     arg: "",
     mods: {
       ctrl: {
-        subtitle: "Installation URL",
+        subtitle: "COPY Installation URL",
         icon: { path: "./icn/copy.icns" },
         variables: {
           action: "sfdx:copy",
-          value: `/packaging/installPackage.apexp?p0=${
+          value: `COPY /packaging/installPackage.apexp?p0=${
             packageVersionDetailName2PackageVersionDetail.get(
               "Subscriber Package Version Id"
             )["Value"]
@@ -129,4 +134,23 @@ function getInstallationLinkItem(
       },
     },
   };
+}
+
+function getPackageVersionReportItems(packageVersionId) {
+  return sfdxPropertyLines.map((properties) => {
+    return {
+      title: properties["Value"],
+      subtitle: properties["Name"],
+      icon: { path: "./icn/info-circle.icns" },
+      mods: {
+        ctrl: {
+          subtitle: `COPY ${properties["Name"]}`,
+          icon: { path: "./icn/copy.icns" },
+        },
+        alt: {
+          subtitle: properties["Name"],
+        },
+      },
+    };
+  });
 }

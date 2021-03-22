@@ -19,6 +19,7 @@ if (!alfy.cache.has(cacheKey)) {
 }
 const pathItem = getPathItem(["Projects", "Add"], {
   description: "Please choose Folder",
+  hideHomeLink: true,
 });
 const workspacePathItems = alfy.matches(
   searchTerm,
