@@ -25,7 +25,7 @@ function getPackageDirItems(potentialPackageDirs, projectPath) {
   return potentialPackageDirs.map((potentialPackageDir) => ({
     title: potentialPackageDir,
     subtitle: "",
-    icon: { path: "./icn/folder.icns" },
+    icon: { path: "./icn/folder.png" },
     arg: "",
     variables: {
       action: "sfdx:project:package:create:entername",

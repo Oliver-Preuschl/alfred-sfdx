@@ -23,7 +23,7 @@ function getAvailableWorkspacePathItems(sfdxWorkspacePaths) {
   return sfdxWorkspacePaths.map((workspaceDir) => ({
     title: workspaceDir.relativePath,
     subtitle: `${workspaceDir.path}`,
-    icon: { path: "./icn/folder.icns" },
+    icon: { path: "./icn/folder.png" },
     arg: "",
     variables: {
       action: "sfdx:project:add:entername",

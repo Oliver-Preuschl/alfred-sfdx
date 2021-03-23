@@ -22,11 +22,11 @@ function getOrgItems(orgs) {
           action: "sfdx:org:display",
           username: org["USERNAME"],
         },
-        icon: { path: "./icn/cloud.icns" },
+        icon: { path: "./icn/cloud.png" },
         mods: {
           ctrl: {
             subtitle: `OPEN Org`,
-            icon: { path: "./icn/external-link.icns" },
+            icon: { path: "./icn/external-link.png" },
             variables: {
               action: "sfdx:org:open",
               value: org["USERNAME"],
@@ -34,7 +34,7 @@ function getOrgItems(orgs) {
           },
           alt: {
             subtitle: `COPY Username: "${org["USERNAME"]}"`,
-            icon: { path: "./icn/copy.icns" },
+            icon: { path: "./icn/copy.png" },
             variables: {
               action: "sfdx:copy",
               value: org["USERNAME"],
@@ -42,7 +42,7 @@ function getOrgItems(orgs) {
           },
           cmd: {
             subtitle: `COPY Instance URL: ${org["INSTANCE URL"]}`,
-            icon: { path: "./icn/copy.icns" },
+            icon: { path: "./icn/copy.png" },
             variables: {
               action: "sfdx:copy",
               value: org["INSTANCE URL"],

@@ -30,7 +30,7 @@ function getOrgDetailItems(orgDetails) {
     return {
       title: orgDetail["VALUE"],
       subtitle: orgDetail["KEY"],
-      icon: { path: "./icn/info-circle.icns" },
+      icon: { path: "./icn/info-circle.png" },
       arg: "",
       variables: {
         action: "sfdx:nop",
@@ -39,7 +39,7 @@ function getOrgDetailItems(orgDetails) {
       mods: {
         ctrl: {
           subtitle: `COPY ${orgDetail["KEY"]}`,
-          icon: { path: "./icn/copy.icns" },
+          icon: { path: "./icn/copy.png" },
           variables: {
             action: "sfdx:copy",
             value: orgDetail["VALUE"],
@@ -47,7 +47,7 @@ function getOrgDetailItems(orgDetails) {
         },
         alt: {
           subtitle: orgDetail["KEY"],
-          icon: { path: "./icn/info-circle.icns" },
+          icon: { path: "./icn/info-circle.png" },
           variables: {},
           valid: false,
         },
@@ -61,7 +61,7 @@ function getActionItems(username, isDevHub) {
     {
       title: "Open",
       subtitle: "OPEN Org",
-      icon: { path: "./icn/external-link.icns" },
+      icon: { path: "./icn/external-link.png" },
       arg: "",
       variables: {
         action: "sfdx:org:open",
@@ -90,7 +90,7 @@ function getActionItems(username, isDevHub) {
     actions.push({
       title: "Packages",
       subtitle: "SHOW Packages",
-      icon: { path: "./icn/gift.icns" },
+      icon: { path: "./icn/gift.png" },
       arg: "",
       variables: {
         action: "sfdx:project:package:list",

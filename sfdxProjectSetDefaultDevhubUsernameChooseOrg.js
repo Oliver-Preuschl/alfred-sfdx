@@ -4,40 +4,40 @@ const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
 const { getConnectedOrgs } = require("./lib/sfdxDataLoader.js");
 
-let searchTerm = alfy.input;
+const { projectPath } = process.env;
+const searchTerm = alfy.input;
 
-const pathItem = getPathItem(["Orgs (Connected)"]);
+const pathItem = getPathItem(["Project", "Set"], {
+  description: "Set Default Devhub Username",
+  hideHomeLink: true,
+});
 const orgs = await getConnectedOrgs();
-const orgItems = alfy.matches(searchTerm, getOrgItems(orgs), "title");
+const orgItems = alfy.matches(
+  searchTerm,
+  getOrgItems(orgs, projectPath),
+  "title"
+);
+
 alfy.output([pathItem, ...orgItems]);
 
-function getOrgItems(orgs) {
+function getOrgItems(orgs, projectPath) {
   return orgs
     .map((org) => {
       return {
         title: (org[""] ? `${org[""]} ` : "") + org["ALIAS"],
         subtitle: `Connection Status: ${org["CONNECTED STATUS"]}`,
         variables: {
-          action: "sfdx:org:display",
+          action: "sfdx:project:setdefaultdevhubusername",
           username: org["USERNAME"],
+          projectPath,
         },
         icon: { path: "./icn/cloud.png" },
         mods: {
           ctrl: {
-            subtitle: `OPEN "${org["USERNAME"]}"`,
-            icon: { path: "./icn/external-link.png" },
-            variables: {
-              action: "sfdx:org:open",
-              value: org["USERNAME"],
-            },
+            subtitle: `Connection Status: ${org["CONNECTED STATUS"]}`,
           },
           alt: {
-            subtitle: `SHOW Packages`,
-            variables: {
-              action: "sfdx:project:package:list",
-              devhubUsername: org["USERNAME"],
-            },
-            icon: { path: "./icn/gift.png" },
+            subtitle: `Connection Status: ${org["CONNECTED STATUS"]}`,
           },
         },
       };

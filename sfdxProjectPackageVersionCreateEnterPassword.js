@@ -8,7 +8,7 @@ const password = alfy.input;
 const inputRequestItem = {
   title: "Please enter Password",
   subtitle: "Leave blank for no password",
-  icon: { path: "./icn/edit.icns" },
+  icon: { path: "./icn/edit.png" },
   valid: true,
   variables: {
     action: "sfdx:project:package:create:version",

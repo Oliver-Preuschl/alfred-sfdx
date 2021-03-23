@@ -31,7 +31,7 @@ function getPackageItems(packages, devhubUsername) {
             ? `${singlePackage["Namespace Prefix"]}.`
             : "") + singlePackage["Name"],
         subtitle: `Id: ${singlePackage["Id"]}`,
-        icon: { path: "./icn/gift.icns" },
+        icon: { path: "./icn/gift.png" },
         variables: {
           action: "sfdx:package:version",
           packageId: singlePackage["Id"],
@@ -40,7 +40,7 @@ function getPackageItems(packages, devhubUsername) {
         mods: {
           ctrl: {
             subtitle: `Id: "${singlePackage["Id"]}"`,
-            icon: { path: "./icn/copy.icns" },
+            icon: { path: "./icn/copy.png" },
             variables: {
               action: "sfdx:copy",
               packageId: singlePackage["Id"],

@@ -7,12 +7,12 @@ const projectName = alfy.input;
 
 const inputRequestItem = {
   title: "Please enter Project Name",
-  icon: { path: "./icn/edit.icns" },
+  icon: { path: "./icn/edit.png" },
   valid: false,
 };
 const confirmItem = {
   title: "OK",
-  icon: { path: "./icn/check-circle-o.icns" },
+  icon: { path: "./icn/check-circle-o.png" },
   variables: {
     action: "sfdx:project:add:enternamespace",
     relativeProjectPath,
@@ -22,7 +22,7 @@ const confirmItem = {
 const invalidProjectNameItem = {
   title: "Invalid Project Name",
   subtitle: "The Project Name may contain letter, numbers, '-' and '_'",
-  icon: { path: "./icn/warning.icns" },
+  icon: { path: "./icn/warning.png" },
   valid: false,
 };
 const projectNamePattern = /^[a-zA-Z\d-_]+$/;

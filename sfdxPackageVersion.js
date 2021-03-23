@@ -35,7 +35,7 @@ function getPackageVersionItems(packageVersions, devhubUsername) {
       return {
         title: `${packageNameWithNamespace} - ${packageVersion["Version"]}${releasedStatus}`,
         subtitle: `${packageVersion["Subscriber Package Version Id"]}`,
-        icon: { path: "./icn/gift.icns" },
+        icon: { path: "./icn/gift.png" },
         variables: {
           action: "sfdx:package:version:report",
           packageVersionId: packageVersion["Subscriber Package Version Id"],
@@ -48,7 +48,7 @@ function getPackageVersionItems(packageVersions, devhubUsername) {
         mods: {
           ctrl: {
             subtitle: `COPY Installation URL: /packaging/installPackage.apexp?p0=${packageVersion["Subscriber Package Version Id"]}`,
-            icon: { path: "./icn/copy.icns" },
+            icon: { path: "./icn/copy.png" },
             variables: {
               action: "sfdx:copy",
               value: `/packaging/installPackage.apexp?p0=${packageVersion["Subscriber Package Version Id"]}`,

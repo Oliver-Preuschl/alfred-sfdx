@@ -21,7 +21,7 @@ async function buildOrgItems(scratchOrgs, projectPath) {
       return {
         title: scratchOrg["ALIAS"],
         subtitle: `${scratchOrg["ALIAS"]} (Expiration Date: ${scratchOrg["EXPIRATION DATE"]})`,
-        icon: { path: "./icn/cloud.icns" },
+        icon: { path: "./icn/cloud.png" },
         arg: "",
         variables: {
           action: "sfdx:project:scratchorg:link",

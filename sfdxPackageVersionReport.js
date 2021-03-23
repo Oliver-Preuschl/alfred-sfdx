@@ -93,12 +93,12 @@ function getInstallationLinkItem(packageVersionDetailName2Value) {
       ]
     }`,
     subtitle: "Installation URL",
-    icon: { path: "./icn/link.icns" },
+    icon: { path: "./icn/link.png" },
     arg: "",
     mods: {
       ctrl: {
         subtitle: "COPY Installation URL",
-        icon: { path: "./icn/copy.icns" },
+        icon: { path: "./icn/copy.png" },
         variables: {
           action: "sfdx:copy",
           value: `COPY /packaging/installPackage.apexp?p0=${
@@ -120,11 +120,11 @@ function getPackageVersionReportItems(packageVersionDetails) {
     return {
       title: packageVersionDetail["Value"],
       subtitle: packageVersionDetail["Name"],
-      icon: { path: "./icn/info-circle.icns" },
+      icon: { path: "./icn/info-circle.png" },
       mods: {
         ctrl: {
           subtitle: `COPY ${packageVersionDetail["Name"]}`,
-          icon: { path: "./icn/copy.icns" },
+          icon: { path: "./icn/copy.png" },
         },
         alt: {
           subtitle: packageVersionDetail["Name"],

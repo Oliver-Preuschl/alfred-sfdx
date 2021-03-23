@@ -6,20 +6,24 @@ const { getProjects } = require("./lib/sfdxDataLoader.js");
 
 const searchTerm = alfy.input;
 
-const projects = await getProjects();
 const pathItem = getPathItem(["Projects"]);
-const addProjectItem = getAddProjectItem();
-const projectPathItems = alfy.matches(
-  searchTerm,
-  getProjectItems(projects),
-  "title"
-);
-alfy.output([pathItem, addProjectItem, ...projectPathItems]);
+if (!!process.env.workspace) {
+  const projects = await getProjects();
+  const addProjectItem = getAddProjectItem();
+  const projectPathItems = alfy.matches(
+    searchTerm,
+    getProjectItems(projects),
+    "title"
+  );
+  alfy.output([pathItem, addProjectItem, ...projectPathItems]);
+} else {
+  alfy.output([pathItem, getWorkspaceNotSetWarningItem()]);
+}
 
 function getAddProjectItem() {
   return {
     title: "Add Project",
-    icon: { path: "./icn/plus-circle.icns" },
+    icon: { path: "./icn/plus-circle.png" },
     arg: "",
     variables: {
       action: "sfdx:project:add:choosefolder",
@@ -40,7 +44,7 @@ function getProjectItems(projects) {
     .map((project) => ({
       title: project.dir,
       subtitle: `...${project.path}`,
-      icon: { path: "./icn/folder.icns" },
+      icon: { path: "./icn/folder.png" },
       arg: "",
       variables: {
         action: "sfdx:project:details",
@@ -50,7 +54,7 @@ function getProjectItems(projects) {
       mods: {
         ctrl: {
           subtitle: `OPEN "...${project.path}/sfdx-project.json"`,
-          icon: { path: "./icn/eye.icns" },
+          icon: { path: "./icn/eye.png" },
           variables: {
             action: "sfdx:open:file",
             pathToOpen: `${project.path}/sfdx-project.json`,
@@ -58,7 +62,7 @@ function getProjectItems(projects) {
         },
         alt: {
           subtitle: `OPEN "...${project.path}"`,
-          icon: { path: "./icn/eye.icns" },
+          icon: { path: "./icn/eye.png" },
           variables: {
             action: "sfdx:open:file",
             pathToOpen: project.path,
@@ -67,4 +71,14 @@ function getProjectItems(projects) {
       },
     }))
     .sort((a, b) => (a.title < b.title ? -1 : 1));
+}
+
+function getWorkspaceNotSetWarningItem() {
+  return {
+    title: "Workspace not set",
+    subtitle:
+      "Please set a workspace directory in order to get access to this feature",
+    icon: { path: "./icn/warning.png" },
+    valid: false,
+  };
 }

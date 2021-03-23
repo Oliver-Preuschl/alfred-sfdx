@@ -8,11 +8,11 @@ const projectNamespace = alfy.input;
 const inputRequestItem = {
   title: "Please enter project namespace",
   subtitle: "Leave empty for no namepace",
-  icon: { path: "./icn/check-circle-o.icns" },
+  icon: { path: "./icn/check-circle-o.png" },
 };
 const confirmItem = {
   title: "OK",
-  icon: { path: "./icn/check-circle-o.icns" },
+  icon: { path: "./icn/check-circle-o.png" },
   variables: {
     action: "sfdx:project:add:choosetemplate",
     relativeProjectPath,
@@ -23,7 +23,7 @@ const confirmItem = {
 const invalidProjectNamespaceItem = {
   title: "Invalid project namespace",
   subtitle: "The project namespace may contain letter, numbers, '-' and '_'",
-  icon: { path: "./icn/warning.icns" },
+  icon: { path: "./icn/warning.png" },
   valid: false,
 };
 const projectNamespacePattern = /^[a-zA-Z\d-_]+$/;
