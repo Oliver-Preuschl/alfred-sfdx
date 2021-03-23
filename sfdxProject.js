@@ -23,7 +23,7 @@ if (!!process.env.workspace) {
 function getAddProjectItem() {
   return {
     title: "Add Project",
-    icon: { path: "./icn/plus-circle.png" },
+    icon: { path: "./icons/plus-circle-solid-green.png" },
     arg: "",
     variables: {
       action: "sfdx:project:add:choosefolder",
@@ -44,7 +44,7 @@ function getProjectItems(projects) {
     .map((project) => ({
       title: project.dir,
       subtitle: `...${project.path}`,
-      icon: { path: "./icn/folder.png" },
+      icon: { path: "./icons/folder-solid-green.png" },
       arg: "",
       variables: {
         action: "sfdx:project:details",
@@ -54,7 +54,7 @@ function getProjectItems(projects) {
       mods: {
         ctrl: {
           subtitle: `OPEN "...${project.path}/sfdx-project.json"`,
-          icon: { path: "./icn/eye.png" },
+          icon: { path: "./icons/eye-solid-green.png" },
           variables: {
             action: "sfdx:open:file",
             pathToOpen: `${project.path}/sfdx-project.json`,
@@ -62,7 +62,7 @@ function getProjectItems(projects) {
         },
         alt: {
           subtitle: `OPEN "...${project.path}"`,
-          icon: { path: "./icn/eye.png" },
+          icon: { path: "./icons/eye-solid-green.png" },
           variables: {
             action: "sfdx:open:file",
             pathToOpen: project.path,
@@ -78,7 +78,7 @@ function getWorkspaceNotSetWarningItem() {
     title: "Workspace not set",
     subtitle:
       "Please set a workspace directory in order to get access to this feature",
-    icon: { path: "./icn/warning.png" },
+    icon: { path: "./icons/warning.png" },
     valid: false,
   };
 }

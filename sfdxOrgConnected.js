@@ -21,11 +21,11 @@ function getOrgItems(orgs) {
           action: "sfdx:org:display",
           username: org["USERNAME"],
         },
-        icon: { path: "./icn/cloud.png" },
+        icon: { path: "./icons/cloud-solid-blue.png" },
         mods: {
           ctrl: {
             subtitle: `OPEN "${org["USERNAME"]}"`,
-            icon: { path: "./icn/external-link.png" },
+            icon: { path: "./icons/external-link-alt-solid-blue.png" },
             variables: {
               action: "sfdx:org:open",
               value: org["USERNAME"],
@@ -37,7 +37,7 @@ function getOrgItems(orgs) {
               action: "sfdx:project:package:list",
               devhubUsername: org["USERNAME"],
             },
-            icon: { path: "./icn/gift.png" },
+            icon: { path: "./icons/gift-solid-red.png" },
           },
         },
       };

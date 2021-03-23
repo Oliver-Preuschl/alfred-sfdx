@@ -61,7 +61,7 @@ function getOpenProjectItem(projectPath, projectDir) {
   return {
     title: projectDir,
     subtitle: `OPEN "...${projectPath}"`,
-    icon: { path: "./icn/eye.png" },
+    icon: { path: "./icons/eye-solid-green.png" },
     variables: {
       action: "sfdx:open:file",
       pathToOpen: projectPath,
@@ -71,7 +71,7 @@ function getOpenProjectItem(projectPath, projectDir) {
     mods: {
       ctrl: {
         subtitle: `OPEN "...${projectPath}/sfdx-project.json"`,
-        icon: { path: "./icn/eye.png" },
+        icon: { path: "./icons/eye-solid-green.png" },
         variables: {
           action: "sfdx:open:file",
           pathToOpen: `${projectPath}/sfdx-project.json`,
@@ -89,12 +89,12 @@ function getDefaultDevhubUsernameItem(defaultDevhubUsername, projectPath) {
   return {
     title: defaultDevhubUsername ? defaultDevhubUsername : "-",
     subtitle: "Default Dev Hub Username",
-    icon: { path: "./icn/server-solid.png" },
+    icon: { path: "./icons/server-solid-green.png" },
     valid: false,
     mods: {
       ctrl: {
         subtitle: "SET Default Dev Hub Username",
-        icon: { path: "./icn/gear.png" },
+        icon: { path: "./icons/wrench-solid-green.png" },
         variables: {
           action: "sfdx:project:setdefaultdevhubusername",
           projectPath,
@@ -113,7 +113,7 @@ function getPackageCreateItem(projectPath) {
   return {
     title: "Create Package",
     subtitle: "Create a new package for this project",
-    icon: { path: "./icn/plus-circle.png" },
+    icon: { path: "./icons/plus-circle-solid-red.png" },
     variables: {
       action: "sfdx:project:package:create:choosefolder",
       projectPath,
@@ -134,7 +134,7 @@ function getPackageItems(packages, projectPath) {
     .map((sfdxPackage) => ({
       title: sfdxPackage.name,
       subtitle: "Show Package Versions",
-      icon: { path: "./icn/gift.png" },
+      icon: { path: "./icons/gift-solid-red.png" },
       variables: {
         action: "sfdx:package:version",
         projectPath,
@@ -148,7 +148,7 @@ function getPackageItems(packages, projectPath) {
         },
         alt: {
           subtitle: "Create new Package Version",
-          icon: { path: "./icn/plus-circle.png" },
+          icon: { path: "./icons/plus-circle-solid-red.png" },
           variables: {
             action: "sfdx:project:package:version:create:enterpassword",
             projectPath,
@@ -174,7 +174,7 @@ async function getScratchOrgItem(projectPath, linkedScratchOrgUsername) {
     {
       title: linkedScratchOrgUsername ? linkedScratchOrgUsername : "NOT LINKED",
       subtitle: "Linked Scratch Org",
-      icon: { path: "./icn/cloud.png" },
+      icon: { path: "./icons/cloud-solid-blue.png" },
       variables: {
         action: "sfdx:org:display",
         username: linkedScratchOrgUsername,
@@ -183,7 +183,7 @@ async function getScratchOrgItem(projectPath, linkedScratchOrgUsername) {
       mods: {
         ctrl: {
           subtitle: "CREATE Scratch Org",
-          icon: { path: "./icn/plus-circle.png" },
+          icon: { path: "./icons/plus-circle-solid-blue.png" },
           arg: "",
           variables: {
             action: "sfdx:project:scratchorg:create:choosedefinition",
@@ -195,7 +195,7 @@ async function getScratchOrgItem(projectPath, linkedScratchOrgUsername) {
             ? linkedScratchOrgUsername
             : "NOT LINKED",
           subtitle: "LINK Scratch Org",
-          icon: { path: "./icn/link.png" },
+          icon: { path: "./icons/link-solid-blue.png" },
           arg: "",
           variables: {
             action: "sfdx:project:scratchorg:link:chooseorg",
@@ -205,7 +205,7 @@ async function getScratchOrgItem(projectPath, linkedScratchOrgUsername) {
         cmd: linkedScratchOrgUsername
           ? {
               subtitle: "UNLINK Scratch Org",
-              icon: { path: "./icn/unlink.png" },
+              icon: { path: "./icons/unlink-solid-blue.png" },
               arg: "",
               variables: {
                 action: "sfdx:project:scratchorg:unlink",
@@ -224,7 +224,7 @@ function getActionPushPullActionItems(projectPath, linkedScratchOrgUsername) {
       {
         title: "Push",
         subtitle: "",
-        icon: { path: "./icn/cloud-upload.png" },
+        icon: { path: "./icons/cloud-upload-alt-solid-blue.png" },
         variables: {
           action: "sfdx:project:push",
           projectPath,
@@ -238,7 +238,7 @@ function getActionPushPullActionItems(projectPath, linkedScratchOrgUsername) {
       {
         title: "Pull",
         subtitle: "",
-        icon: { path: "./icn/cloud-download.png" },
+        icon: { path: "./icons/cloud-download-alt-solid-blue.png" },
         variables: {
           action: "sfdx:project:pull",
           projectPath,

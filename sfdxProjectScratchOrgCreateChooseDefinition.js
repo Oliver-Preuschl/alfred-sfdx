@@ -28,7 +28,7 @@ async function buildScratchOrgDefinitionItems(scratchOrgDefinitionFiles) {
     .map((sfdxProjectFile) => ({
       title: sfdxProjectFile.file,
       subtitle: `...${sfdxProjectFile.relativeDirPath}`,
-      icon: { path: "./icn/file.png" },
+      icon: { path: "./icons/file-solid.png" },
       variables: {
         action: "sfdx:project:scratchorg:create",
         scratchOrgDefinitionFilePath: `${sfdxProjectFile.relativeDirPath}/${sfdxProjectFile.file}`,

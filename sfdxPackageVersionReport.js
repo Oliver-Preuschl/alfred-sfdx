@@ -66,7 +66,7 @@ function getPromotionItem(packageVersionDetailName2Value) {
   return {
     title: "Promote",
     subtitle: "Promote this Version",
-    icon: { path: "./icn/glass-cheers-solid.png" },
+    icon: { path: "./icons/glass-cheers-solid-red.png" },
     arg: "",
     variables: {
       action: "sfdx:package:version:promote",
@@ -93,12 +93,12 @@ function getInstallationLinkItem(packageVersionDetailName2Value) {
       ]
     }`,
     subtitle: "Installation URL",
-    icon: { path: "./icn/link.png" },
+    icon: { path: "./icons/link-solid-red.png" },
     arg: "",
     mods: {
       ctrl: {
         subtitle: "COPY Installation URL",
-        icon: { path: "./icn/copy.png" },
+        icon: { path: "./icons/copy-solid-red.png" },
         variables: {
           action: "sfdx:copy",
           value: `COPY /packaging/installPackage.apexp?p0=${
@@ -120,11 +120,11 @@ function getPackageVersionReportItems(packageVersionDetails) {
     return {
       title: packageVersionDetail["Value"],
       subtitle: packageVersionDetail["Name"],
-      icon: { path: "./icn/info-circle.png" },
+      icon: { path: "./icons/info-circle-solid-red.png" },
       mods: {
         ctrl: {
           subtitle: `COPY ${packageVersionDetail["Name"]}`,
-          icon: { path: "./icn/copy.png" },
+          icon: { path: "./icons/copy-solid-red.png" },
         },
         alt: {
           subtitle: packageVersionDetail["Name"],

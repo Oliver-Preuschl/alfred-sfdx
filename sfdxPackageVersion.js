@@ -35,7 +35,7 @@ function getPackageVersionItems(packageVersions, devhubUsername) {
       return {
         title: `${packageNameWithNamespace} - ${packageVersion["Version"]}${releasedStatus}`,
         subtitle: `${packageVersion["Subscriber Package Version Id"]}`,
-        icon: { path: "./icn/gift.png" },
+        icon: { path: "./icons/gift-solid-red.png" },
         variables: {
           action: "sfdx:package:version:report",
           packageVersionId: packageVersion["Subscriber Package Version Id"],
@@ -48,7 +48,7 @@ function getPackageVersionItems(packageVersions, devhubUsername) {
         mods: {
           ctrl: {
             subtitle: `COPY Installation URL: /packaging/installPackage.apexp?p0=${packageVersion["Subscriber Package Version Id"]}`,
-            icon: { path: "./icn/copy.png" },
+            icon: { path: "./icons/copy-solid-red.png" },
             variables: {
               action: "sfdx:copy",
               value: `/packaging/installPackage.apexp?p0=${packageVersion["Subscriber Package Version Id"]}`,
@@ -56,7 +56,7 @@ function getPackageVersionItems(packageVersions, devhubUsername) {
           },
           alt: {
             subtitle: "PROMOTE",
-            icon: { path: "./icn/glass-cheers-solid.png" },
+            icon: { path: "./icons/glass-cheers-solid-red.png" },
             variables: {
               action: "sfdx:package:version:promote",
               packageVersionId: packageVersion["Subscriber Package Version Id"],

@@ -4,7 +4,7 @@ const options = [
   {
     title: "Projects",
     arg: "sfdx:project ",
-    icon: { path: "./icn/folder.png" },
+    icon: { path: "./icons/folder-solid-green.png" },
     mods: {
       ctrl: {
         subtitle: "",
@@ -17,7 +17,7 @@ const options = [
   {
     title: "Scratch Orgs",
     arg: "sfdx:org:scratch ",
-    icon: { path: "./icn/cloud.png" },
+    icon: { path: "./icons/cloud-solid-blue.png" },
     mods: {
       ctrl: {
         subtitle: "",
@@ -30,7 +30,7 @@ const options = [
   {
     title: "Connected Orgs",
     arg: "sfdx:org:connected ",
-    icon: { path: "./icn/cloud.png" },
+    icon: { path: "./icons/cloud-solid-blue.png" },
     mods: {
       ctrl: {
         subtitle: "",
@@ -46,7 +46,7 @@ const options = [
     variables: {
       action: "sfdx:clearcache",
     },
-    icon: { path: "./icn/trash-o.png" },
+    icon: { path: "./icons/trash-solid-red.png" },
     mods: {
       ctrl: {
         subtitle: "",
@@ -63,7 +63,7 @@ if (alfy.cache.has("sfdx:lastviewedconfig")) {
   options.unshift({
     title: lastViewedConfig.title,
     subtitle: lastViewedConfig.subtitle,
-    icon: { path: "./icn/history-solid.png" },
+    icon: { path: "./icons/history-solid.png" },
     arg: "",
     variables: lastViewedConfig.variables,
     mods: {

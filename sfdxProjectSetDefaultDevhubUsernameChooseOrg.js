@@ -31,7 +31,7 @@ function getOrgItems(orgs, projectPath) {
           username: org["USERNAME"],
           projectPath,
         },
-        icon: { path: "./icn/cloud.png" },
+        icon: { path: "./icons/cloud-solid-blue.png" },
         mods: {
           ctrl: {
             subtitle: `Connection Status: ${org["CONNECTED STATUS"]}`,
