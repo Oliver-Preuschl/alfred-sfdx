@@ -781,6 +781,16 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
+				<string>A220AAF2-5227-4716-A29D-1BFD1261717E</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
 				<string>BB45C395-9564-4CB1-A5A4-60AA509B4F17</string>
 				<key>modifiers</key>
 				<integer>0</integer>
@@ -2832,6 +2842,23 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>argument</key>
+				<string>'{query}', {allvars}</string>
+				<key>cleardebuggertext</key>
+				<false/>
+				<key>processoutputs</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.debug</string>
+			<key>uid</key>
+			<string>A220AAF2-5227-4716-A29D-1BFD1261717E</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>alfredfiltersresults</key>
 				<false/>
 				<key>alfredfiltersresultsmatchmode</key>
@@ -3835,6 +3862,13 @@
 			<integer>2370</integer>
 			<key>ypos</key>
 			<integer>1475</integer>
+		</dict>
+		<key>A220AAF2-5227-4716-A29D-1BFD1261717E</key>
+		<dict>
+			<key>xpos</key>
+			<integer>2110</integer>
+			<key>ypos</key>
+			<integer>1675</integer>
 		</dict>
 		<key>A70B91D5-410D-4DCC-BC1C-B42514C5C722</key>
 		<dict>

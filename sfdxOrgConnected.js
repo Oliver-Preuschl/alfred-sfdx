@@ -28,7 +28,7 @@ function getOrgItems(orgs) {
             icon: { path: "./icons/external-link-alt-solid-blue.png" },
             variables: {
               action: "sfdx:org:open",
-              value: org["USERNAME"],
+              username: org["USERNAME"],
             },
           },
           alt: {
