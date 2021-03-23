@@ -2,65 +2,55 @@
 
 const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
-const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
+const { getPackages } = require("./lib/sfdxDataLoader.js");
 
 const { projectPath, devhubUsername } = process.env;
 const searchTerm = alfy.input;
 
-const path = projectPath
-  ? `${process.env.workspace}/${projectPath}`
-  : "alfred-sfdx";
-
-const cacheKey = `sfdx:package:${devhubUsername}`;
-let sfdxPropertyLines;
-if (!alfy.cache.has(cacheKey)) {
-  sfdxPropertyLines = await getSfdxPropertyLines(
-    `cd "${path}"; sfdx force:package:list --targetdevhubusername ${devhubUsername}`,
-    2
-  );
-  alfy.cache.set(cacheKey, sfdxPropertyLines, {
-    maxAge: process.env.cacheMaxAge,
-  });
-} else {
-  sfdxPropertyLines = alfy.cache.get(cacheKey);
-}
+const packages = await getPackages(devhubUsername, {
+  relativeProjectPath: projectPath,
+});
 const packageItems = alfy.matches(
   searchTerm,
-  await getPackageItems(sfdxPropertyLines, devhubUsername),
+  getPackageItems(packages, devhubUsername),
   "title"
 );
-const pathItem = getPathItem(["Project", "Packages"]);
+const pathItem = projectPath
+  ? getPathItem(["Project", "Packages"], { description: projectPath })
+  : devhubUsername
+  ? getPathItem(["Connected Org", "Packages"], { description: devhubUsername })
+  : getPathItem(["Packages"]);
 alfy.output([pathItem, ...packageItems]);
 
-async function getPackageItems(sfdxPropertyLines, devhubUsername) {
-  return sfdxPropertyLines
-    .map((properties) => {
+function getPackageItems(packages, devhubUsername) {
+  return packages
+    .map((singlePackage) => {
       return {
         title:
-          (properties["Namespace Prefix"]
-            ? `${properties["Namespace Prefix"]}.`
-            : "") + properties["Name"],
-        subtitle: `Id: ${properties["Id"]}`,
+          (singlePackage["Namespace Prefix"]
+            ? `${singlePackage["Namespace Prefix"]}.`
+            : "") + singlePackage["Name"],
+        subtitle: `Id: ${singlePackage["Id"]}`,
         icon: { path: "./icn/gift.icns" },
         variables: {
           action: "sfdx:package:version",
-          packageId: properties["Id"],
+          packageId: singlePackage["Id"],
           devhubUsername,
         },
         mods: {
           ctrl: {
-            subtitle: `Id: "${properties["Id"]}"`,
+            subtitle: `Id: "${singlePackage["Id"]}"`,
             icon: { path: "./icn/copy.icns" },
             variables: {
               action: "sfdx:copy",
-              packageId: properties["Id"],
+              packageId: singlePackage["Id"],
             },
           },
           alt: {
-            subtitle: `Type: ${properties["Type"]}`,
+            subtitle: `Type: ${singlePackage["Type"]}`,
           },
           cmd: {
-            subtitle: `Description: ${properties["Description"]}`,
+            subtitle: `Description: ${singlePackage["Description"]}`,
           },
         },
       };

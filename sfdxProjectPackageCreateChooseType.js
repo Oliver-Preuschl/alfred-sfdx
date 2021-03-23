@@ -11,7 +11,7 @@ const pathItem = getPathItem(["Project", "Package", "Create"], {
   hideHomeLink: true,
 });
 
-const templateItems = [
+const packageTypeItems = [
   {
     title: "Unlocked",
     variables: {
@@ -34,4 +34,6 @@ const templateItems = [
   },
 ];
 
-alfy.output([pathItem, ...templateItems]);
+const filteredPackageTypeItems = alfy.matches(searchTerm, packageTypeItems, "title");
+
+alfy.output([pathItem, ...filteredPackageTypeItems]);

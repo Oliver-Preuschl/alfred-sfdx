@@ -2,67 +2,45 @@
 
 const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
-const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
+const { getConnectedOrgs } = require("./lib/sfdxDataLoader.js");
 
-const inputGroups = alfy.input.match(/(\S*)/);
-let searchTerm = inputGroups[1];
+let searchTerm = alfy.input;
 
-const cacheKey = "sfdx:org:connected";
-let sfdxPropertyLines;
-if (!alfy.cache.has(cacheKey)) {
-  sfdxPropertyLines = await getSfdxPropertyLines(
-    "cd  alfred-sfdx; sfdx force:org:list",
-    1,
-    {
-      startLineKeyword: "CONNECTED STATUS",
-      endLineKeyword: "EXPIRATION DATE",
-    }
-  );
-  alfy.cache.set(cacheKey, sfdxPropertyLines, {
-    maxAge: process.env.cacheMaxAge,
-  });
-} else {
-  sfdxPropertyLines = alfy.cache.get(cacheKey);
-}
 const pathItem = getPathItem(["Orgs (Connected)"]);
-const orgItems = alfy.matches(
-  searchTerm,
-  await getOrgItems(sfdxPropertyLines),
-  "title"
-);
+const orgs = await getConnectedOrgs();
+const orgItems = alfy.matches(searchTerm, getOrgItems(orgs), "title");
 alfy.output([pathItem, ...orgItems]);
 
-async function getOrgItems(sfdxPropertyLines) {
-  return sfdxPropertyLines
-    .map((properties) => {
+function getOrgItems(orgs) {
+  return orgs
+    .map((org) => {
       return {
-        title:
-          (properties[""] ? `${properties[""]} ` : "") + properties["ALIAS"],
-        subtitle: `Connection Status: ${properties["CONNECTED STATUS"]}`,
+        title: (org[""] ? `${org[""]} ` : "") + org["ALIAS"],
+        subtitle: `Connection Status: ${org["CONNECTED STATUS"]}`,
         variables: {
           action: "sfdx:org:display",
-          username: properties["USERNAME"],
+          username: org["USERNAME"],
         },
         icon: { path: "./icn/cloud.icns" },
         mods: {
           ctrl: {
-            subtitle: `OPEN "${properties["USERNAME"]}"`,
+            subtitle: `OPEN "${org["USERNAME"]}"`,
             icon: { path: "./icn/external-link.icns" },
             variables: {
               action: "sfdx:org:open",
-              value: properties["USERNAME"],
+              value: org["USERNAME"],
             },
           },
           alt: {
             subtitle: `SHOW Packages`,
             variables: {
               action: "sfdx:project:package:list",
-              devhubUsername: properties["USERNAME"],
+              devhubUsername: org["USERNAME"],
             },
             icon: { path: "./icn/gift.icns" },
           },
         },
       };
     })
-    .filter((item) => !!item.title);
+    .sort((a, b) => a.title.localeCompare(b.title));
 }

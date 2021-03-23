@@ -3,23 +3,17 @@
 const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
 const {
-  getSfdxPropertyLines,
-  getKey2PropertyLineFromPropertyLines,
-} = require("./lib/sfdxExecutor.js");
+  getPackageVersionDetails,
+  getKeyValueMap,
+} = require("./lib/sfdxDataLoader.js");
 
 const {
   projectPath,
-  devHubUsername,
+  devhubUsername,
   packageVersionId,
   packageNameWithNamespace,
 } = process.env;
 
-const path = projectPath
-  ? `${process.env.workspace}/${projectPath}`
-  : "alfred-sfdx";
-const targetDevHubUsernameArg = devHubUsername
-  ? `--targetdevhubusername ${devHubUsername}`
-  : "";
 const searchTerm = alfy.input;
 
 alfy.cache.set(
@@ -30,7 +24,7 @@ alfy.cache.set(
     variables: {
       action: "sfdx:package:version:report",
       projectPath,
-      devHubUsername,
+      devhubUsername,
       packageVersionId,
       packageNameWithNamespace,
     },
@@ -38,39 +32,26 @@ alfy.cache.set(
   { maxAge: process.env.cacheMaxAge }
 );
 
-const cacheKey = `sfdx:package:${packageVersionId}:report`;
-
-let sfdxPropertyLines;
-if (!alfy.cache.has(cacheKey)) {
-  sfdxPropertyLines = await getSfdxPropertyLines(
-    `cd "${path}"; sfdx force:package:version:report ${targetDevHubUsernameArg} --package=${packageVersionId}`,
-    2
-  );
-  alfy.cache.set(cacheKey, sfdxPropertyLines, {
-    maxAge: process.env.cacheMaxAge,
-  });
-} else {
-  sfdxPropertyLines = alfy.cache.get(cacheKey);
-}
-const packageVersionDetailName2PackageVersionDetail = getKey2PropertyLineFromPropertyLines(
-  sfdxPropertyLines,
-  "Name"
-);
-
-const promotionItem = getPromotionItem(
-  packageVersionDetailName2PackageVersionDetail
-);
-
-const installationUrlItem = getInstallationLinkItem(
-  packageVersionDetailName2PackageVersionDetail
+const packageVersionDetails = await getPackageVersionDetails(packageVersionId, {
+  devhubUsername,
+  relativeProjectPath: projectPath,
+});
+const packageVersionDetailName2Value = getKeyValueMap(
+  packageVersionDetails,
+  "Name",
+  "Value"
 );
 
 const pathItem = getPathItem(["Project", "Package", "Version", "Details"], {
   description: packageNameWithNamespace,
 });
+const promotionItem = getPromotionItem(packageVersionDetailName2Value);
+const installationUrlItem = getInstallationLinkItem(
+  packageVersionDetailName2Value
+);
 const packageVersionReportItems = alfy.matches(
   searchTerm,
-  getPackageVersionReportItems(sfdxPropertyLines),
+  getPackageVersionReportItems(packageVersionDetails),
   "subtitle"
 );
 
@@ -81,7 +62,7 @@ alfy.output([
   ...packageVersionReportItems,
 ]);
 
-function getPromotionItem(packageVersionDetailName2PackageVersionDetail) {
+function getPromotionItem(packageVersionDetailName2Value) {
   return {
     title: "Promote",
     subtitle: "Promote this Version",
@@ -89,7 +70,7 @@ function getPromotionItem(packageVersionDetailName2PackageVersionDetail) {
     arg: "",
     variables: {
       action: "sfdx:package:version:promote",
-      packageVersionId: packageVersionDetailName2PackageVersionDetail.get(
+      packageVersionId: packageVersionDetailName2Value.get(
         "Subscriber Package Version Id"
       )["Value"],
     },
@@ -104,14 +85,12 @@ function getPromotionItem(packageVersionDetailName2PackageVersionDetail) {
   };
 }
 
-function getInstallationLinkItem(
-  packageVersionDetailName2PackageVersionDetail
-) {
+function getInstallationLinkItem(packageVersionDetailName2Value) {
   return {
     title: `/packaging/installPackage.apexp?p0=${
-      packageVersionDetailName2PackageVersionDetail.get(
-        "Subscriber Package Version Id"
-      )["Value"]
+      packageVersionDetailName2Value.get("Subscriber Package Version Id")[
+        "Value"
+      ]
     }`,
     subtitle: "Installation URL",
     icon: { path: "./icn/link.icns" },
@@ -123,9 +102,9 @@ function getInstallationLinkItem(
         variables: {
           action: "sfdx:copy",
           value: `COPY /packaging/installPackage.apexp?p0=${
-            packageVersionDetailName2PackageVersionDetail.get(
-              "Subscriber Package Version Id"
-            )["Value"]
+            packageVersionDetailName2Value.get("Subscriber Package Version Id")[
+              "Value"
+            ]
           }`,
         },
       },
@@ -136,19 +115,19 @@ function getInstallationLinkItem(
   };
 }
 
-function getPackageVersionReportItems(packageVersionId) {
-  return sfdxPropertyLines.map((properties) => {
+function getPackageVersionReportItems(packageVersionDetails) {
+  return packageVersionDetails.map((packageVersionDetail) => {
     return {
-      title: properties["Value"],
-      subtitle: properties["Name"],
+      title: packageVersionDetail["Value"],
+      subtitle: packageVersionDetail["Name"],
       icon: { path: "./icn/info-circle.icns" },
       mods: {
         ctrl: {
-          subtitle: `COPY ${properties["Name"]}`,
+          subtitle: `COPY ${packageVersionDetail["Name"]}`,
           icon: { path: "./icn/copy.icns" },
         },
         alt: {
-          subtitle: properties["Name"],
+          subtitle: packageVersionDetail["Name"],
         },
       },
     };

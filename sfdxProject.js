@@ -2,30 +2,16 @@
 
 const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
-const {
-  findDirsWithMatchingFileInWorkspace,
-} = require("./lib/fileSearcher.js");
+const { getProjects } = require("./lib/sfdxDataLoader.js");
 
-const inputGroups = alfy.input.match(/(\S*)/);
-let searchTerm = inputGroups[1];
+const searchTerm = alfy.input;
 
-const cacheKey = `sfdx:project:paths`;
-let sfdxProjectFiles;
-if (!alfy.cache.has(cacheKey)) {
-  sfdxProjectFiles = await findDirsWithMatchingFileInWorkspace(
-    "sfdx-project.json"
-  );
-  alfy.cache.set(cacheKey, sfdxProjectFiles, {
-    maxAge: process.env.cacheMaxAge,
-  });
-} else {
-  sfdxProjectFiles = alfy.cache.get(cacheKey);
-}
+const projects = await getProjects();
 const pathItem = getPathItem(["Projects"]);
 const addProjectItem = getAddProjectItem();
 const projectPathItems = alfy.matches(
   searchTerm,
-  await getAvailableProjectPathItems(sfdxProjectFiles),
+  getProjectItems(projects),
   "title"
 );
 alfy.output([pathItem, addProjectItem, ...projectPathItems]);
@@ -49,33 +35,33 @@ function getAddProjectItem() {
   };
 }
 
-function getAvailableProjectPathItems(sfdxProjectFiles) {
-  return sfdxProjectFiles
-    .map((sfdxProjectFile) => ({
-      title: sfdxProjectFile.dir,
-      subtitle: `...${sfdxProjectFile.path}`,
+function getProjectItems(projects) {
+  return projects
+    .map((project) => ({
+      title: project.dir,
+      subtitle: `...${project.path}`,
       icon: { path: "./icn/folder.icns" },
       arg: "",
       variables: {
         action: "sfdx:project:details",
-        projectPath: sfdxProjectFile.path,
+        projectPath: project.path,
       },
-      path: sfdxProjectFile.path,
+      path: project.path,
       mods: {
         ctrl: {
-          subtitle: `OPEN "...${sfdxProjectFile.path}/sfdx-project.json"`,
+          subtitle: `OPEN "...${project.path}/sfdx-project.json"`,
           icon: { path: "./icn/eye.icns" },
           variables: {
             action: "sfdx:open:file",
-            pathToOpen: `${sfdxProjectFile.path}/sfdx-project.json`,
+            pathToOpen: `${project.path}/sfdx-project.json`,
           },
         },
         alt: {
-          subtitle: `OPEN "...${sfdxProjectFile.path}"`,
+          subtitle: `OPEN "...${project.path}"`,
           icon: { path: "./icn/eye.icns" },
           variables: {
             action: "sfdx:open:file",
-            pathToOpen: sfdxProjectFile.path,
+            pathToOpen: project.path,
           },
         },
       },

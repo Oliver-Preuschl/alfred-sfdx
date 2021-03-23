@@ -2,56 +2,41 @@
 
 const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
-const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
+const { getScratchOrgs } = require("./lib/sfdxDataLoader.js");
 
 const projectPath = process.env.projectPath;
 const searchTerm = alfy.input;
 
-const cacheKey = "sfdx:org:scratch";
-let sfdxPropertyLines;
-if (!alfy.cache.has(cacheKey)) {
-  sfdxPropertyLines = await getSfdxPropertyLines(
-    "cd  alfred-sfdx; sfdx force:org:list --verbose",
-    1,
-    {
-      startLineKeyword: "EXPIRATION DATE",
-    }
-  );
-  alfy.cache.set(cacheKey, sfdxPropertyLines, {
-    maxAge: process.env.cacheMaxAge,
-  });
-} else {
-  sfdxPropertyLines = alfy.cache.get(cacheKey);
-}
+const scratchOrgs = await getScratchOrgs();
 const pathItem = getPathItem(["Project", "Org (Scratch)", "Link"], {
   description: "Please choose Scratch Org",
   hideHomeLink: true,
 });
-const orgItems = await buildOrgItems(projectPath);
+const orgItems = await buildOrgItems(scratchOrgs, projectPath);
 alfy.output([pathItem, ...alfy.matches(searchTerm, orgItems, "title")]);
 
-async function buildOrgItems(projectPath) {
-  return sfdxPropertyLines
-    .map((properties) => {
+async function buildOrgItems(scratchOrgs, projectPath) {
+  return scratchOrgs
+    .map((scratchOrg) => {
       return {
-        title: properties["ALIAS"],
-        subtitle: `${properties["ALIAS"]} (Expiration Date: ${properties["EXPIRATION DATE"]})`,
+        title: scratchOrg["ALIAS"],
+        subtitle: `${scratchOrg["ALIAS"]} (Expiration Date: ${scratchOrg["EXPIRATION DATE"]})`,
         icon: { path: "./icn/cloud.icns" },
         arg: "",
         variables: {
           action: "sfdx:project:scratchorg:link",
           projectPath,
-          username: properties["USERNAME"],
+          username: scratchOrg["USERNAME"],
         },
         mods: {
           ctrl: {
-            subtitle: `${properties["ALIAS"]} (Expiration Date: ${properties["EXPIRATION DATE"]})`,
+            subtitle: `${scratchOrg["ALIAS"]} (Expiration Date: ${scratchOrg["EXPIRATION DATE"]})`,
           },
           alt: {
-            subtitle: `${properties["ALIAS"]} (Expiration Date: ${properties["EXPIRATION DATE"]})`,
+            subtitle: `${scratchOrg["ALIAS"]} (Expiration Date: ${scratchOrg["EXPIRATION DATE"]})`,
           },
         },
       };
     })
-    .filter((item) => !!item.title);
+    .sort((a, b) => a.title.localeCompare(b.title));
 }

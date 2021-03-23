@@ -2,28 +2,19 @@
 
 const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
-const { getWorkspaceDirs } = require("./lib/fileSearcher.js");
+const { getWorkspacePaths } = require("./lib/sfdxDataLoader.js");
 
-const inputGroups = alfy.input.match(/(\S*)/);
-let searchTerm = inputGroups[1];
+const searchTerm = alfy.input;
 
-const cacheKey = `sfdx:workspace:paths`;
-let sfdxWorkspacePaths;
-if (!alfy.cache.has(cacheKey)) {
-  sfdxWorkspacePaths = await getWorkspaceDirs();
-  alfy.cache.set(cacheKey, sfdxWorkspacePaths, {
-    maxAge: process.env.cacheMaxAge,
-  });
-} else {
-  sfdxWorkspacePaths = alfy.cache.get(cacheKey);
-}
+const sfdxWorkspacePaths = await getWorkspacePaths();
+
 const pathItem = getPathItem(["Projects", "Add"], {
   description: "Please choose Folder",
   hideHomeLink: true,
 });
 const workspacePathItems = alfy.matches(
   searchTerm,
-  await getAvailableWorkspacePathItems(sfdxWorkspacePaths),
+  getAvailableWorkspacePathItems(sfdxWorkspacePaths),
   "title"
 );
 alfy.output([pathItem, ...workspacePathItems]);

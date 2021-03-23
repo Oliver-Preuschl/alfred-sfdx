@@ -44,4 +44,6 @@ const templateItems = [
   },
 ];
 
-alfy.output([pathItem, ...templateItems]);
+const filteredTemplateItems = alfy.matches(searchTerm, templateItems, "title");
+
+alfy.output([pathItem, ...filteredTemplateItems]);

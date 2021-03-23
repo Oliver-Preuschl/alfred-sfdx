@@ -4,13 +4,14 @@ const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
 
 const { projectPath, packageDir, packageName, packageType } = process.env;
+const searchTerm = alfy.input;
 
 const pathItem = getPathItem(["Project", "Package", "Create"], {
   description: "Should the package be Org dependent?",
   hideHomeLink: true,
 });
 
-const templateItems = [
+const packageOrgDependencyItems = [
   {
     title: "Yes",
     variables: {
@@ -35,4 +36,10 @@ const templateItems = [
   },
 ];
 
-alfy.output([pathItem, ...templateItems]);
+const filteredPackageOrgDependencyItems = alfy.matches(
+  searchTerm,
+  packageOrgDependencyItems,
+  "title"
+);
+
+alfy.output([pathItem, ...filteredPackageOrgDependencyItems]);

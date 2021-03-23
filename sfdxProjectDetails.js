@@ -3,9 +3,9 @@
 const alfy = require("alfy");
 const path = require("path");
 const { getPathItem } = require("./lib/pathItemCreator.js");
-const { getPackagesForProject } = require("./lib/fileSearcher.js");
+const { getProjectPackages } = require("./lib/sfdxDataLoader.js");
 
-let { projectPath } = process.env;
+const { projectPath } = process.env;
 const projectPathParts = projectPath.split(path.sep);
 const projectDir = projectPathParts[projectPathParts.length - 1];
 
@@ -22,19 +22,9 @@ alfy.cache.set(
   { maxAge: process.env.cacheMaxAge }
 );
 
-const cacheKey = `sfdx:project:${projectPath}:details`;
-let packages;
-if (!alfy.cache.has(cacheKey)) {
-  packages = await getPackagesForProject(
-    process.env.workspace + "/" + projectPath
-  );
-  alfy.cache.set(cacheKey, packages, {
-    maxAge: process.env.cacheMaxAge,
-  });
-} else {
-  packages = alfy.cache.get(cacheKey);
-}
+const packages = await getProjectPackages(projectPath);
 const linkedScratchOrgUsername = getLinkedScratchOrgUsername(projectPath);
+
 const pathItem = getPathItem(["Project", "Details"], {
   description: projectDir,
 });

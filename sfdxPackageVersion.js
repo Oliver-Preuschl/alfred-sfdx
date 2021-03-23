@@ -2,71 +2,56 @@
 
 const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
-const { getSfdxPropertyLines } = require("./lib/sfdxExecutor.js");
+const { getPackageVersions } = require("./lib/sfdxDataLoader.js");
 
-const { projectPath, packageId, devHubUsername } = process.env;
+const { projectPath, packageId, devhubUsername } = process.env;
 
-const path = projectPath
-  ? `${process.env.workspace}/${projectPath}`
-  : "alfred-sfdx";
-const targetDevHubUsernameArg = devHubUsername
-  ? `--targetdevhubusername ${devHubUsername}`
-  : "";
 const searchTerm = alfy.input;
 
-const cacheKey = `sfdx:package:${packageId}:version`;
-let sfdxPropertyLines;
-if (!alfy.cache.has(cacheKey)) {
-  sfdxPropertyLines = await getSfdxPropertyLines(
-    `cd "${path}"; sfdx force:package:version:list ${targetDevHubUsernameArg} --packages=${packageId}`,
-    2
-  );
-  alfy.cache.set(cacheKey, sfdxPropertyLines, {
-    maxAge: 300000,
-  });
-} else {
-  sfdxPropertyLines = alfy.cache.get(cacheKey);
-}
 const pathItem = getPathItem(["Project", "Package", "Versions"], {
   description: packageId,
+});
+const packageVersions = await getPackageVersions(packageId, {
+  devhubUsername,
+  relativeProjectPath: projectPath,
 });
 const packageVersionItems = alfy
   .matches(
     searchTerm,
-    await getPackageVersionItems(sfdxPropertyLines, devHubUsername),
+    getPackageVersionItems(packageVersions, devhubUsername),
     "title"
   )
   .sort((a, b) => (a.id > b.id ? -1 : 1));
 alfy.output([pathItem, ...packageVersionItems]);
 
-async function getPackageVersionItems(sfdxPropertyLines, devHubUsername) {
-  return sfdxPropertyLines
-    .map((propertyLine) => {
+function getPackageVersionItems(packageVersions, devhubUsername) {
+  return packageVersions
+    .map((packageVersion) => {
       const packageNameWithNamespace =
-        (propertyLine["Namespace"] ? `${propertyLine["Namespace"]}.` : "") +
-        propertyLine["Package Name"];
+        (packageVersion["Namespace"] ? `${packageVersion["Namespace"]}.` : "") +
+        packageVersion["Package Name"];
       const releasedStatus =
-        propertyLine["Released"] === "true" ? " (Released)" : "";
+        packageVersion["Released"] === "true" ? " (Released)" : "";
       return {
-        title: `${packageNameWithNamespace} - ${propertyLine["Version"]}${releasedStatus}`,
-        subtitle: `${propertyLine["Subscriber Package Version Id"]}`,
+        title: `${packageNameWithNamespace} - ${packageVersion["Version"]}${releasedStatus}`,
+        subtitle: `${packageVersion["Subscriber Package Version Id"]}`,
         icon: { path: "./icn/gift.icns" },
         variables: {
           action: "sfdx:package:version:report",
-          packageVersionId: propertyLine["Subscriber Package Version Id"],
+          packageVersionId: packageVersion["Subscriber Package Version Id"],
           projectPath,
-          devHubUsername,
+          devhubUsername,
           packageNameWithNamespace,
         },
-        id: propertyLine["Subscriber Package Version Id"],
-        version: propertyLine["Version"],
+        id: packageVersion["Subscriber Package Version Id"],
+        version: packageVersion["Version"],
         mods: {
           ctrl: {
-            subtitle: `COPY Installation URL: /packaging/installPackage.apexp?p0=${propertyLine["Subscriber Package Version Id"]}`,
+            subtitle: `COPY Installation URL: /packaging/installPackage.apexp?p0=${packageVersion["Subscriber Package Version Id"]}`,
             icon: { path: "./icn/copy.icns" },
             variables: {
               action: "sfdx:copy",
-              value: `/packaging/installPackage.apexp?p0=${propertyLine["Subscriber Package Version Id"]}`,
+              value: `/packaging/installPackage.apexp?p0=${packageVersion["Subscriber Package Version Id"]}`,
             },
           },
           alt: {
@@ -74,11 +59,11 @@ async function getPackageVersionItems(sfdxPropertyLines, devHubUsername) {
             icon: { path: "./icn/glass-cheers-solid.png" },
             variables: {
               action: "sfdx:package:version:promote",
-              packageVersionId: propertyLine["Subscriber Package Version Id"],
+              packageVersionId: packageVersion["Subscriber Package Version Id"],
             },
           },
           cmd: {
-            subtitle: `${propertyLine["Subscriber Package Version Id"]}`,
+            subtitle: `${packageVersion["Subscriber Package Version Id"]}`,
           },
         },
       };

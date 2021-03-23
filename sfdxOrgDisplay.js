@@ -2,48 +2,34 @@
 
 const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
-const {
-  getSfdxPropertyLines,
-  getKey2PropertyLineFromPropertyLines,
-} = require("./lib/sfdxExecutor.js");
+const { getOrgDetails, getKeyValueMap } = require("./lib/sfdxDataLoader.js");
 
-let inputUsername = process.env.username;
-let searchTerm = alfy.input;
+const inputUsername = process.env.username;
+const searchTerm = alfy.input;
 
-const cacheKey = `sfdx:org:${inputUsername}:display`;
-let sfdxPropertyLines;
-if (!alfy.cache.has(cacheKey)) {
-  sfdxPropertyLines = await getSfdxPropertyLines(
-    `cd  alfred-sfdx; sfdx force:org:display --targetusername=${inputUsername} --verbose`,
-    4
-  );
-  alfy.cache.set(cacheKey, sfdxPropertyLines, {
-    maxAge: process.env.cacheMaxAge,
-  });
-} else {
-  sfdxPropertyLines = alfy.cache.get(cacheKey);
-}
-const orgDetails = getOrgDetailItems(sfdxPropertyLines);
-const orgDetailName2OrgDetail = getKey2PropertyLineFromPropertyLines(
-  sfdxPropertyLines,
-  "KEY"
+const orgDetails = await getOrgDetails(inputUsername);
+const orgDetailItems = alfy.matches(
+  searchTerm,
+  getOrgDetailItems(orgDetails),
+  "subtitle"
 );
-const pathItem = getPathItem(["Org", "Details"], {
-  description: orgDetailName2OrgDetail.get("Alias")["VALUE"],
-});
-const orgDetailItems = alfy.matches(searchTerm, orgDetails, "subtitle");
-const username = orgDetailName2OrgDetail.get("Username")["VALUE"];
-const isDevHubAvailable = orgDetailName2OrgDetail.has("Dev Hub Id");
+const orgDetailName2Value = getKeyValueMap(orgDetails, "KEY", "VALUE");
+const username = orgDetailName2Value.get("Username");
+const isDevHubAvailable = orgDetailName2Value.has("Dev Hub Id");
 const mayBeDevHub = !isDevHubAvailable;
+
+const pathItem = getPathItem(["Org", "Details"], {
+  description: orgDetailName2Value.get("Alias"),
+});
 const actionItems = getActionItems(username, mayBeDevHub);
 
 alfy.output([pathItem, ...actionItems, ...orgDetailItems]);
 
-function getOrgDetailItems(sfdxPropertyLines) {
-  return sfdxPropertyLines.map((properties) => {
+function getOrgDetailItems(orgDetails) {
+  return orgDetails.map((orgDetail) => {
     return {
-      title: properties["VALUE"],
-      subtitle: properties["KEY"],
+      title: orgDetail["VALUE"],
+      subtitle: orgDetail["KEY"],
       icon: { path: "./icn/info-circle.icns" },
       arg: "",
       variables: {
@@ -52,15 +38,15 @@ function getOrgDetailItems(sfdxPropertyLines) {
       valid: true,
       mods: {
         ctrl: {
-          subtitle: `COPY ${properties["KEY"]}`,
+          subtitle: `COPY ${orgDetail["KEY"]}`,
           icon: { path: "./icn/copy.icns" },
           variables: {
             action: "sfdx:copy",
-            value: properties["VALUE"],
+            value: orgDetail["VALUE"],
           },
         },
         alt: {
-          subtitle: properties["KEY"],
+          subtitle: orgDetail["KEY"],
           icon: { path: "./icn/info-circle.icns" },
           variables: {},
           valid: false,
