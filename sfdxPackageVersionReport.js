@@ -72,7 +72,7 @@ function getPromotionItem(packageVersionDetailName2Value) {
       action: "sfdx:package:version:promote",
       packageVersionId: packageVersionDetailName2Value.get(
         "Subscriber Package Version Id"
-      )["Value"],
+      ),
     },
     mods: {
       ctrl: {
@@ -88,9 +88,7 @@ function getPromotionItem(packageVersionDetailName2Value) {
 function getInstallationLinkItem(packageVersionDetailName2Value) {
   return {
     title: `/packaging/installPackage.apexp?p0=${
-      packageVersionDetailName2Value.get("Subscriber Package Version Id")[
-        "Value"
-      ]
+      packageVersionDetailName2Value.get("Subscriber Package Version Id")
     }`,
     subtitle: "Installation URL",
     icon: { path: "./icons/link-solid-red.png" },
@@ -102,9 +100,7 @@ function getInstallationLinkItem(packageVersionDetailName2Value) {
         variables: {
           action: "sfdx:copy",
           value: `COPY /packaging/installPackage.apexp?p0=${
-            packageVersionDetailName2Value.get("Subscriber Package Version Id")[
-              "Value"
-            ]
+            packageVersionDetailName2Value.get("Subscriber Package Version Id")
           }`,
         },
       },

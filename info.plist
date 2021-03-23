@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>bundleid</key>
-	<string>com.alfredapp.op.sfdx</string>
+	<string>com.op.alred-sfdx</string>
 	<key>category</key>
 	<string>Development</string>
 	<key>connections</key>
