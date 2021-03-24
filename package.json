@@ -1,15 +1,22 @@
 {
   "name": "alfred-sfdx",
   "version": "0.0.1",
-  "description": "SFDX UI",
+  "description": "SFDX Package Development Support",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Oliver.Preuschl",
-  "license": "MIT",
+  "author": {
+    "name": "Oliver Preuschl",
+    "email": "olli@preuschl.com",
+    "url": "https://github.com/Oliver-Preuschl"
+  },
+  "homepage": "https://github.com/Oliver-Preuschl/alfred-sfdx",
+  "license": "Apache-2.0",
   "dependencies": {
-    "alfy": "^0.10.0",
+    "alfy": "^0.10.0"
+  },
+  "devDependencies": {
     "prettier": "^2.2.1"
   }
 }
