@@ -1,6 +1,6 @@
 {
   "name": "alfred-sfdx",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "SFDX Package Development Support",
   "main": "index.js",
   "scripts": {
