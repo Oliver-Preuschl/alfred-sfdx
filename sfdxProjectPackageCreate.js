@@ -16,6 +16,7 @@
 
 "use strict";
 
+const alfy = require("alfy");
 const exec = require("child_process").exec;
 const { getDateTime } = require("./lib/dateTimeFormatter.js");
 
@@ -29,7 +30,7 @@ const {
 
 const formattedDateTime = getDateTime();
 
-const orgDependencyArg = isPackageOrgDependent ? " --orgdependent" : "";
+const orgDependencyArg = isPackageOrgDependent === "1" ? " --orgdependent" : "";
 
 const command = `cd "${process.env.workspace}/${projectPath}"; sfdx force:package:create --name "${packageName}" --path "${packageDir}" --packagetype "${packageType}"${orgDependencyArg}`;
 exec(command, function (error, stdout, stderr) {
@@ -38,8 +39,10 @@ exec(command, function (error, stdout, stderr) {
     : "sfdx:status:largeType:error";
   let message;
   if (!error) {
+    const cacheKey = `sfdx:project:${projectPath}:packages`;
+    alfy.cache.delete(cacheKey);
     message = `Successfully created package "${packageName}" (type "${packageType}", Org-Dependent: ${
-      isPackageOrgDependent ? "Yes" : "No"
+      isPackageOrgDependent === "1" ? "Yes" : "No"
     }) for path "${
       process.env.workspace
     }/${projectPath}/${packageDir}"\n\n${stdout}`;

@@ -34,13 +34,13 @@ const packageVersions = await getPackageVersions(packageId, {
 const packageVersionItems = alfy
   .matches(
     searchTerm,
-    getPackageVersionItems(packageVersions, devhubUsername),
+    getPackageVersionItems(packageVersions, devhubUsername, projectPath),
     "title"
   )
   .sort((a, b) => (a.id > b.id ? -1 : 1));
 alfy.output([pathItem, ...packageVersionItems]);
 
-function getPackageVersionItems(packageVersions, devhubUsername) {
+function getPackageVersionItems(packageVersions, devhubUsername, projectPath) {
   return packageVersions
     .map((packageVersion) => {
       const packageNameWithNamespace =
@@ -76,6 +76,7 @@ function getPackageVersionItems(packageVersions, devhubUsername) {
             variables: {
               action: "sfdx:package:version:promote",
               packageVersionId: packageVersion["Subscriber Package Version Id"],
+              projectPath,
             },
           },
           cmd: {

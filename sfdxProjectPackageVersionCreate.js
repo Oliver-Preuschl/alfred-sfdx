@@ -16,6 +16,7 @@
 
 "use strict";
 
+const alfy = require("alfy");
 const exec = require("child_process").exec;
 const { getDateTime } = require("./lib/dateTimeFormatter.js");
 
@@ -30,6 +31,8 @@ exec(command, function (error, stdout, stderr) {
     : "sfdx:status:largeType:error";
   let message;
   if (!error) {
+    const cacheKey = `sfdx:package:${packageId}:version`;
+    alfy.cache.delete(cacheKey);
     message = `Successfully created package version for package "${packageId}" from path "${process.env.workspace}/${projectPath}"\n\n${stdout}`;
   } else {
     message = `Error creating package version\n\n${stderr}`;

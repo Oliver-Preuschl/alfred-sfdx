@@ -61,7 +61,10 @@ const packageVersionDetailName2Value = getKeyValueMap(
 const pathItem = getPathItem(["Project", "Package", "Version", "Details"], {
   description: packageNameWithNamespace,
 });
-const promotionItem = getPromotionItem(packageVersionDetailName2Value);
+const promotionItem = getPromotionItem(
+  packageVersionDetailName2Value,
+  projectPath
+);
 const installationUrlItem = getInstallationLinkItem(
   packageVersionDetailName2Value
 );
@@ -89,6 +92,7 @@ function getPromotionItem(packageVersionDetailName2Value) {
       packageVersionId: packageVersionDetailName2Value.get(
         "Subscriber Package Version Id"
       ),
+      projectPath,
     },
     mods: {
       ctrl: {
@@ -103,9 +107,9 @@ function getPromotionItem(packageVersionDetailName2Value) {
 
 function getInstallationLinkItem(packageVersionDetailName2Value) {
   return {
-    title: `/packaging/installPackage.apexp?p0=${
-      packageVersionDetailName2Value.get("Subscriber Package Version Id")
-    }`,
+    title: `/packaging/installPackage.apexp?p0=${packageVersionDetailName2Value.get(
+      "Subscriber Package Version Id"
+    )}`,
     subtitle: "Installation URL",
     icon: { path: "./icons/link-solid-red.png" },
     arg: "",
@@ -115,9 +119,9 @@ function getInstallationLinkItem(packageVersionDetailName2Value) {
         icon: { path: "./icons/copy-solid-red.png" },
         variables: {
           action: "sfdx:copy",
-          value: `COPY /packaging/installPackage.apexp?p0=${
-            packageVersionDetailName2Value.get("Subscriber Package Version Id")
-          }`,
+          value: `COPY /packaging/installPackage.apexp?p0=${packageVersionDetailName2Value.get(
+            "Subscriber Package Version Id"
+          )}`,
         },
       },
       alt: {

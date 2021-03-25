@@ -63,19 +63,6 @@
 				<false/>
 			</dict>
 		</array>
-		<key>25EE6CD5-B674-4DE7-8DB7-7DF8E9F14169</key>
-		<array>
-			<dict>
-				<key>destinationuid</key>
-				<string>81F03FA8-AD7B-43CE-9CBE-B2FC10E210FE</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-				<key>vitoclose</key>
-				<false/>
-			</dict>
-		</array>
 		<key>2830AA5E-5471-4CB0-9997-3CE10E7366F6</key>
 		<array>
 			<dict>
@@ -93,7 +80,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>4EAE7182-3A57-46BA-B934-1EA963043DA6</string>
+				<string>B6525863-C570-42BB-9422-6A1EA405AB81</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -408,7 +395,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>B6525863-C570-42BB-9422-6A1EA405AB81</string>
+				<string>81F03FA8-AD7B-43CE-9CBE-B2FC10E210FE</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -478,6 +465,16 @@
 		</array>
 		<key>5E2992B4-0C2B-4F8C-8F5F-9A79B9B8FD4E</key>
 		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>C2250DEE-CCF5-4CC8-89BE-A1D192FA326F</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
 			<dict>
 				<key>destinationuid</key>
 				<string>C9C01364-8765-477A-BC48-298AB2995B60</string>
@@ -829,7 +826,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>25EE6CD5-B674-4DE7-8DB7-7DF8E9F14169</string>
+				<string>4EAE7182-3A57-46BA-B934-1EA963043DA6</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -1179,6 +1176,23 @@
 	<string>SFDX</string>
 	<key>objects</key>
 	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argument</key>
+				<string>'{query}', {allvars}</string>
+				<key>cleardebuggertext</key>
+				<false/>
+				<key>processoutputs</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.debug</string>
+			<key>uid</key>
+			<string>C2250DEE-CCF5-4CC8-89BE-A1D192FA326F</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
@@ -1624,53 +1638,6 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>alfredfiltersresults</key>
-				<false/>
-				<key>alfredfiltersresultsmatchmode</key>
-				<integer>0</integer>
-				<key>argumenttreatemptyqueryasnil</key>
-				<true/>
-				<key>argumenttrimmode</key>
-				<integer>0</integer>
-				<key>argumenttype</key>
-				<integer>1</integer>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>queuedelaycustom</key>
-				<integer>3</integer>
-				<key>queuedelayimmediatelyinitially</key>
-				<true/>
-				<key>queuedelaymode</key>
-				<integer>0</integer>
-				<key>queuemode</key>
-				<integer>1</integer>
-				<key>runningsubtext</key>
-				<string>Loading...</string>
-				<key>script</key>
-				<string>./node_modules/.bin/run-node sfdxProjectPackageCreateChooseOrgDependency.js "$1"</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string></string>
-				<key>subtext</key>
-				<string></string>
-				<key>title</key>
-				<string>Loading...</string>
-				<key>type</key>
-				<integer>0</integer>
-				<key>withspace</key>
-				<true/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.scriptfilter</string>
-			<key>uid</key>
-			<string>25EE6CD5-B674-4DE7-8DB7-7DF8E9F14169</string>
-			<key>version</key>
-			<integer>3</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>concurrently</key>
 				<false/>
 				<key>escaping</key>
@@ -1984,55 +1951,6 @@
 				<integer>1</integer>
 				<key>escaping</key>
 				<integer>102</integer>
-				<key>keyword</key>
-				<string>sfdx:project:details</string>
-				<key>queuedelaycustom</key>
-				<integer>3</integer>
-				<key>queuedelayimmediatelyinitially</key>
-				<true/>
-				<key>queuedelaymode</key>
-				<integer>0</integer>
-				<key>queuemode</key>
-				<integer>1</integer>
-				<key>runningsubtext</key>
-				<string>Getting Project Details...</string>
-				<key>script</key>
-				<string>./node_modules/.bin/run-node sfdxProjectDetails.js "$1"</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string></string>
-				<key>subtext</key>
-				<string></string>
-				<key>title</key>
-				<string>SFDX Project Details</string>
-				<key>type</key>
-				<integer>0</integer>
-				<key>withspace</key>
-				<true/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.scriptfilter</string>
-			<key>uid</key>
-			<string>3773A6CA-0F34-418C-AE14-4215ABFC59AA</string>
-			<key>version</key>
-			<integer>3</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>alfredfiltersresults</key>
-				<false/>
-				<key>alfredfiltersresultsmatchmode</key>
-				<integer>0</integer>
-				<key>argumenttreatemptyqueryasnil</key>
-				<true/>
-				<key>argumenttrimmode</key>
-				<integer>0</integer>
-				<key>argumenttype</key>
-				<integer>1</integer>
-				<key>escaping</key>
-				<integer>102</integer>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -2087,6 +2005,53 @@
 			<string>DC8A10C5-D003-4309-8974-4EE37AF93F8D</string>
 			<key>version</key>
 			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Getting Project Details...</string>
+				<key>script</key>
+				<string>./node_modules/.bin/run-node sfdxProjectDetails.js "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string>Please wait</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>3773A6CA-0F34-418C-AE14-4215ABFC59AA</string>
+			<key>version</key>
+			<integer>3</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -3625,13 +3590,6 @@
 			<key>ypos</key>
 			<integer>1575</integer>
 		</dict>
-		<key>25EE6CD5-B674-4DE7-8DB7-7DF8E9F14169</key>
-		<dict>
-			<key>xpos</key>
-			<integer>2920</integer>
-			<key>ypos</key>
-			<integer>870</integer>
-		</dict>
 		<key>2830AA5E-5471-4CB0-9997-3CE10E7366F6</key>
 		<dict>
 			<key>xpos</key>
@@ -3672,7 +3630,7 @@
 			<key>xpos</key>
 			<integer>1810</integer>
 			<key>ypos</key>
-			<integer>995</integer>
+			<integer>1045</integer>
 		</dict>
 		<key>396BF63A-0669-4B71-8603-5B3CB3280892</key>
 		<dict>
@@ -3705,7 +3663,7 @@
 		<key>4EAE7182-3A57-46BA-B934-1EA963043DA6</key>
 		<dict>
 			<key>xpos</key>
-			<integer>2535</integer>
+			<integer>2715</integer>
 			<key>ypos</key>
 			<integer>870</integer>
 		</dict>
@@ -3908,7 +3866,7 @@
 		<key>B6525863-C570-42BB-9422-6A1EA405AB81</key>
 		<dict>
 			<key>xpos</key>
-			<integer>2710</integer>
+			<integer>2540</integer>
 			<key>ypos</key>
 			<integer>870</integer>
 		</dict>
@@ -3932,6 +3890,13 @@
 			<integer>1200</integer>
 			<key>ypos</key>
 			<integer>2390</integer>
+		</dict>
+		<key>C2250DEE-CCF5-4CC8-89BE-A1D192FA326F</key>
+		<dict>
+			<key>xpos</key>
+			<integer>2570</integer>
+			<key>ypos</key>
+			<integer>445</integer>
 		</dict>
 		<key>C2D934B0-82C1-42D4-8E03-08DCD3250FF8</key>
 		<dict>
@@ -4053,7 +4018,7 @@
 		<key>packageVersionWaitTime</key>
 		<string>15</string>
 		<key>workspace</key>
-		<string>/Users/oliver.preuschl/Documents/Salesforce/IlluminatedCloud/Projects</string>
+		<string></string>
 		<key>workspaceProjectSearchDepth</key>
 		<string>3</string>
 	</dict>

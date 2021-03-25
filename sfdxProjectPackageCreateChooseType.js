@@ -31,25 +31,42 @@ const packageTypeItems = [
   {
     title: "Unlocked",
     variables: {
-      action: "sfdx:project:package:create:chooseorgdependency",
+      action: "sfdx:project:package:create",
       projectPath,
       packageDir,
       packageName,
       packageType: "Unlocked",
+      isPackageOrgDependent: false,
+    },
+  },
+  {
+    title: "Unlocked (Org-Dependent)",
+    variables: {
+      action: "sfdx:project:package:create",
+      projectPath,
+      packageDir,
+      packageName,
+      packageType: "Unlocked",
+      isPackageOrgDependent: true,
     },
   },
   {
     title: "Managed",
     variables: {
-      action: "sfdx:project:package:create:chooseorgdependency",
+      action: "sfdx:project:package:create",
       projectPath,
       packageDir,
       packageName,
       packageType: "Managed",
+      isPackageOrgDependent: false,
     },
   },
 ];
 
-const filteredPackageTypeItems = alfy.matches(searchTerm, packageTypeItems, "title");
+const filteredPackageTypeItems = alfy.matches(
+  searchTerm,
+  packageTypeItems,
+  "title"
+);
 
 alfy.output([pathItem, ...filteredPackageTypeItems]);

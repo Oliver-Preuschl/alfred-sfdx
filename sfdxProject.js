@@ -93,7 +93,7 @@ function getWorkspaceNotSetWarningItem() {
   return {
     title: "Workspace not set",
     subtitle:
-      "Please set a workspace directory in order to get access to this feature",
+      "Please set the workspace environment variable in order to get access to this feature",
     icon: { path: "./icons/warning.png" },
     valid: false,
   };

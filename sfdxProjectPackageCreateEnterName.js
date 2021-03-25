@@ -18,7 +18,7 @@
 
 const alfy = require("alfy");
 
-const { projectPath, packageDir } = process.env;
+const { projectPath, packageDir, isPackageOrgDependent } = process.env;
 const packageName = alfy.input;
 
 const inputRequestItem = {

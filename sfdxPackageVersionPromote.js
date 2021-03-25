@@ -18,9 +18,9 @@
 
 const exec = require("child_process").exec;
 
-const { packageVersionId } = process.env;
+const { packageVersionId, projectPath } = process.env;
 
-const command = `cd "${process.env.workspace}/${projectPath}"; sfdx force:package:version:promote --package "${packageVersionId}"`;
+const command = `cd "${process.env.workspace}/${projectPath}"; sfdx force:package:version:promote --package "${packageVersionId}" --noprompt`;
 exec(command, function (error, stdout, stderr) {
   const action = !error
     ? "sfdx:status:largeType:success"

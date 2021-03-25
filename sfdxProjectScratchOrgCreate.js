@@ -44,6 +44,8 @@ exec(command, function (error, stdout, stderr) {
     message = `Success\n\n${stdout}`;
     const configKey = `sfdx:project:${projectDirPath}:linkedscratchorg`;
     alfy.config.set(configKey, username);
+    const cacheKey = "sfdx:org:scratch";
+    alfy.cache.delete(cacheKey);
   } else {
     message = `Error while creating org\n\n${stdout}`;
   }
