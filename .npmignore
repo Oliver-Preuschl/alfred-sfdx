@@ -1,4 +1,4 @@
-.idea
-node_modules
+.idea/
+node_modules/
 screenshots/usage.screeniumComposition
 screenshots/usage.m4v
