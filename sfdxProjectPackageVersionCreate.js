@@ -24,7 +24,10 @@ const { projectPath, packageId, password } = process.env;
 
 const formattedDateTime = getDateTime();
 
-const command = `cd "${process.env.workspace}/${projectPath}"; sfdx force:package:version:create --package "${packageId}" --installationkey "${password}" --codecoverage --wait ${process.env.packageVersionWaitTime}`;
+const instllationKeyArg = password
+  ? `--installationkey "${password}"`
+  : "--installationkeybypass";
+const command = `cd "${process.env.workspace}/${projectPath}"; sfdx force:package:version:create --package "${packageId}" ${instllationKeyArg} --codecoverage --wait ${process.env.packageVersionWaitTime}`;
 exec(command, function (error, stdout, stderr) {
   const action = !error
     ? "sfdx:status:largeType:success"
