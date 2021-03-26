@@ -1,6 +1,6 @@
 {
   "name": "alfred-sfdx",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "SFDX Package Development Workflow",
   "main": "index.js",
   "author": {

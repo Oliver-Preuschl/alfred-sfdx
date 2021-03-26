@@ -119,7 +119,7 @@ function getInstallationLinkItem(packageVersionDetailName2Value) {
         icon: { path: "./icons/copy-solid-red.png" },
         variables: {
           action: "sfdx:copy",
-          value: `COPY /packaging/installPackage.apexp?p0=${packageVersionDetailName2Value.get(
+          value: `/packaging/installPackage.apexp?p0=${packageVersionDetailName2Value.get(
             "Subscriber Package Version Id"
           )}`,
         },
