@@ -44,30 +44,30 @@ function getPackageVersionItems(packageVersions, devhubUsername, projectPath) {
   return packageVersions
     .map((packageVersion) => {
       const packageNameWithNamespace =
-        (packageVersion["Namespace"] ? `${packageVersion["Namespace"]}.` : "") +
-        packageVersion["Package Name"];
-      const releasedStatus =
-        packageVersion["Released"] === "true" ? " (Released)" : "";
+        (packageVersion.NamespacePrefix
+          ? `${packageVersion.NamespacePrefix}.`
+          : "") + packageVersion.Package2Name;
+      const releasedStatus = packageVersion.IsReleased ? " (Released)" : "";
       return {
-        title: `${packageNameWithNamespace} - ${packageVersion["Version"]}${releasedStatus}`,
-        subtitle: `${packageVersion["Subscriber Package Version Id"]}`,
+        title: `${packageNameWithNamespace} - ${packageVersion.Version}${releasedStatus}`,
+        subtitle: `${packageVersion.SubscriberPackageVersionId}`,
         icon: { path: "./icons/gift-solid-red.png" },
         variables: {
           action: "sfdx:package:version:report",
-          packageVersionId: packageVersion["Subscriber Package Version Id"],
+          packageVersionId: packageVersion.SubscriberPackageVersionId,
           projectPath,
           devhubUsername,
           packageNameWithNamespace,
         },
-        id: packageVersion["Subscriber Package Version Id"],
-        version: packageVersion["Version"],
+        id: packageVersion.SubscriberPackageVersionId,
+        version: packageVersion.Version,
         mods: {
           ctrl: {
-            subtitle: `COPY Installation URL: /packaging/installPackage.apexp?p0=${packageVersion["Subscriber Package Version Id"]}`,
+            subtitle: `COPY Installation URL: /packaging/installPackage.apexp?p0=${packageVersion.SubscriberPackageVersionId}`,
             icon: { path: "./icons/copy-solid-red.png" },
             variables: {
               action: "sfdx:copy",
-              value: `/packaging/installPackage.apexp?p0=${packageVersion["Subscriber Package Version Id"]}`,
+              value: `/packaging/installPackage.apexp?p0=${packageVersion.SubscriberPackageVersionId}`,
             },
           },
           alt: {
@@ -75,12 +75,12 @@ function getPackageVersionItems(packageVersions, devhubUsername, projectPath) {
             icon: { path: "./icons/glass-cheers-solid-red.png" },
             variables: {
               action: "sfdx:package:version:promote",
-              packageVersionId: packageVersion["Subscriber Package Version Id"],
+              packageVersionId: packageVersion.SubscriberPackageVersionId,
               projectPath,
             },
           },
           cmd: {
-            subtitle: `${packageVersion["Subscriber Package Version Id"]}`,
+            subtitle: `${packageVersion.SubscriberPackageVersionId}`,
           },
         },
       };

@@ -18,7 +18,7 @@
 
 const alfy = require("alfy");
 const { getPathItem } = require("./lib/pathItemCreator.js");
-const { getOrgDetails, getKeyValueMap } = require("./lib/sfdxDataLoader.js");
+const { getOrgDetails, getAttributeList } = require("./lib/sfdxDataLoader.js");
 
 const inputUsername = process.env.username;
 const searchTerm = alfy.input;
@@ -29,23 +29,23 @@ const orgDetailItems = alfy.matches(
   getOrgDetailItems(orgDetails),
   "subtitle"
 );
-const orgDetailName2Value = getKeyValueMap(orgDetails, "KEY", "VALUE");
-const username = orgDetailName2Value.get("Username");
-const isDevHubAvailable = orgDetailName2Value.has("Dev Hub Id");
+const username = orgDetails.username;
+const isDevHubAvailable = orgDetails.devHubId;
 const mayBeDevHub = !isDevHubAvailable;
 
 const pathItem = getPathItem(["Org", "Details"], {
-  description: orgDetailName2Value.get("Alias"),
+  description: orgDetails.alias,
 });
 const actionItems = getActionItems(username, mayBeDevHub);
 
 alfy.output([pathItem, ...actionItems, ...orgDetailItems]);
 
 function getOrgDetailItems(orgDetails) {
-  return orgDetails.map((orgDetail) => {
+  const orgDetailKey2Value = getAttributeList(orgDetails);
+  return orgDetailKey2Value.map((orgDetail) => {
     return {
-      title: orgDetail["VALUE"],
-      subtitle: orgDetail["KEY"],
+      title: orgDetail.value,
+      subtitle: orgDetail.key,
       icon: { path: "./icons/info-circle-solid-blue.png" },
       arg: "",
       variables: {
@@ -54,15 +54,15 @@ function getOrgDetailItems(orgDetails) {
       valid: true,
       mods: {
         ctrl: {
-          subtitle: `COPY ${orgDetail["KEY"]}`,
+          subtitle: `COPY ${orgDetail.key}`,
           icon: { path: "./icons/copy-solid-blue.png" },
           variables: {
             action: "sfdx:copy",
-            value: orgDetail["VALUE"],
+            value: orgDetail.value,
           },
         },
         alt: {
-          subtitle: orgDetail["KEY"],
+          subtitle: orgDetail.key,
           valid: false,
         },
       },

@@ -31,27 +31,29 @@ function getOrgItems(orgs) {
   return orgs
     .map((org) => {
       return {
-        title: (org[""] ? `${org[""]} ` : "") + org["ALIAS"],
-        subtitle: `Connection Status: ${org["CONNECTED STATUS"]}`,
+        title:
+          (org.isDefaultDevHubUsername ? `${org.defaultMarker} ` : "") +
+          org.alias,
+        subtitle: `Connection Status: ${org.connectedStatus}`,
         variables: {
           action: "sfdx:org:display",
-          username: org["USERNAME"],
+          username: org.username,
         },
         icon: { path: "./icons/cloud-solid-blue.png" },
         mods: {
           ctrl: {
-            subtitle: `OPEN "${org["USERNAME"]}"`,
+            subtitle: `OPEN "${org.username}"`,
             icon: { path: "./icons/external-link-alt-solid-blue.png" },
             variables: {
               action: "sfdx:org:open",
-              username: org["USERNAME"],
+              username: org.username,
             },
           },
           alt: {
             subtitle: `SHOW Packages`,
             variables: {
               action: "sfdx:project:package:list",
-              devhubUsername: org["USERNAME"],
+              devhubUsername: org.username,
             },
             icon: { path: "./icons/gift-solid-red.png" },
           },

@@ -32,11 +32,11 @@ function getOrgItems(orgs) {
   return orgs
     .map((org) => {
       return {
-        title: org["ALIAS"],
-        subtitle: `${org["STATUS"]} (Expiration Date: ${org["EXPIRATION DATE"]})`,
+        title: org.alias,
+        subtitle: `${org.status} (Expiration Date: ${org.expirationDate})`,
         variables: {
           action: "sfdx:org:display",
-          username: org["USERNAME"],
+          username: org.username,
         },
         icon: { path: "./icons/cloud-solid-blue.png" },
         mods: {
@@ -45,23 +45,23 @@ function getOrgItems(orgs) {
             icon: { path: "./icons/external-link-alt-solid-blue.png" },
             variables: {
               action: "sfdx:org:open",
-              username: org["USERNAME"],
+              username: org.username,
             },
           },
           alt: {
-            subtitle: `COPY Username: "${org["USERNAME"]}"`,
+            subtitle: `COPY Username: "${org.username}"`,
             icon: { path: "./icons/copy-solid-blue.png" },
             variables: {
               action: "sfdx:copy",
-              value: org["USERNAME"],
+              value: org.username,
             },
           },
           cmd: {
-            subtitle: `COPY Instance URL: ${org["INSTANCE URL"]}`,
+            subtitle: `COPY Instance URL: ${org.instanceUrl}`,
             icon: { path: "./icons/copy-solid-blue.png" },
             variables: {
               action: "sfdx:copy",
-              value: org["INSTANCE URL"],
+              value: org.instanceUrl,
             },
           },
         },
