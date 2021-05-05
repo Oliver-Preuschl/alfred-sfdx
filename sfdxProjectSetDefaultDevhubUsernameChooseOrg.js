@@ -40,20 +40,22 @@ function getOrgItems(orgs, projectPath) {
   return orgs
     .map((org) => {
       return {
-        title: (org[""] ? `${org[""]} ` : "") + org["ALIAS"],
-        subtitle: `Connection Status: ${org["CONNECTED STATUS"]}`,
+        title:
+          (org.isDefaultDevHubUsername ? `${org.defaultMarker} ` : "") +
+          org.alias,
+        subtitle: `Connection Status: ${org.connectedStatus}`,
         variables: {
           action: "sfdx:project:setdefaultdevhubusername",
-          username: org["USERNAME"],
+          username: org.username,
           projectPath,
         },
         icon: { path: "./icons/cloud-solid-blue.png" },
         mods: {
           ctrl: {
-            subtitle: `Connection Status: ${org["CONNECTED STATUS"]}`,
+            subtitle: `Connection Status: ${org.connectedStatus}`,
           },
           alt: {
-            subtitle: `Connection Status: ${org["CONNECTED STATUS"]}`,
+            subtitle: `Connection Status: ${org.connectedStatus}`,
           },
         },
       };
